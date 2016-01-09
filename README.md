@@ -3,26 +3,26 @@ Create beautiful pulsey tours for your app
 
 
 Component Map
-1 Pulsey
-2 Dot
-3 Underlay
-4 Tooltip
-5 Welcome
-6 Progress
+- 1 Pulsey
+- 2 Dot
+- 3 Underlay
+- 4 Tooltip
+- 5 Welcome
+- 6 Progress
 
 OPTIONS
-utilities
-  launch
-  storage
-  ordered
-  keyboardNav
-  animateScroll
-  defaultStyles
-  defaultAnimations
-  callbacks
-    tourComplete
-    stepComplete
-    exitTour  
+- utilities
+  - launch
+  - storage
+  - ordered
+  - keyboardNav
+  - animateScroll
+  - defaultStyles
+  - defaultAnimations
+  - callbacks
+    - tourComplete
+    - stepComplete
+    - exitTour  
 dot
   style
   animation
