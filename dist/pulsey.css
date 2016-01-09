@@ -3,7 +3,14 @@ body {
   background: #333;
 }
 
-.user-anchor {
+.wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 50px;
+}
+
+.wrapper div {
   background: #f67b45;
   width: 300px;
   height: 100px;
@@ -11,13 +18,6 @@ body {
   margin: 50px;
   border-radius: 4px;
   display: inline-block;
-}
-
-.wrapper {
-  position: absolute;
-  top: 0;
-  left: 0;
-  padding: 50px;
 }
 
 .spinner {

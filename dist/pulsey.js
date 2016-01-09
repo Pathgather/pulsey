@@ -19,8 +19,31 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Pulsey = function (_React$Component) {
-  _inherits(Pulsey, _React$Component);
+var PulsyDot = function (_React$Component) {
+  _inherits(PulsyDot, _React$Component);
+
+  function PulsyDot() {
+    _classCallCheck(this, PulsyDot);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(PulsyDot).apply(this, arguments));
+  }
+
+  _createClass(PulsyDot, [{
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        null,
+        'yebo yebo yebo!'
+      );
+    }
+  }]);
+
+  return PulsyDot;
+}(_react2.default.Component);
+
+var Pulsey = function (_React$Component2) {
+  _inherits(Pulsey, _React$Component2);
 
   function Pulsey() {
     _classCallCheck(this, Pulsey);
@@ -31,10 +54,16 @@ var Pulsey = function (_React$Component) {
   _createClass(Pulsey, [{
     key: 'render',
     value: function render() {
+      var dots = [];
+      for (var i = 0; i < pulseyAnchors.length; i++) {
+        dots.push(_react2.default.createElement(PulsyDot, { key: Math.random(),
+          po: this.props.po[i]
+        }));
+      }
       return _react2.default.createElement(
         'div',
-        null,
-        'yebo!'
+        { style: styles.tour },
+        dots
       );
     }
   }]);
@@ -47,50 +76,66 @@ var Pulsey = function (_React$Component) {
 var pulseyObjects = [];
 
 // Create array of user-selected dom anchors
-var pulseyAnchors = document.getElementsByClassName('pulsey-anchor');
+var pulseyAnchors = document.getElementsByClassName('ps-anchor');
 
 // Initialize pulsey objects with data based on html anchors
-function initPulseyObjects() {
+function createPulseyObjects() {
   for (var i = 0; i < pulseyAnchors.length; i++) {
-    var styles = window.getComputedStyle(pulseyAnchors[i], null),
-        header = pulseyAnchors[i].getAttribute('data-ps-header'),
-        note = pulseyAnchors[i].getAttribute('data-ps-note'),
+    console.log(pulseyObjects);
+    var elementStyles = window.getComputedStyle(pulseyAnchors[i], null),
+        tooltipHeader = pulseyAnchors[i].getAttribute('data-ps-header'),
+        tooltipNote = pulseyAnchors[i].getAttribute('data-ps-note'),
         step = parseInt(pulseyAnchors[i].getAttribute('data-ps-step')),
-        custom = pulseyAnchors[i].getAttribute('data-ps-custom');
+        customHTML = pulseyAnchors[i].getAttribute('data-ps-custom');
     pulseyObjects[i] = {
       dot: {
         id: i,
         clicked: false,
-        coordinates: pulseyAnchors[i].getBoundingClientRect(),
-        fixed: anchorStyles.getPropertyValue('position') === "fixed"
+        top: pulseyAnchors[i].getBoundingClientRect().top,
+        left: pulseyAnchors[i].getBoundingClientRect().left,
+        width: pulseyAnchors[i].getBoundingClientRect().width,
+        height: pulseyAnchors[i].getBoundingClientRect().height,
+        fixed: elementStyles.getPropertyValue('position') === "fixed"
       },
       tooltip: {
-        header: header ? header : options.tooltip.content.header,
-        note: note ? note : options.tooltip.content.note
+        header: tooltipHeader ? tooltipHeader : options.tooltip.content.header,
+        note: tooltipNote ? ntooltipNoteote : options.tooltip.content.note
       }
     };
   }
 }
 
-var options = {};
+var options = {
+  tooltip: {
+    content: {
+      header: null,
+      note: null
+    }
+  }
+};
 
-var styles = {};
+var styles = {
+  tour: {
+    display: 'block',
+    width: '200px',
+    height: '50px',
+    background: 'yellow'
+  }
+};
 
 function pulsey() {
-  initPulseyObjects();
-  localStorage.setItem("nextStep", options.firstStep);
-  _reactDom2.default.render(_react2.default.createElement(Pulsey, { p: pulseyObjects }), document.getElementById('pulsy-tour'));
+  createPulseyObjects();
+  _reactDom2.default.render(_react2.default.createElement(Pulsey, { po: pulseyObjects }), document.getElementById('pulsey'));
 }
 
 window.onresize = function renderResize() {
-  pulsy();
+  pulsey();
 };
 window.onscroll = function renderScroll() {
-  pulsy();
+  pulsey();
 };
 
-// Launch pulsey
-pulsy();
+pulsey();
 },{"react":159,"react-dom":3}],2:[function(require,module,exports){
 // shim for using process in browser
 

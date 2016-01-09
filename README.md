@@ -7,6 +7,8 @@ Component Map
 2 Dot
 3 Underlay
 4 Tooltip
+5 Welcome
+6 Progress
 
 OPTIONS
 utilities
@@ -24,7 +26,7 @@ utilities
 dot
   style
   animation
-  count
+  counter
     style
     animation
   offset
@@ -36,7 +38,7 @@ tooltip
   offset
     left
     top
-  count
+  counter
     style
   edgesense
   arrow
@@ -78,11 +80,16 @@ welcome
     style
 progress
   display
-  location
-  type
+  container
   style
 
-
+STYLES
+tour
+dot
+tooltip
+underlay
+welcome
+progress
 
   FEATURES
   - user chooses html elements to be dotted
