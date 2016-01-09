@@ -31,10 +31,18 @@ var PulsyDot = function (_React$Component) {
   _createClass(PulsyDot, [{
     key: 'render',
     value: function render() {
+      var pod = this.props.po.dot;
+      var style = {
+        dot: {
+          top: pod.top + pod.height / 2 - styles.dot.height / 2 + options.dot.offset.top,
+          left: pod.left + pod.width / 2 - styles.dot.width / 2 + options.dot.offset.left
+        }
+      };
+      var dotStyle = Object.assign(style.dot, styles.dot);
       return _react2.default.createElement(
         'div',
         null,
-        'yebo yebo yebo!'
+        _react2.default.createElement('div', { style: dotStyle })
       );
     }
   }]);
@@ -81,7 +89,6 @@ var pulseyAnchors = document.getElementsByClassName('ps-anchor');
 // Initialize pulsey objects with data based on html anchors
 function createPulseyObjects() {
   for (var i = 0; i < pulseyAnchors.length; i++) {
-    console.log(pulseyObjects);
     var elementStyles = window.getComputedStyle(pulseyAnchors[i], null),
         tooltipHeader = pulseyAnchors[i].getAttribute('data-ps-header'),
         tooltipNote = pulseyAnchors[i].getAttribute('data-ps-note'),
@@ -106,6 +113,12 @@ function createPulseyObjects() {
 }
 
 var options = {
+  dot: {
+    offset: {
+      top: 0,
+      left: 0
+    }
+  },
   tooltip: {
     content: {
       header: null,
@@ -116,10 +129,14 @@ var options = {
 
 var styles = {
   tour: {
-    display: 'block',
-    width: '200px',
-    height: '50px',
-    background: 'yellow'
+    zIndex: '9999',
+    position: 'absolute'
+  },
+  dot: {
+    width: '25',
+    height: '25',
+    background: 'red',
+    position: 'absolute'
   }
 };
 
