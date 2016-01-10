@@ -93,12 +93,23 @@ var Dot = function (_React$Component3) {
     var _this3 = _possibleConstructorReturn(this, Object.getPrototypeOf(Dot).call(this, props));
 
     _this3.state = {
+      clicked: !localStorage.getItem("dot " + _this3.props.po.dot.id),
       show: false
     };
     return _this3;
   }
 
   _createClass(Dot, [{
+    key: 'dotClick',
+    value: function dotClick() {
+      this.setState({
+        clicked: localStorage.setItem("dot " + this.props.po.dot.id, true)
+      });
+      this.setState({
+        show: !this.state.show
+      });
+    }
+  }, {
     key: 'toggle',
     value: function toggle() {
       this.setState({
@@ -115,14 +126,15 @@ var Dot = function (_React$Component3) {
         position: pod.fixed ? 'fixed' : 'absolute'
       };
       var dotStyle = Object.assign(position, styles.dot.back);
+      var dot = _react2.default.createElement(
+        'div',
+        { style: dotStyle, onClick: this.dotClick.bind(this) },
+        _react2.default.createElement('div', { style: styles.dot.front, className: 'spinner' })
+      );
       return _react2.default.createElement(
         'div',
         null,
-        _react2.default.createElement(
-          'div',
-          { style: dotStyle, onClick: this.toggle.bind(this) },
-          _react2.default.createElement('div', { style: styles.dot.front, className: 'spinner' })
-        ),
+        this.state.clicked ? dot : null,
         _react2.default.createElement(Tooltip, { po: this.props.po, toggle: this.toggle.bind(this), show: this.state.show }),
         _react2.default.createElement(Underlay, { po: this.props.po, toggle: this.toggle.bind(this), show: this.state.show })
       );

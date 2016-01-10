@@ -40,8 +40,17 @@ class Dot extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      clicked: !localStorage.getItem("dot " + this.props.po.dot.id),
       show: false,
     }
+  }
+  dotClick() {
+    this.setState({
+      clicked: localStorage.setItem("dot " + this.props.po.dot.id, true)
+    });
+    this.setState({
+      show: !this.state.show,
+    });
   }
   toggle() {
     this.setState({
@@ -56,11 +65,13 @@ class Dot extends React.Component {
       position: pod.fixed ? 'fixed' : 'absolute',
     }
     var dotStyle = Object.assign(position,styles.dot.back);
+    var dot =
+      <div style={dotStyle} onClick={this.dotClick.bind(this)}>
+        <div style={styles.dot.front} className="spinner"></div>
+      </div>
     return (
       <div>
-        <div style={dotStyle} onClick={this.toggle.bind(this)}>
-          <div style={styles.dot.front} className="spinner"></div>
-        </div>
+        {this.state.clicked ? dot : null}
         <Tooltip po={this.props.po} toggle={this.toggle.bind(this)} show={this.state.show} />
         <Underlay po={this.props.po} toggle={this.toggle.bind(this)} show={this.state.show} />
       </div>
