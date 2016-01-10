@@ -61,6 +61,7 @@ var Tooltip = function (_React$Component2) {
     key: 'render',
     value: function render() {
       var pod = this.props.po.dot;
+      var pot = this.props.po.tooltip;
       var position = {
         top: pod.fixed ? pod.top + pod.height / 2 - styles.tooltip.height / 2 + options.dot.offset.top : pod.top + pod.height / 2 - styles.tooltip.height / 2 + options.dot.offset.top + window.scrollY,
         left: pod.fixed ? pod.left + pod.width / 2 - styles.tooltip.width / 2 + options.dot.offset.left : pod.left + pod.width / 2 - styles.tooltip.width / 2 + options.dot.offset.left + window.scrollX,
@@ -74,6 +75,16 @@ var Tooltip = function (_React$Component2) {
           'div',
           { style: styles.tooltip.close },
           ' + '
+        ),
+        _react2.default.createElement(
+          'div',
+          { style: styles.tooltip.header },
+          pot.header
+        ),
+        _react2.default.createElement(
+          'div',
+          { style: styles.tooltip.note },
+          pot.note
         )
       );
       var showTooltip = this.props.show ? tooltip : null;
@@ -214,7 +225,7 @@ function createPulseyObjects() {
       },
       tooltip: {
         header: tooltipHeader ? tooltipHeader : options.tooltip.content.header,
-        note: tooltipNote ? ntooltipNoteote : options.tooltip.content.note
+        note: tooltipNote ? tooltipNote : options.tooltip.content.note
       }
     };
   }
@@ -230,8 +241,8 @@ var options = {
   },
   tooltip: {
     content: {
-      header: null,
-      note: null
+      header: 'Header not set',
+      note: 'Note not set'
     }
   },
   underlay: {},
@@ -271,6 +282,16 @@ var styles = {
     cursor: 'pointer',
     close: {
       color: '#fff'
+    },
+    header: {
+      display: 'flex',
+      justifyContent: 'center',
+      fontWeight: '600'
+    },
+    note: {
+      display: 'flex',
+      justifyContent: 'center',
+      fontWeight: '300'
     }
   },
   underlay: {
