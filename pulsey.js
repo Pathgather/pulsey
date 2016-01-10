@@ -3,8 +3,13 @@ import ReactDOM from 'react-dom'
 
 class Underlay extends React.Component {
   render() {
+    var underlay =
+      <div style={styles.underlay} onClick={this.props.toggle}></div>
+    var showUnderlay = this.props.show ? underlay : null;
     return (
-        <div style={styles.underlay}></div>
+      <div>
+        {showUnderlay}
+      </div>
     );
   }
 }
@@ -18,15 +23,32 @@ class Tooltip extends React.Component {
       position: pod.fixed ? 'fixed' : 'absolute',
     }
     var tooltipStyle = Object.assign(position,styles.tooltip);
+    var tooltip =
+      <div style={tooltipStyle} onClick={this.props.toggle}>
+        <div style={styles.tooltip.close}> + </div>
+      </div>
+    var showTooltip = this.props.show ? tooltip : null;
     return (
-      <div style={tooltipStyle}>
-        <div style={styles.tooltip.close}>+</div>
+      <div>
+        {showTooltip}
       </div>
     );
   }
 }
 
 class Dot extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      show: false,
+    }
+  }
+  toggle() {
+    this.setState({
+      show: !this.state.show,
+    });
+    console.log('yebo');
+  }
   render() {
     var pod = this.props.po.dot;
     var position = {
@@ -37,11 +59,11 @@ class Dot extends React.Component {
     var dotStyle = Object.assign(position,styles.dot.back);
     return (
       <div>
-        <div style={dotStyle}>
+        <div style={dotStyle} onClick={this.toggle.bind(this)}>
           <div style={styles.dot.front} className="spinner"></div>
         </div>
-        <Tooltip po={this.props.po} />
-        <Underlay po={this.props.po} />
+        <Tooltip po={this.props.po} toggle={this.toggle.bind(this)} show={this.state.show} />
+        <Underlay po={this.props.po} toggle={this.toggle.bind(this)} show={this.state.show} />
       </div>
     );
   }
@@ -116,11 +138,13 @@ var options = {
 
 var styles = {
   tour: {
-    zIndex: '9999',
+    zIndex: '99999',
     position: 'absolute',
   },
   dot: {
+    zIndex: '99997',
     size: '25',
+    cursor: 'pointer',
     back: {
       width: '25',
       height: '25',
@@ -128,19 +152,28 @@ var styles = {
     front: {
       width: '25',
       height: '25',
+      cursor: 'pointer',
       background: '#fff',
     }
   },
   tooltip: {
+    zIndex: '99999',
     width: '250',
     height: '75',
     background: '#fff',
+    cursor: 'pointer',
     close: {
       color: '#fff',
     }
   },
   underlay: {
-    background: 'transparent',
+    zIndex: '99998',
+    background: 'rgba(76,147,234,0.4)',
+    position: 'absolute',
+    left: '0',
+    top: '0',
+    width: '100vw',
+    height: '100vh',
   }
 }
 

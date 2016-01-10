@@ -31,7 +31,13 @@ var Underlay = function (_React$Component) {
   _createClass(Underlay, [{
     key: 'render',
     value: function render() {
-      return _react2.default.createElement('div', { style: styles.underlay });
+      var underlay = _react2.default.createElement('div', { style: styles.underlay, onClick: this.props.toggle });
+      var showUnderlay = this.props.show ? underlay : null;
+      return _react2.default.createElement(
+        'div',
+        null,
+        showUnderlay
+      );
     }
   }]);
 
@@ -57,14 +63,20 @@ var Tooltip = function (_React$Component2) {
         position: pod.fixed ? 'fixed' : 'absolute'
       };
       var tooltipStyle = Object.assign(position, styles.tooltip);
-      return _react2.default.createElement(
+      var tooltip = _react2.default.createElement(
         'div',
-        { style: tooltipStyle },
+        { style: tooltipStyle, onClick: this.props.toggle },
         _react2.default.createElement(
           'div',
           { style: styles.tooltip.close },
-          '+'
+          ' + '
         )
+      );
+      var showTooltip = this.props.show ? tooltip : null;
+      return _react2.default.createElement(
+        'div',
+        null,
+        showTooltip
       );
     }
   }]);
@@ -75,13 +87,26 @@ var Tooltip = function (_React$Component2) {
 var Dot = function (_React$Component3) {
   _inherits(Dot, _React$Component3);
 
-  function Dot() {
+  function Dot(props) {
     _classCallCheck(this, Dot);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(Dot).apply(this, arguments));
+    var _this3 = _possibleConstructorReturn(this, Object.getPrototypeOf(Dot).call(this, props));
+
+    _this3.state = {
+      show: false
+    };
+    return _this3;
   }
 
   _createClass(Dot, [{
+    key: 'toggle',
+    value: function toggle() {
+      this.setState({
+        show: !this.state.show
+      });
+      console.log('yebo');
+    }
+  }, {
     key: 'render',
     value: function render() {
       var pod = this.props.po.dot;
@@ -96,11 +121,11 @@ var Dot = function (_React$Component3) {
         null,
         _react2.default.createElement(
           'div',
-          { style: dotStyle },
+          { style: dotStyle, onClick: this.toggle.bind(this) },
           _react2.default.createElement('div', { style: styles.dot.front, className: 'spinner' })
         ),
-        _react2.default.createElement(Tooltip, { po: this.props.po }),
-        _react2.default.createElement(Underlay, { po: this.props.po })
+        _react2.default.createElement(Tooltip, { po: this.props.po, toggle: this.toggle.bind(this), show: this.state.show }),
+        _react2.default.createElement(Underlay, { po: this.props.po, toggle: this.toggle.bind(this), show: this.state.show })
       );
     }
   }]);
@@ -191,11 +216,13 @@ var options = {
 
 var styles = {
   tour: {
-    zIndex: '9999',
+    zIndex: '99999',
     position: 'absolute'
   },
   dot: {
+    zIndex: '99997',
     size: '25',
+    cursor: 'pointer',
     back: {
       width: '25',
       height: '25'
@@ -203,19 +230,28 @@ var styles = {
     front: {
       width: '25',
       height: '25',
+      cursor: 'pointer',
       background: '#fff'
     }
   },
   tooltip: {
+    zIndex: '99999',
     width: '250',
     height: '75',
     background: '#fff',
+    cursor: 'pointer',
     close: {
       color: '#fff'
     }
   },
   underlay: {
-    background: 'transparent'
+    zIndex: '99998',
+    background: 'rgba(76,147,234,0.4)',
+    position: 'absolute',
+    left: '0',
+    top: '0',
+    width: '100vw',
+    height: '100vh'
   }
 };
 

@@ -28,11 +28,11 @@ gulp.task('clean', function(cb) {
     del(['dist'], cb)
 });
 
-gulp.task('build', ['clean', 'scripts', 'styles', 'views']);
+gulp.task('build', ['scripts', 'styles', 'views']);
 
 
 gulp.task('watch', function() {
   gulp.watch('./*', ['scripts', 'styles', 'views']);
 });
 
-gulp.task('default', ['build', 'watch']);
+gulp.task('default', ['clean', 'build', 'watch']);
