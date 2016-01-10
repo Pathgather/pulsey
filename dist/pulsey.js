@@ -19,27 +19,78 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var PulsyDot = function (_React$Component) {
-  _inherits(PulsyDot, _React$Component);
+var Underlay = function (_React$Component) {
+  _inherits(Underlay, _React$Component);
 
-  function PulsyDot() {
-    _classCallCheck(this, PulsyDot);
+  function Underlay() {
+    _classCallCheck(this, Underlay);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(PulsyDot).apply(this, arguments));
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(Underlay).apply(this, arguments));
   }
 
-  _createClass(PulsyDot, [{
+  _createClass(Underlay, [{
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement('div', { style: styles.underlay });
+    }
+  }]);
+
+  return Underlay;
+}(_react2.default.Component);
+
+var Tooltip = function (_React$Component2) {
+  _inherits(Tooltip, _React$Component2);
+
+  function Tooltip() {
+    _classCallCheck(this, Tooltip);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(Tooltip).apply(this, arguments));
+  }
+
+  _createClass(Tooltip, [{
     key: 'render',
     value: function render() {
       var pod = this.props.po.dot;
-      var style = {
-        dot: {
-          top: pod.fixed ? pod.top + pod.height / 2 - styles.dot.size / 2 + options.dot.offset.top : pod.top + pod.height / 2 - styles.dot.size / 2 + options.dot.offset.top + window.scrollY,
-          left: pod.fixed ? pod.left + pod.width / 2 - styles.dot.size / 2 + options.dot.offset.left : pod.left + pod.width / 2 - styles.dot.size / 2 + options.dot.offset.left + window.scrollX,
-          position: pod.fixed ? 'fixed' : 'absolute'
-        }
+      var position = {
+        top: pod.fixed ? pod.top + pod.height / 2 - styles.tooltip.height / 2 + options.dot.offset.top : pod.top + pod.height / 2 - styles.tooltip.height / 2 + options.dot.offset.top + window.scrollY,
+        left: pod.fixed ? pod.left + pod.width / 2 - styles.tooltip.width / 2 + options.dot.offset.left : pod.left + pod.width / 2 - styles.tooltip.width / 2 + options.dot.offset.left + window.scrollX,
+        position: pod.fixed ? 'fixed' : 'absolute'
       };
-      var dotStyle = Object.assign(style.dot, styles.dot.back);
+      var tooltipStyle = Object.assign(position, styles.tooltip);
+      return _react2.default.createElement(
+        'div',
+        { style: tooltipStyle },
+        _react2.default.createElement(
+          'div',
+          { style: styles.tooltip.close },
+          '+'
+        )
+      );
+    }
+  }]);
+
+  return Tooltip;
+}(_react2.default.Component);
+
+var Dot = function (_React$Component3) {
+  _inherits(Dot, _React$Component3);
+
+  function Dot() {
+    _classCallCheck(this, Dot);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(Dot).apply(this, arguments));
+  }
+
+  _createClass(Dot, [{
+    key: 'render',
+    value: function render() {
+      var pod = this.props.po.dot;
+      var position = {
+        top: pod.fixed ? pod.top + pod.height / 2 - styles.dot.size / 2 + options.dot.offset.top : pod.top + pod.height / 2 - styles.dot.size / 2 + options.dot.offset.top + window.scrollY,
+        left: pod.fixed ? pod.left + pod.width / 2 - styles.dot.size / 2 + options.dot.offset.left : pod.left + pod.width / 2 - styles.dot.size / 2 + options.dot.offset.left + window.scrollX,
+        position: pod.fixed ? 'fixed' : 'absolute'
+      };
+      var dotStyle = Object.assign(position, styles.dot.back);
       return _react2.default.createElement(
         'div',
         null,
@@ -47,16 +98,18 @@ var PulsyDot = function (_React$Component) {
           'div',
           { style: dotStyle },
           _react2.default.createElement('div', { style: styles.dot.front, className: 'spinner' })
-        )
+        ),
+        _react2.default.createElement(Tooltip, { po: this.props.po }),
+        _react2.default.createElement(Underlay, { po: this.props.po })
       );
     }
   }]);
 
-  return PulsyDot;
+  return Dot;
 }(_react2.default.Component);
 
-var Pulsey = function (_React$Component2) {
-  _inherits(Pulsey, _React$Component2);
+var Pulsey = function (_React$Component4) {
+  _inherits(Pulsey, _React$Component4);
 
   function Pulsey() {
     _classCallCheck(this, Pulsey);
@@ -69,7 +122,7 @@ var Pulsey = function (_React$Component2) {
     value: function render() {
       var dots = [];
       for (var i = 0; i < pulseyAnchors.length; i++) {
-        dots.push(_react2.default.createElement(PulsyDot, { key: Math.random(),
+        dots.push(_react2.default.createElement(Dot, { key: Math.random(),
           po: this.props.po[i]
         }));
       }
@@ -152,6 +205,17 @@ var styles = {
       height: '25',
       background: '#fff'
     }
+  },
+  tooltip: {
+    width: '250',
+    height: '75',
+    background: '#fff',
+    close: {
+      color: '#fff'
+    }
+  },
+  underlay: {
+    background: 'transparent'
   }
 };
 

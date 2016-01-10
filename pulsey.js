@@ -1,22 +1,47 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-class PulsyDot extends React.Component {
+class Underlay extends React.Component {
+  render() {
+    return (
+        <div style={styles.underlay}></div>
+    );
+  }
+}
+
+class Tooltip extends React.Component {
   render() {
     var pod = this.props.po.dot;
-    var style = {
-      dot: {
-        top: pod.fixed ? pod.top + pod.height/2 - styles.dot.size/2 + options.dot.offset.top : pod.top + pod.height/2 - styles.dot.size/2 + options.dot.offset.top + window.scrollY,
-        left: pod.fixed ? pod.left + pod.width/2 - styles.dot.size/2 + options.dot.offset.left : pod.left + pod.width/2 - styles.dot.size/2 + options.dot.offset.left + window.scrollX,
-        position: pod.fixed ? 'fixed' : 'absolute',
-      }
+    var position = {
+      top: pod.fixed ? pod.top + pod.height/2 - styles.tooltip.height/2 + options.dot.offset.top : pod.top + pod.height/2 - styles.tooltip.height/2 + options.dot.offset.top + window.scrollY,
+      left: pod.fixed ? pod.left + pod.width/2 - styles.tooltip.width/2 + options.dot.offset.left : pod.left + pod.width/2 - styles.tooltip.width/2 + options.dot.offset.left + window.scrollX,
+      position: pod.fixed ? 'fixed' : 'absolute',
     }
-    var dotStyle = Object.assign(style.dot,styles.dot.back);
+    var tooltipStyle = Object.assign(position,styles.tooltip);
+    return (
+      <div style={tooltipStyle}>
+        <div style={styles.tooltip.close}>+</div>
+      </div>
+    );
+  }
+}
+
+class Dot extends React.Component {
+  render() {
+    var pod = this.props.po.dot;
+    var position = {
+      top: pod.fixed ? pod.top + pod.height/2 - styles.dot.size/2 + options.dot.offset.top : pod.top + pod.height/2 - styles.dot.size/2 + options.dot.offset.top + window.scrollY,
+      left: pod.fixed ? pod.left + pod.width/2 - styles.dot.size/2 + options.dot.offset.left : pod.left + pod.width/2 - styles.dot.size/2 + options.dot.offset.left + window.scrollX,
+      position: pod.fixed ? 'fixed' : 'absolute',
+    }
+    var dotStyle = Object.assign(position,styles.dot.back);
     return (
       <div>
         <div style={dotStyle}>
           <div style={styles.dot.front} className="spinner"></div>
         </div>
+        <Tooltip po={this.props.po} />
+        <Underlay po={this.props.po} />
       </div>
     );
   }
@@ -26,7 +51,7 @@ class Pulsey extends React.Component {
   render() {
     var dots = [];
     for (var i=0;i<pulseyAnchors.length;i++) {
-      dots.push(<PulsyDot key={Math.random()}
+      dots.push(<Dot key={Math.random()}
         po={this.props.po[i]}
       />);
     }
@@ -105,6 +130,17 @@ var styles = {
       height: '25',
       background: '#fff',
     }
+  },
+  tooltip: {
+    width: '250',
+    height: '75',
+    background: '#fff',
+    close: {
+      color: '#fff',
+    }
+  },
+  underlay: {
+    background: 'transparent',
   }
 }
 
