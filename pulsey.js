@@ -6,15 +6,17 @@ class PulsyDot extends React.Component {
     var pod = this.props.po.dot;
     var style = {
       dot: {
-        top: pod.fixed ? pod.top + pod.height/2 - styles.dot.height/2 + options.dot.offset.top : pod.top + pod.height/2 - styles.dot.height/2 + options.dot.offset.top + window.scrollY,
-        left: pod.fixed ? pod.left + pod.width/2 - styles.dot.width/2 + options.dot.offset.left : pod.left + pod.width/2 - styles.dot.width/2 + options.dot.offset.left + window.scrollX,
+        top: pod.fixed ? pod.top + pod.height/2 - styles.dot.size/2 + options.dot.offset.top : pod.top + pod.height/2 - styles.dot.size/2 + options.dot.offset.top + window.scrollY,
+        left: pod.fixed ? pod.left + pod.width/2 - styles.dot.size/2 + options.dot.offset.left : pod.left + pod.width/2 - styles.dot.size/2 + options.dot.offset.left + window.scrollX,
         position: pod.fixed ? 'fixed' : 'absolute',
       }
     }
-    var dotStyle = Object.assign(style.dot,styles.dot);
+    var dotStyle = Object.assign(style.dot,styles.dot.back);
     return (
       <div>
-        <div style={dotStyle}></div>
+        <div style={dotStyle}>
+          <div style={styles.dot.front} className="spinner"></div>
+        </div>
       </div>
     );
   }
@@ -93,9 +95,16 @@ var styles = {
     position: 'absolute',
   },
   dot: {
-    width: '25',
-    height: '25',
-    background: 'red',
+    size: '25',
+    back: {
+      width: '25',
+      height: '25',
+    },
+    front: {
+      width: '25',
+      height: '25',
+      background: '#fff',
+    }
   }
 }
 
