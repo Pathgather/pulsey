@@ -8,7 +8,7 @@ body {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  padding: 15vh 50px 50px;
+  padding: 50px;
   width: 100vw;
   box-sizing: border-box;
 }

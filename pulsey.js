@@ -1,5 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import VelocityReact from 'velocity-react'
+import {VelocityComponent, VelocityTransitionGroup} from 'velocity-react'
 
 class Underlay extends React.Component {
   render() {
@@ -7,9 +9,9 @@ class Underlay extends React.Component {
       <div style={styles.underlay} onClick={this.props.toggle}></div>
     var showUnderlay = this.props.show ? underlay : null;
     return (
-      <div>
+      <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
         {showUnderlay}
-      </div>
+      </VelocityTransitionGroup>
     );
   }
 }
@@ -29,9 +31,9 @@ class Tooltip extends React.Component {
       </div>
     var showTooltip = this.props.show ? tooltip : null;
     return (
-      <div>
+      <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
         {showTooltip}
-      </div>
+      </VelocityTransitionGroup>
     );
   }
 }
@@ -196,7 +198,7 @@ var styles = {
     boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
     background: '#555',
     left: '50%',
-    top: '7.5vh',
+    bottom: '7.5vh',
     position: 'fixed',
     border: 'none',
     cursor: 'pointer',

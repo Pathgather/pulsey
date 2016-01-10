@@ -19,6 +19,7 @@
     "gulp": "^3.9.0",
     "gulp-babel": "^6.1.1",
     "gulp-browserify": "^0.5.1",
-    "gulp-notify": "^2.2.0"
+    "gulp-notify": "^2.2.0",
+    "velocity-react": "^1.1.1"
   }
 }
