@@ -104,7 +104,6 @@ var Dot = function (_React$Component3) {
       this.setState({
         show: !this.state.show
       });
-      console.log('yebo');
     }
   }, {
     key: 'render',
@@ -143,6 +142,11 @@ var Pulsey = function (_React$Component4) {
   }
 
   _createClass(Pulsey, [{
+    key: 'reset',
+    value: function reset() {
+      localStorage.clear();
+    }
+  }, {
     key: 'render',
     value: function render() {
       var dots = [];
@@ -154,7 +158,12 @@ var Pulsey = function (_React$Component4) {
       return _react2.default.createElement(
         'div',
         { style: styles.tour },
-        dots
+        dots,
+        _react2.default.createElement(
+          'button',
+          { style: styles.reset, onClick: this.reset.bind(this) },
+          'Reset Dots'
+        )
       );
     }
   }]);
@@ -252,6 +261,20 @@ var styles = {
     top: '0',
     width: '100vw',
     height: '100vh'
+  },
+  reset: {
+    width: '150px',
+    height: '50px',
+    borderRadius: '2px',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+    background: '#555',
+    left: '50%',
+    top: '7.5vh',
+    position: 'fixed',
+    border: 'none',
+    cursor: 'pointer',
+    outline: 'none',
+    transform: 'translateX(-50%)'
   }
 };
 

@@ -47,7 +47,6 @@ class Dot extends React.Component {
     this.setState({
       show: !this.state.show,
     });
-    console.log('yebo');
   }
   render() {
     var pod = this.props.po.dot;
@@ -70,6 +69,9 @@ class Dot extends React.Component {
 }
 
 class Pulsey extends React.Component {
+  reset() {
+    localStorage.clear();
+  }
   render() {
     var dots = [];
     for (var i=0;i<pulseyAnchors.length;i++) {
@@ -80,6 +82,7 @@ class Pulsey extends React.Component {
     return (
       <div style={styles.tour}>
         {dots}
+        <button style={styles.reset} onClick={this.reset.bind(this)}>Reset Dots</button>
       </div>
     );
   }
@@ -174,6 +177,20 @@ var styles = {
     top: '0',
     width: '100vw',
     height: '100vh',
+  },
+  reset: {
+    width: '150px',
+    height: '50px',
+    borderRadius: '2px',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+    background: '#555',
+    left: '50%',
+    top: '7.5vh',
+    position: 'fixed',
+    border: 'none',
+    cursor: 'pointer',
+    outline: 'none',
+    transform: 'translateX(-50%)',
   }
 }
 
