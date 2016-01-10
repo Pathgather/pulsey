@@ -62,8 +62,8 @@ class Dot extends React.Component {
   render() {
     var pod = this.props.po.dot;
     var position = {
-      top: pod.fixed ? pod.top + pod.height/2 - styles.dot.size/2 + options.dot.offset.top : pod.top + pod.height/2 - styles.dot.size/2 + options.dot.offset.top + window.scrollY,
-      left: pod.fixed ? pod.left + pod.width/2 - styles.dot.size/2 + options.dot.offset.left : pod.left + pod.width/2 - styles.dot.size/2 + options.dot.offset.left + window.scrollX,
+      top: pod.fixed ? pod.top + pod.height/2 + options.dot.offset.top : pod.top + pod.height/2 + options.dot.offset.top + window.scrollY,
+      left: pod.fixed ? pod.left + pod.width/2 + options.dot.offset.left : pod.left + pod.width/2 + options.dot.offset.left + window.scrollX,
       position: pod.fixed ? 'fixed' : 'absolute',
     }
     var dotStyle = Object.assign(position,styles.dot.back);
@@ -164,11 +164,15 @@ var styles = {
     back: {
       width: '25',
       height: '25',
+      borderRadius: '100%',
+      transform: 'translate(-50%,-50%)',
+      background: 'rgba(255,255,255,0.2)',
     },
     front: {
       width: '25',
       height: '25',
       cursor: 'pointer',
+      transform: 'translate(-50%,-50%)',
       background: '#fff',
     }
   },
