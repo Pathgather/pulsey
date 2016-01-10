@@ -114,5 +114,8 @@ FEATURES
 - detect if next pulse is offscreen and animate document scroll to it
 - basic optional welcome screen with customizable header, message, button, etc.
 
+ISSUES
+- need to find a better way to ensure dots track their target elements, because you're currently re-rendering the whole pulsey app, which is disruptive
+
 NEW FEATURE IDEAS
 - give each dot a class of "pulsey-dot-" + po.dot.id so users can easily customize the CSS without using the API

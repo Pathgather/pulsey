@@ -13,8 +13,6 @@ var _reactDom2 = _interopRequireDefault(_reactDom);
 
 var _velocityReact = require('velocity-react');
 
-var _velocityReact2 = _interopRequireDefault(_velocityReact);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -63,8 +61,8 @@ var Tooltip = function (_React$Component2) {
       var pod = this.props.po.dot;
       var pot = this.props.po.tooltip;
       var position = {
-        top: pod.fixed ? pod.top + pod.height / 2 - styles.tooltip.height / 2 + options.dot.offset.top : pod.top + pod.height / 2 - styles.tooltip.height / 2 + options.dot.offset.top + window.scrollY,
-        left: pod.fixed ? pod.left + pod.width / 2 - styles.tooltip.width / 2 + options.dot.offset.left : pod.left + pod.width / 2 - styles.tooltip.width / 2 + options.dot.offset.left + window.scrollX,
+        top: pod.fixed ? pod.top + pod.height / 2 + options.dot.offset.top : pod.top + pod.height / 2 + options.dot.offset.top + window.scrollY,
+        left: pod.fixed ? pod.left + pod.width / 2 + options.dot.offset.left : pod.left + pod.width / 2 + options.dot.offset.left + window.scrollX,
         position: pod.fixed ? 'fixed' : 'absolute'
       };
       var tooltipStyle = Object.assign(position, styles.tooltip);
@@ -90,7 +88,7 @@ var Tooltip = function (_React$Component2) {
       var showTooltip = this.props.show ? tooltip : null;
       return _react2.default.createElement(
         _velocityReact.VelocityTransitionGroup,
-        { enter: { animation: "slideDown" }, leave: { animation: "slideUp" } },
+        { enter: { animation: "transition.bounceIn" }, leave: { animation: "transition.bounceOut" } },
         showTooltip
       );
     }
@@ -276,22 +274,29 @@ var styles = {
   },
   tooltip: {
     zIndex: '99999',
-    width: '250',
-    height: '75',
     background: '#fff',
+    padding: '20',
+    minWidth: '200',
+    borderRadius: '2',
+    transform: 'translate(-50%,-50%)',
     cursor: 'pointer',
-    close: {
-      color: '#fff'
-    },
     header: {
       display: 'flex',
       justifyContent: 'center',
-      fontWeight: '600'
+      fontWeight: '600',
+      lineHeight: '2em'
     },
     note: {
       display: 'flex',
       justifyContent: 'center',
       fontWeight: '300'
+    },
+    close: {
+      color: '#333',
+      transform: 'rotate(45deg)',
+      position: 'absolute',
+      top: '5',
+      right: '5'
     }
   },
   underlay: {

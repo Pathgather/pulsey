@@ -1,7 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import VelocityReact from 'velocity-react'
-import {VelocityComponent, VelocityTransitionGroup} from 'velocity-react'
+import {VelocityReact, VelocityComponent, VelocityUI, VelocityTransitionGroup} from 'velocity-react'
 
 class Underlay extends React.Component {
   render() {
@@ -21,8 +20,8 @@ class Tooltip extends React.Component {
     var pod = this.props.po.dot;
     var pot = this.props.po.tooltip;
     var position = {
-      top: pod.fixed ? pod.top + pod.height/2 - styles.tooltip.height/2 + options.dot.offset.top : pod.top + pod.height/2 - styles.tooltip.height/2 + options.dot.offset.top + window.scrollY,
-      left: pod.fixed ? pod.left + pod.width/2 - styles.tooltip.width/2 + options.dot.offset.left : pod.left + pod.width/2 - styles.tooltip.width/2 + options.dot.offset.left + window.scrollX,
+      top: pod.fixed ? pod.top + pod.height/2 + options.dot.offset.top : pod.top + pod.height/2 + options.dot.offset.top + window.scrollY,
+      left: pod.fixed ? pod.left + pod.width/2 + options.dot.offset.left : pod.left + pod.width/2 + options.dot.offset.left + window.scrollX,
       position: pod.fixed ? 'fixed' : 'absolute',
     }
     var tooltipStyle = Object.assign(position,styles.tooltip);
@@ -34,7 +33,7 @@ class Tooltip extends React.Component {
       </div>
     var showTooltip = this.props.show ? tooltip : null;
     return (
-      <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
+      <VelocityTransitionGroup enter={{animation: "transition.bounceIn"}} leave={{animation: "transition.bounceOut"}}>
         {showTooltip}
       </VelocityTransitionGroup>
     );
@@ -181,23 +180,30 @@ var styles = {
   },
   tooltip: {
     zIndex: '99999',
-    width: '250',
-    height: '75',
     background: '#fff',
+    padding: '20',
+    minWidth: '200',
+    borderRadius: '2',
+    transform: 'translate(-50%,-50%)',
     cursor: 'pointer',
-    close: {
-      color: '#fff',
-    },
     header: {
       display: 'flex',
       justifyContent: 'center',
       fontWeight: '600',
+      lineHeight: '2em',
     },
     note: {
       display: 'flex',
       justifyContent: 'center',
       fontWeight: '300',
-    }
+    },
+    close: {
+      color: '#333',
+      transform: 'rotate(45deg)',
+      position: 'absolute',
+      top: '5',
+      right: '5',
+    },
   },
   underlay: {
     zIndex: '99998',
