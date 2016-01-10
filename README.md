@@ -113,3 +113,6 @@ FEATURES
 - option to show/not show and position the triangle arrow
 - detect if next pulse is offscreen and animate document scroll to it
 - basic optional welcome screen with customizable header, message, button, etc.
+
+NEW FEATURE IDEAS
+- give each dot a class of "pulsey-dot-" + po.dot.id so users can easily customize the CSS without using the API

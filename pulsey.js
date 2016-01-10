@@ -6,8 +6,8 @@ class PulsyDot extends React.Component {
     var pod = this.props.po.dot;
     var style = {
       dot: {
-        top: pod.top + pod.height/2 - styles.dot.height/2 + options.dot.offset.top,
-        left: pod.left + pod.width/2 - styles.dot.width/2 + options.dot.offset.left,
+        top: pod.top + pod.height/2 - styles.dot.height/2 + options.dot.offset.top + window.scrollY,
+        left: pod.left + pod.width/2 - styles.dot.width/2 + options.dot.offset.left + window.scrollX,
       }
     }
     var dotStyle = Object.assign(style.dot,styles.dot);
@@ -68,6 +68,7 @@ function createPulseyObjects() {
 }
 
 var options = {
+  utilities : {},
   dot: {
     offset: {
       top: 0,
@@ -79,7 +80,10 @@ var options = {
       header: null,
       note: null,
     }
-  }
+  },
+  underlay: {},
+  welcome: {},
+  progress: {}
 }
 
 var styles = {
