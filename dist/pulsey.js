@@ -34,8 +34,9 @@ var PulsyDot = function (_React$Component) {
       var pod = this.props.po.dot;
       var style = {
         dot: {
-          top: pod.top + pod.height / 2 - styles.dot.height / 2 + options.dot.offset.top + window.scrollY,
-          left: pod.left + pod.width / 2 - styles.dot.width / 2 + options.dot.offset.left + window.scrollX
+          top: pod.fixed ? pod.top + pod.height / 2 - styles.dot.height / 2 + options.dot.offset.top : pod.top + pod.height / 2 - styles.dot.height / 2 + options.dot.offset.top + window.scrollY,
+          left: pod.fixed ? pod.left + pod.width / 2 - styles.dot.width / 2 + options.dot.offset.left : pod.left + pod.width / 2 - styles.dot.width / 2 + options.dot.offset.left + window.scrollX,
+          position: pod.fixed ? 'fixed' : 'absolute'
         }
       };
       var dotStyle = Object.assign(style.dot, styles.dot);
@@ -139,8 +140,7 @@ var styles = {
   dot: {
     width: '25',
     height: '25',
-    background: 'red',
-    position: 'absolute'
+    background: 'red'
   }
 };
 
