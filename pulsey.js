@@ -1,6 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {VelocityReact, VelocityComponent, VelocityUI, VelocityTransitionGroup} from 'velocity-react'
+import {VelocityReact, VelocityComponent, VelocityTransitionGroup} from 'velocity-react'
+require('./velocity');
+require('./velocity.ui');
 
 class Underlay extends React.Component {
   render() {
