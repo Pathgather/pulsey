@@ -1,7 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {VelocityReact, VelocityComponent, VelocityTransitionGroup} from 'velocity-react'
-require('./velocity');
 require('./velocity.ui');
 
 class Underlay extends React.Component {
@@ -22,8 +21,8 @@ class Tooltip extends React.Component {
     var pod = this.props.po.dot;
     var pot = this.props.po.tooltip;
     var position = {
-      top: pod.fixed ? pod.top + pod.height/2 + options.dot.offset.top : pod.top + pod.height/2 + options.dot.offset.top + window.scrollY,
-      left: pod.fixed ? pod.left + pod.width/2 + options.dot.offset.left : pod.left + pod.width/2 + options.dot.offset.left + window.scrollX,
+      top: pod.fixed ? pod.top + pod.height/2 + options.tooltip.offset.top : pod.top + pod.height/2 + options.tooltip.offset.top + window.scrollY,
+      left: pod.fixed ? pod.left + pod.width/2 - styles.tooltip.width/2 + options.tooltip.offset.left : pod.left + pod.width/2 - styles.tooltip.width/2 + options.tooltip.offset.left + window.scrollX,
       position: pod.fixed ? 'fixed' : 'absolute',
     }
     var tooltipStyle = Object.assign(position,styles.tooltip);
@@ -143,17 +142,21 @@ var options = {
     offset: {
       top: 0,
       left: 0,
-    }
+    },
   },
   tooltip: {
     content: {
       header: 'Header not set',
       note: 'Note not set',
-    }
+    },
+    offset: {
+      top: -20,
+      left: 0,
+    },
   },
   underlay: {},
   welcome: {},
-  progress: {}
+  progress: {},
 }
 
 var styles = {
@@ -184,10 +187,11 @@ var styles = {
     zIndex: '99999',
     background: '#fff',
     padding: '20',
-    minWidth: '200',
+    width: '250',
     borderRadius: '2',
     transform: 'translate(-50%,-50%)',
     cursor: 'pointer',
+    boxSizing: 'border-box',
     header: {
       display: 'flex',
       justifyContent: 'center',

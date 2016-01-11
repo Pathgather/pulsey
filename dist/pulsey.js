@@ -21,7 +21,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-require('./velocity');
 require('./velocity.ui');
 
 var Underlay = function (_React$Component) {
@@ -64,8 +63,8 @@ var Tooltip = function (_React$Component2) {
       var pod = this.props.po.dot;
       var pot = this.props.po.tooltip;
       var position = {
-        top: pod.fixed ? pod.top + pod.height / 2 + options.dot.offset.top : pod.top + pod.height / 2 + options.dot.offset.top + window.scrollY,
-        left: pod.fixed ? pod.left + pod.width / 2 + options.dot.offset.left : pod.left + pod.width / 2 + options.dot.offset.left + window.scrollX,
+        top: pod.fixed ? pod.top + pod.height / 2 + options.tooltip.offset.top : pod.top + pod.height / 2 + options.tooltip.offset.top + window.scrollY,
+        left: pod.fixed ? pod.left + pod.width / 2 - styles.tooltip.width / 2 + options.tooltip.offset.left : pod.left + pod.width / 2 - styles.tooltip.width / 2 + options.tooltip.offset.left + window.scrollX,
         position: pod.fixed ? 'fixed' : 'absolute'
       };
       var tooltipStyle = Object.assign(position, styles.tooltip);
@@ -244,6 +243,10 @@ var options = {
     content: {
       header: 'Header not set',
       note: 'Note not set'
+    },
+    offset: {
+      top: -20,
+      left: 0
     }
   },
   underlay: {},
@@ -279,10 +282,11 @@ var styles = {
     zIndex: '99999',
     background: '#fff',
     padding: '20',
-    minWidth: '200',
+    width: '250',
     borderRadius: '2',
     transform: 'translate(-50%,-50%)',
     cursor: 'pointer',
+    boxSizing: 'border-box',
     header: {
       display: 'flex',
       justifyContent: 'center',
@@ -340,7 +344,7 @@ window.onscroll = function renderScroll() {
 };
 
 pulsey();
-},{"./velocity":244,"./velocity.ui":245,"react":161,"react-dom":3,"velocity-react":162}],2:[function(require,module,exports){
+},{"./velocity.ui":244,"react":161,"react-dom":3,"velocity-react":162}],2:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -26639,8 +26643,6 @@ var VelocityTransitionGroup = React.createClass({
 module.exports = VelocityTransitionGroup;
 
 },{"./lib/velocity-animate-shim":163,"lodash/collection/each":165,"lodash/collection/pluck":168,"lodash/object/extend":232,"lodash/object/keys":233,"lodash/object/omit":235,"react":161,"react-addons-transition-group":239,"react-dom":3}],244:[function(require,module,exports){
-module.exports=require(240)
-},{}],245:[function(require,module,exports){
 /**********************
    Velocity UI Pack
 **********************/
