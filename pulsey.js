@@ -27,10 +27,11 @@ class Tooltip extends React.Component {
     }
     var tooltipStyle = Object.assign(position,styles.tooltip);
     var tooltip =
-      <div style={tooltipStyle} onClick={this.props.toggle}>
+      <div style={tooltipStyle} className={"pulsey-tooltip-" + pod.id} onClick={this.props.toggle}>
         <div style={styles.tooltip.close}> + </div>
           <div style={styles.tooltip.header}>{pot.header}</div>
           <div style={styles.tooltip.note}>{pot.note}</div>
+          <div style={styles.tooltip.tip}></div>
       </div>
     var showTooltip = this.props.show ? tooltip : null;
     return (
@@ -71,7 +72,7 @@ class Dot extends React.Component {
     }
     var dotStyle = Object.assign(position,styles.dot.back);
     var dot =
-      <div style={dotStyle} onClick={this.dotClick.bind(this)}>
+      <div style={dotStyle} className={"pulsey-dot-" + this.props.po.dot.id} onClick={this.dotClick.bind(this)}>
         <div style={styles.dot.front} className="spinner"></div>
       </div>
     return (
@@ -91,9 +92,11 @@ class Pulsey extends React.Component {
   render() {
     var dots = [];
     for (var i=0;i<pulseyAnchors.length;i++) {
-      dots.push(<Dot key={Math.random()}
-        po={this.props.po[i]}
-      />);
+      dots.push(
+        <Dot
+          key={Math.random()}
+          po={this.props.po[i]}
+        />);
     }
     return (
       <div style={styles.tour}>
@@ -202,6 +205,18 @@ var styles = {
       display: 'flex',
       justifyContent: 'center',
       fontWeight: '300',
+    },
+    tip: {
+      width: '0',
+      height: '0',
+      borderLeft: '10px solid transparent',
+      borderBottom: '10px solid #fff',
+      borderRight: '10px solid transparent',
+      borderTop: '10px solid transparent',
+      transform: 'translateX(-50%)',
+      left: '50%',
+      position: 'absolute',
+      top: '-20',
     },
     close: {
       color: '#333',

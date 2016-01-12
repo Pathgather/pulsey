@@ -70,7 +70,7 @@ var Tooltip = function (_React$Component2) {
       var tooltipStyle = Object.assign(position, styles.tooltip);
       var tooltip = _react2.default.createElement(
         'div',
-        { style: tooltipStyle, onClick: this.props.toggle },
+        { style: tooltipStyle, className: "pulsey-tooltip-" + pod.id, onClick: this.props.toggle },
         _react2.default.createElement(
           'div',
           { style: styles.tooltip.close },
@@ -85,7 +85,8 @@ var Tooltip = function (_React$Component2) {
           'div',
           { style: styles.tooltip.note },
           pot.note
-        )
+        ),
+        _react2.default.createElement('div', { style: styles.tooltip.tip })
       );
       var showTooltip = this.props.show ? tooltip : null;
       return _react2.default.createElement(
@@ -143,7 +144,7 @@ var Dot = function (_React$Component3) {
       var dotStyle = Object.assign(position, styles.dot.back);
       var dot = _react2.default.createElement(
         'div',
-        { style: dotStyle, onClick: this.dotClick.bind(this) },
+        { style: dotStyle, className: "pulsey-dot-" + this.props.po.dot.id, onClick: this.dotClick.bind(this) },
         _react2.default.createElement('div', { style: styles.dot.front, className: 'spinner' })
       );
       return _react2.default.createElement(
@@ -178,7 +179,8 @@ var Pulsey = function (_React$Component4) {
     value: function render() {
       var dots = [];
       for (var i = 0; i < pulseyAnchors.length; i++) {
-        dots.push(_react2.default.createElement(Dot, { key: Math.random(),
+        dots.push(_react2.default.createElement(Dot, {
+          key: Math.random(),
           po: this.props.po[i]
         }));
       }
@@ -297,6 +299,18 @@ var styles = {
       display: 'flex',
       justifyContent: 'center',
       fontWeight: '300'
+    },
+    tip: {
+      width: '0',
+      height: '0',
+      borderLeft: '10px solid transparent',
+      borderBottom: '10px solid #fff',
+      borderRight: '10px solid transparent',
+      borderTop: '10px solid transparent',
+      transform: 'translateX(-50%)',
+      left: '50%',
+      position: 'absolute',
+      top: '-20'
     },
     close: {
       color: '#333',

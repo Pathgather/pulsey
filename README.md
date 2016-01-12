@@ -90,32 +90,35 @@ STYLES
 - welcome
 - progress
 
-FEATURES
-- user chooses html elements to be dotted
+NEXT FEATURES
+- option to have tooltip arrow or not
+- tooltips recognize whether they are overflowing the screen and reposition themselves automatically, unless user decides to turn this functionality off
+- option to choose which direction tooltip pops
+- detect if next pulse is offscreen and animate document scroll to it
+
 - PulseyTour shows ordered or unordered dots
 - clicked dots show html, which the user adds using data attributes in their html file.  optional next/skip buttons
 - underlay can have 0 to 1 opacity
 - pulse's stay with html element, regardless of screen width changes, positioning changes, or scrolling
 - must detect mobile devices and be mobile friendly - allow them to enter a second comma-separate option for any mobile differences?
 - provide user with multiple pre-designed options for look and animation of dots and tooltips just by changing one option.  or they can choose to use their own css.
-- tooltips recognize whether they are overflowing the screen and reposition themselves automatically, unless user decides to turn this functionality off
-- sends and event whenever a dot is clicked or tour is started or completed so user can listen for the events and do something
-- option to 'highlight' the anchor element
-- option to choose which direction tooltip pops
+- sends an event whenever a dot is clicked or tour is started or completed so user can listen for the events and do something
+- tooltip next buttons
 - option to nav by keyboard
-- incredibly easy to use and customize
 - optional progress bar, whose look can be customized
-- each element has its own class that the user can easily identify and use to modify the styles without having to dive into the code or api
-- PulseyTour listens for an event befoe starting.  that event is when the document loads by default.
+- PulseyTour listens for an event before starting.  that event is when the document loads by default.
 - ability to pass PulseyTour a custom ID that the user can use to identify who is taking the tour and that they've completed it (as opposed to relying on localStorage)
 - option to use sessionStorage instead of localStorage
-- no jQuery required (requires Velocity)
-- option to show/not show and position the triangle arrow
-- detect if next pulse is offscreen and animate document scroll to it
 - basic optional welcome screen with customizable header, message, button, etc.
+
+COMPLETED FEATURES
+- user chooses html elements to be dotted
+- no jQuery required (requires Velocity)
+- each element has its own class that the user can easily identify and use to modify the styles without having to dive into the code or api
 
 ISSUES
 - need to find a better way to ensure dots track their target elements, because you're currently re-rendering the whole pulsey app, which is disruptive
+- properly import velocity.ui.js from node_modules
 
 NEW FEATURE IDEAS
 - give each dot a class of "pulsey-dot-" + po.dot.id so users can easily customize the CSS without using the API
