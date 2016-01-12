@@ -68,6 +68,7 @@ var Tooltip = function (_React$Component2) {
         position: pod.fixed ? 'fixed' : 'absolute'
       };
       var tooltipStyle = Object.assign(position, styles.tooltip);
+      var tip = options.tooltip.tip.display ? _react2.default.createElement('div', { style: styles.tooltip.tip }) : null;
       var tooltip = _react2.default.createElement(
         'div',
         { style: tooltipStyle, className: "pulsey-tooltip-" + pod.id, onClick: this.props.toggle },
@@ -86,7 +87,7 @@ var Tooltip = function (_React$Component2) {
           { style: styles.tooltip.note },
           pot.note
         ),
-        _react2.default.createElement('div', { style: styles.tooltip.tip })
+        tip
       );
       var showTooltip = this.props.show ? tooltip : null;
       return _react2.default.createElement(
@@ -242,9 +243,15 @@ var options = {
     }
   },
   tooltip: {
+    width: '250',
     content: {
       header: 'Header not set',
       note: 'Note not set'
+    },
+    tip: {
+      display: false,
+      side: 'top',
+      size: '10'
     },
     offset: {
       top: -20,
@@ -255,6 +262,9 @@ var options = {
   welcome: {},
   progress: {}
 };
+
+var tipSide = options.tooltip.tip.side;
+var tipSize = options.tooltip.tip.size;
 
 var styles = {
   tour: {
@@ -284,7 +294,7 @@ var styles = {
     zIndex: '99999',
     background: '#fff',
     padding: '20',
-    width: '250',
+    width: options.tooltip.width,
     borderRadius: '2',
     transform: 'translate(-50%,-50%)',
     cursor: 'pointer',
@@ -303,14 +313,15 @@ var styles = {
     tip: {
       width: '0',
       height: '0',
-      borderLeft: '10px solid transparent',
-      borderBottom: '10px solid #fff',
-      borderRight: '10px solid transparent',
-      borderTop: '10px solid transparent',
-      transform: 'translateX(-50%)',
-      left: '50%',
-      position: 'absolute',
-      top: '-20'
+      borderLeft: tipSide == 'right' ? tipSize + 'px solid #fff' : tipSize + 'px solid transparent',
+      borderBottom: tipSide == 'top' ? tipSize + 'px solid #fff' : tipSize + 'px solid transparent',
+      borderRight: tipSide == 'left' ? tipSize + 'px solid #fff' : tipSize + 'px solid transparent',
+      borderTop: tipSide == 'bottom' ? tipSize + 'px solid #fff' : tipSize + 'px solid transparent',
+      transform: tipSide == 'right' || tipSide == 'left' ? 'translateY(-50%)' : tipSide == 'bottom' ? 'translate(-50%, 100%)' : 'translate(-50%, 0)',
+      left: tipSide == 'top' || tipSide == 'bottom' ? '50%' : tipSide == 'left' ? '-' + 2 * tipSize : options.tooltip.width,
+      top: tipSide == 'right' || tipSide == 'left' ? '50%' : tipSide == 'top' ? '-' + 2 * tipSize : null,
+      bottom: tipSide == 'bottom' ? '0' : null,
+      position: 'absolute'
     },
     close: {
       color: '#333',
