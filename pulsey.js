@@ -33,6 +33,10 @@ class Tooltip extends React.Component {
         <div style={styles.tooltip.close}> + </div>
           <div style={styles.tooltip.header}>{pot.header}</div>
           <div style={styles.tooltip.note}>{pot.note}</div>
+          <div style={styles.tooltip.buttons}>
+            <button style={styles.tooltip.exitButton}>Exit</button>
+            <button style={styles.tooltip.nextButton}>Next</button>
+          </div>
           {tip}
       </div>
     var showTooltip = this.props.show ? tooltip : null;
@@ -156,12 +160,12 @@ var options = {
       note: 'Note not set',
     },
     tip: {
-      display: false,
+      display: true,
       side: 'top',
       size: '10',
     },
     offset: {
-      top: -20,
+      top: 25,
       left: 0,
     },
   },
@@ -200,7 +204,7 @@ var styles = {
   tooltip: {
     zIndex: '99999',
     background: '#fff',
-    padding: '20',
+    padding: '15',
     width: options.tooltip.width,
     borderRadius: '2',
     transform: 'translate(-50%,-50%)',
@@ -216,6 +220,39 @@ var styles = {
       display: 'flex',
       justifyContent: 'center',
       fontWeight: '300',
+    },
+    buttons: {
+      position: 'relative',
+      width: '100%',
+      marginTop: '20',
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
+    nextButton: {
+      padding: '4',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      border: '1px solid #ddd',
+      background: '#fff',
+      borderRadius: '2',
+      color: '#555',
+      width: '50',
+      outline: 'none',
+      cursor: 'pointer',
+    },
+    exitButton: {
+      padding: '4',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      border: 'none',
+      background: '#fff',
+      color: '#aaa',
+      width: '50',
+      outline: 'none',
+      cursor: 'pointer',
     },
     tip: {
       width: '0',

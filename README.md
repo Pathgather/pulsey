@@ -91,13 +91,13 @@ STYLES
 - progress
 
 NEXT FEATURES
-- option to have tooltip arrow or not
 - tooltips recognize whether they are overflowing the screen and reposition themselves automatically, unless user decides to turn this functionality off
-- option to choose which direction tooltip pops
 - detect if next pulse is offscreen and animate document scroll to it
 
-- PulseyTour shows ordered or unordered dots
+- Pulsey shows ordered or unordered dots
 - clicked dots show html, which the user adds using data attributes in their html file.  optional next/skip buttons
+- option to show dot or not (in case they just want to use the next button)
+- show next dot by looking at dot ids if ps-step hasn't been set by user
 - underlay can have 0 to 1 opacity
 - pulse's stay with html element, regardless of screen width changes, positioning changes, or scrolling
 - must detect mobile devices and be mobile friendly - allow them to enter a second comma-separate option for any mobile differences?
@@ -115,10 +115,12 @@ COMPLETED FEATURES
 - user chooses html elements to be dotted
 - no jQuery required (requires Velocity)
 - each element has its own class that the user can easily identify and use to modify the styles without having to dive into the code or api
+- option to have tooltip arrow or not, and which side it will be on
 
 ISSUES
 - need to find a better way to ensure dots track their target elements, because you're currently re-rendering the whole pulsey app, which is disruptive
 - properly import velocity.ui.js from node_modules
+- options are not currently specific to each dot and each tooltip - they're global and shouldn't be
 
 NEW FEATURE IDEAS
 - give each dot a class of "pulsey-dot-" + po.dot.id so users can easily customize the CSS without using the API
