@@ -57,7 +57,7 @@ class Dot extends React.Component {
     super(props);
     this.state = {
       hideDot: !localStorage.getItem("dot " + this.props.po.dot.id),
-      show: false,
+      show: this.props.po.dot.id == this.props.currentStep,
     }
   }
   dotClick() {
@@ -71,12 +71,10 @@ class Dot extends React.Component {
   nextStep() {
     console.log(this.props.currentStep);
     console.log(this.props.po.dot.id);
-    console.log(this.props.next);
-    this.props.next;
+    this.dotClick();
+    this.props.nextStep();
     console.log(this.props.currentStep);
     console.log(this.props.po.dot.id);
-    this.props.currentStep == this.props.po.dot.id ?
-      console.log('yebo!') : console.log('nope');
   }
   toggle() {
     this.setState({
@@ -128,7 +126,6 @@ class Pulsey extends React.Component {
     this.setState({
       currentStep: this.state.currentStep + 1,
     });
-    console.log('next step called');
   }
   render() {
     var dots = [];
@@ -137,7 +134,7 @@ class Pulsey extends React.Component {
         <Dot
           key={Math.random()}
           po={this.props.po[i]}
-          next={this.nextStep.bind(this)}
+          nextStep={this.nextStep.bind(this)}
           currentStep={this.state.currentStep}
         />);
     }

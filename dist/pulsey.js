@@ -127,7 +127,7 @@ var Dot = function (_React$Component3) {
 
     _this3.state = {
       hideDot: !localStorage.getItem("dot " + _this3.props.po.dot.id),
-      show: false
+      show: _this3.props.po.dot.id == _this3.props.currentStep
     };
     return _this3;
   }
@@ -147,11 +147,10 @@ var Dot = function (_React$Component3) {
     value: function nextStep() {
       console.log(this.props.currentStep);
       console.log(this.props.po.dot.id);
-      console.log(this.props.next);
-      this.props.next;
+      this.dotClick();
+      this.props.nextStep();
       console.log(this.props.currentStep);
       console.log(this.props.po.dot.id);
-      this.props.currentStep == this.props.po.dot.id ? console.log('yebo!') : console.log('nope');
     }
   }, {
     key: 'toggle',
@@ -222,7 +221,6 @@ var Pulsey = function (_React$Component4) {
       this.setState({
         currentStep: this.state.currentStep + 1
       });
-      console.log('next step called');
     }
   }, {
     key: 'render',
@@ -232,7 +230,7 @@ var Pulsey = function (_React$Component4) {
         dots.push(_react2.default.createElement(Dot, {
           key: Math.random(),
           po: this.props.po[i],
-          next: this.nextStep.bind(this),
+          nextStep: this.nextStep.bind(this),
           currentStep: this.state.currentStep
         }));
       }
