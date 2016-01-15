@@ -71,10 +71,10 @@ var Tooltip = function (_React$Component2) {
       var tip = options.tooltip.tip.display ? _react2.default.createElement('div', { style: styles.tooltip.tip }) : null;
       var tooltip = _react2.default.createElement(
         'div',
-        { style: tooltipStyle, className: "pulsey-tooltip-" + pod.id, onClick: this.props.toggle },
+        { style: tooltipStyle, className: "pulsey-tooltip-" + pod.id },
         _react2.default.createElement(
           'div',
-          { style: styles.tooltip.close },
+          { style: styles.tooltip.close, onClick: this.props.toggle },
           ' + '
         ),
         _react2.default.createElement(
@@ -97,7 +97,9 @@ var Tooltip = function (_React$Component2) {
           ),
           _react2.default.createElement(
             'button',
-            { style: styles.tooltip.nextButton },
+            {
+              style: styles.tooltip.nextButton,
+              onClick: this.props.nextStep },
             'Next'
           )
         ),
@@ -106,7 +108,7 @@ var Tooltip = function (_React$Component2) {
       var showTooltip = this.props.show ? tooltip : null;
       return _react2.default.createElement(
         _velocityReact.VelocityTransitionGroup,
-        { enter: { animation: "transition.bounceIn" }, leave: { animation: "transition.bounceOut" } },
+        { enter: { animation: "transition.expandIn" }, leave: { animation: "transition.expandOut" } },
         showTooltip
       );
     }
@@ -124,7 +126,7 @@ var Dot = function (_React$Component3) {
     var _this3 = _possibleConstructorReturn(this, Object.getPrototypeOf(Dot).call(this, props));
 
     _this3.state = {
-      clicked: !localStorage.getItem("dot " + _this3.props.po.dot.id),
+      hideDot: !localStorage.getItem("dot " + _this3.props.po.dot.id),
       show: false
     };
     return _this3;
@@ -134,11 +136,22 @@ var Dot = function (_React$Component3) {
     key: 'dotClick',
     value: function dotClick() {
       this.setState({
-        clicked: localStorage.setItem("dot " + this.props.po.dot.id, true)
+        hideDot: localStorage.setItem("dot " + this.props.po.dot.id, true)
       });
       this.setState({
         show: !this.state.show
       });
+    }
+  }, {
+    key: 'nextStep',
+    value: function nextStep() {
+      console.log(this.props.currentStep);
+      console.log(this.props.po.dot.id);
+      console.log(this.props.next);
+      this.props.next;
+      console.log(this.props.currentStep);
+      console.log(this.props.po.dot.id);
+      this.props.currentStep == this.props.po.dot.id ? console.log('yebo!') : console.log('nope');
     }
   }, {
     key: 'toggle',
@@ -165,9 +178,18 @@ var Dot = function (_React$Component3) {
       return _react2.default.createElement(
         'div',
         null,
-        this.state.clicked ? dot : null,
-        _react2.default.createElement(Tooltip, { po: this.props.po, toggle: this.toggle.bind(this), show: this.state.show }),
-        _react2.default.createElement(Underlay, { po: this.props.po, toggle: this.toggle.bind(this), show: this.state.show })
+        this.state.hideDot ? dot : null,
+        _react2.default.createElement(Tooltip, {
+          po: this.props.po,
+          toggle: this.toggle.bind(this),
+          show: this.state.show,
+          nextStep: this.nextStep.bind(this)
+        }),
+        _react2.default.createElement(Underlay, {
+          po: this.props.po,
+          toggle: this.toggle.bind(this),
+          show: this.state.show
+        })
       );
     }
   }]);
@@ -178,10 +200,15 @@ var Dot = function (_React$Component3) {
 var Pulsey = function (_React$Component4) {
   _inherits(Pulsey, _React$Component4);
 
-  function Pulsey() {
+  function Pulsey(props) {
     _classCallCheck(this, Pulsey);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(Pulsey).apply(this, arguments));
+    var _this4 = _possibleConstructorReturn(this, Object.getPrototypeOf(Pulsey).call(this, props));
+
+    _this4.state = {
+      currentStep: options.dot.firstDot
+    };
+    return _this4;
   }
 
   _createClass(Pulsey, [{
@@ -190,13 +217,23 @@ var Pulsey = function (_React$Component4) {
       localStorage.clear();
     }
   }, {
+    key: 'nextStep',
+    value: function nextStep() {
+      this.setState({
+        currentStep: this.state.currentStep + 1
+      });
+      console.log('next step called');
+    }
+  }, {
     key: 'render',
     value: function render() {
       var dots = [];
       for (var i = 0; i < pulseyAnchors.length; i++) {
         dots.push(_react2.default.createElement(Dot, {
           key: Math.random(),
-          po: this.props.po[i]
+          po: this.props.po[i],
+          next: this.nextStep.bind(this),
+          currentStep: this.state.currentStep
         }));
       }
       return _react2.default.createElement(
@@ -233,7 +270,7 @@ function createPulseyObjects() {
     pulseyObjects[i] = {
       dot: {
         id: i,
-        clicked: false,
+        hideDot: false,
         top: pulseyAnchors[i].getBoundingClientRect().top,
         left: pulseyAnchors[i].getBoundingClientRect().left,
         width: pulseyAnchors[i].getBoundingClientRect().width,
@@ -251,6 +288,7 @@ function createPulseyObjects() {
 var options = {
   utilities: {},
   dot: {
+    firstDot: 1,
     offset: {
       top: 0,
       left: 0
@@ -375,7 +413,8 @@ var styles = {
       transform: 'rotate(45deg)',
       position: 'absolute',
       top: '5',
-      right: '5'
+      right: '12',
+      fontSize: '25'
     }
   },
   underlay: {

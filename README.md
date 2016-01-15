@@ -90,26 +90,36 @@ STYLES
 - welcome
 - progress
 
+
+triggering next dot
+- we initialize the state of showDot to this.props.po.dot.id == options.dot.firstDotId, which is set to 1 by default
+- click next button, triggers onClick event which triggers pulsey handler,
+- which sets a pulsey state of showDot to Pulsey's state id to += 1
+- Dot has state of showDot: this.props.nextDot == this.po.dot.id
+- and then we have this.state.showDot ? dot : null;
+
+
+
+
 NEXT FEATURES
 - tooltips recognize whether they are overflowing the screen and reposition themselves automatically, unless user decides to turn this functionality off
 - detect if next pulse is offscreen and animate document scroll to it
 
+- consider changing Tooltip component so it is just one that follows the dots, so you can animate transition between the dots.  this could be an option.
+- create next and skip tour buttons, which can be turned on or off
 - Pulsey shows ordered or unordered dots
-- clicked dots show html, which the user adds using data attributes in their html file.  optional next/skip buttons
+- clicked dots show html, which the user adds using data attributes in their html file.
 - option to show dot or not (in case they just want to use the next button)
-- show next dot by looking at dot ids if ps-step hasn't been set by user
-- underlay can have 0 to 1 opacity
-- pulse's stay with html element, regardless of screen width changes, positioning changes, or scrolling
-- must detect mobile devices and be mobile friendly - allow them to enter a second comma-separate option for any mobile differences?
+- determine next dot to show by looking at dot ids if ps-step hasn't been set by user
+- pulses stay with html element, regardless of screen width changes, positioning changes, or scrolling (issue)
+- detect mobile devices and be mobile friendly
 - provide user with multiple pre-designed options for look and animation of dots and tooltips just by changing one option.  or they can choose to use their own css.
 - sends an event whenever a dot is clicked or tour is started or completed so user can listen for the events and do something
-- tooltip next buttons
 - option to nav by keyboard
-- optional progress bar, whose look can be customized
-- PulseyTour listens for an event before starting.  that event is when the document loads by default.
-- ability to pass PulseyTour a custom ID that the user can use to identify who is taking the tour and that they've completed it (as opposed to relying on localStorage)
+- ability to pass Pulsey a custom ID that the user can use to identify who is taking the tour and that they've completed it (as opposed to relying on localStorage)
 - option to use sessionStorage instead of localStorage
 - basic optional welcome screen with customizable header, message, button, etc.
+- optional progress bar, whose look can be customized
 
 COMPLETED FEATURES
 - user chooses html elements to be dotted

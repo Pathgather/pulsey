@@ -29,19 +29,23 @@ class Tooltip extends React.Component {
     var tip = options.tooltip.tip.display ?
       <div style={styles.tooltip.tip}></div> : null;
     var tooltip =
-      <div style={tooltipStyle} className={"pulsey-tooltip-" + pod.id} onClick={this.props.toggle}>
-        <div style={styles.tooltip.close}> + </div>
+      <div style={tooltipStyle} className={"pulsey-tooltip-" + pod.id}>
+        <div style={styles.tooltip.close} onClick={this.props.toggle}> + </div>
           <div style={styles.tooltip.header}>{pot.header}</div>
           <div style={styles.tooltip.note}>{pot.note}</div>
           <div style={styles.tooltip.buttons}>
             <button style={styles.tooltip.exitButton}>Exit</button>
-            <button style={styles.tooltip.nextButton}>Next</button>
+            <button
+              style={styles.tooltip.nextButton}
+              onClick={this.props.nextStep}>
+              Next
+            </button>
           </div>
           {tip}
       </div>
     var showTooltip = this.props.show ? tooltip : null;
     return (
-      <VelocityTransitionGroup enter={{animation: "transition.bounceIn"}} leave={{animation: "transition.bounceOut"}}>
+      <VelocityTransitionGroup enter={{animation: "transition.expandIn"}} leave={{animation: "transition.expandOut"}}>
         {showTooltip}
       </VelocityTransitionGroup>
     );
@@ -52,17 +56,27 @@ class Dot extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      clicked: !localStorage.getItem("dot " + this.props.po.dot.id),
+      hideDot: !localStorage.getItem("dot " + this.props.po.dot.id),
       show: false,
     }
   }
   dotClick() {
     this.setState({
-      clicked: localStorage.setItem("dot " + this.props.po.dot.id, true)
+      hideDot: localStorage.setItem("dot " + this.props.po.dot.id, true)
     });
     this.setState({
       show: !this.state.show,
     });
+  }
+  nextStep() {
+    console.log(this.props.currentStep);
+    console.log(this.props.po.dot.id);
+    console.log(this.props.next);
+    this.props.next;
+    console.log(this.props.currentStep);
+    console.log(this.props.po.dot.id);
+    this.props.currentStep == this.props.po.dot.id ?
+      console.log('yebo!') : console.log('nope');
   }
   toggle() {
     this.setState({
@@ -83,17 +97,38 @@ class Dot extends React.Component {
       </div>
     return (
       <div>
-        {this.state.clicked ? dot : null}
-        <Tooltip po={this.props.po} toggle={this.toggle.bind(this)} show={this.state.show} />
-        <Underlay po={this.props.po} toggle={this.toggle.bind(this)} show={this.state.show} />
+        {this.state.hideDot ? dot : null}
+        <Tooltip
+          po={this.props.po}
+          toggle={this.toggle.bind(this)}
+          show={this.state.show}
+          nextStep={this.nextStep.bind(this)}
+        />
+        <Underlay
+          po={this.props.po}
+          toggle={this.toggle.bind(this)}
+          show={this.state.show}
+        />
       </div>
     );
   }
 }
 
 class Pulsey extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentStep: options.dot.firstDot,
+    }
+  }
   reset() {
     localStorage.clear();
+  }
+  nextStep() {
+    this.setState({
+      currentStep: this.state.currentStep + 1,
+    });
+    console.log('next step called');
   }
   render() {
     var dots = [];
@@ -102,6 +137,8 @@ class Pulsey extends React.Component {
         <Dot
           key={Math.random()}
           po={this.props.po[i]}
+          next={this.nextStep.bind(this)}
+          currentStep={this.state.currentStep}
         />);
     }
     return (
@@ -130,7 +167,7 @@ function createPulseyObjects() {
     pulseyObjects[i] = {
       dot: {
         id: i,
-        clicked: false,
+        hideDot: false,
         top: pulseyAnchors[i].getBoundingClientRect().top,
         left: pulseyAnchors[i].getBoundingClientRect().left,
         width: pulseyAnchors[i].getBoundingClientRect().width,
@@ -148,6 +185,7 @@ function createPulseyObjects() {
 var options = {
   utilities : {},
   dot: {
+    firstDot: 1,
     offset: {
       top: 0,
       left: 0,
@@ -272,7 +310,8 @@ var styles = {
       transform: 'rotate(45deg)',
       position: 'absolute',
       top: '5',
-      right: '5',
+      right: '12',
+      fontSize: '25',
     },
   },
   underlay: {
@@ -312,4 +351,4 @@ window.onscroll = function renderScroll() {
   pulsey();
 }
 
-pulsey();
+  pulsey();
