@@ -56,25 +56,22 @@ class Dot extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      hideDot: !localStorage.getItem("dot " + this.props.po.dot.id),
+      hideDot: !localStorage.getItem("dot" + this.props.po.dot.id),
       show: this.props.po.dot.id == this.props.currentStep,
     }
   }
   dotClick() {
     this.setState({
-      hideDot: localStorage.setItem("dot " + this.props.po.dot.id, true)
+      hideDot: localStorage.setItem("dot" + this.props.po.dot.id, true)
     });
     this.setState({
       show: !this.state.show,
     });
+    console.log(this.props.po.dot.id);
   }
   nextStep() {
-    console.log(this.props.currentStep);
-    console.log(this.props.po.dot.id);
-    this.dotClick();
+    hideDot: localStorage.setItem("dot" + parseInt(this.props.po.dot.id + 1), true)
     this.props.nextStep();
-    console.log(this.props.currentStep);
-    console.log(this.props.po.dot.id);
   }
   toggle() {
     this.setState({
@@ -90,7 +87,7 @@ class Dot extends React.Component {
     }
     var dotStyle = Object.assign(position,styles.dot.back);
     var dot =
-      <div style={dotStyle} className={"pulsey-dot-" + this.props.po.dot.id} onClick={this.dotClick.bind(this)}>
+      <div style={dotStyle} className={"pulsey-dot-" + this.props.po.dot.id} ref="testRef" onClick={this.dotClick.bind(this)}>
         <div style={styles.dot.front} className="spinner"></div>
       </div>
     return (

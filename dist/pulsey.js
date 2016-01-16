@@ -126,7 +126,7 @@ var Dot = function (_React$Component3) {
     var _this3 = _possibleConstructorReturn(this, Object.getPrototypeOf(Dot).call(this, props));
 
     _this3.state = {
-      hideDot: !localStorage.getItem("dot " + _this3.props.po.dot.id),
+      hideDot: !localStorage.getItem("dot" + _this3.props.po.dot.id),
       show: _this3.props.po.dot.id == _this3.props.currentStep
     };
     return _this3;
@@ -136,21 +136,18 @@ var Dot = function (_React$Component3) {
     key: 'dotClick',
     value: function dotClick() {
       this.setState({
-        hideDot: localStorage.setItem("dot " + this.props.po.dot.id, true)
+        hideDot: localStorage.setItem("dot" + this.props.po.dot.id, true)
       });
       this.setState({
         show: !this.state.show
       });
+      console.log(this.props.po.dot.id);
     }
   }, {
     key: 'nextStep',
     value: function nextStep() {
-      console.log(this.props.currentStep);
-      console.log(this.props.po.dot.id);
-      this.dotClick();
+      hideDot: localStorage.setItem("dot" + parseInt(this.props.po.dot.id + 1), true);
       this.props.nextStep();
-      console.log(this.props.currentStep);
-      console.log(this.props.po.dot.id);
     }
   }, {
     key: 'toggle',
@@ -171,7 +168,7 @@ var Dot = function (_React$Component3) {
       var dotStyle = Object.assign(position, styles.dot.back);
       var dot = _react2.default.createElement(
         'div',
-        { style: dotStyle, className: "pulsey-dot-" + this.props.po.dot.id, onClick: this.dotClick.bind(this) },
+        { style: dotStyle, className: "pulsey-dot-" + this.props.po.dot.id, ref: 'testRef', onClick: this.dotClick.bind(this) },
         _react2.default.createElement('div', { style: styles.dot.front, className: 'spinner' })
       );
       return _react2.default.createElement(
