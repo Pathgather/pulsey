@@ -87,8 +87,14 @@ class Dot extends React.Component {
     }
     var dotStyle = Object.assign(position,styles.dot.back);
     var dot =
-      <div style={dotStyle} className={"pulsey-dot-" + this.props.po.dot.id} ref="testRef" onClick={this.dotClick.bind(this)}>
-        <div style={styles.dot.front} className="spinner"></div>
+      <div
+        style={dotStyle}
+        className={"pulsey-dot-" + this.props.po.dot.id}
+        onClick={this.dotClick.bind(this)}>
+        <div
+          style={styles.dot.front}
+          className="spinner">
+        </div>
       </div>
     return (
       <div>
@@ -179,7 +185,7 @@ function createPulseyObjects() {
 var options = {
   utilities : {},
   dot: {
-    firstDot: 1,
+    firstDot: null,
     offset: {
       top: 0,
       left: 0,

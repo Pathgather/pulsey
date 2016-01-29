@@ -91,17 +91,15 @@ STYLES
 - progress
 
 
-triggering next dot
-- we initialize the state of showDot to this.props.po.dot.id == options.dot.firstDotId, which is set to 1 by default
-- click next button, triggers onClick event which triggers pulsey handler,
-- which sets a pulsey state of showDot to Pulsey's state id to += 1
-- Dot has state of showDot: this.props.nextDot == this.po.dot.id
-- and then we have this.state.showDot ? dot : null;
-
-
-
+fixing the scrolling and window resize
+- create a state in Pulsey called resetProps
+- it equals the pulseyObects array
+- create a method componentDidMount, give it two listeners window.onresize and window.onscroll
+- within those you call createPulseyObjects(), and do this.setState to set resetProps to pulseyObjects
+- finally, when you create your dots within the dot for loop within Pulsey, set the prop po to this.state.resetProps
 
 NEXT FEATURES
+- fix the way you handle screen size changes and scrolling
 - tooltips recognize whether they are overflowing the screen and reposition themselves automatically, unless user decides to turn this functionality off
 - detect if next pulse is offscreen and animate document scroll to it
 
@@ -127,10 +125,19 @@ COMPLETED FEATURES
 - each element has its own class that the user can easily identify and use to modify the styles without having to dive into the code or api
 - option to have tooltip arrow or not, and which side it will be on
 
+NEW FEATURE IDEAS
+- give each dot a class of "pulsey-dot-" + po.dot.id so users can easily customize the CSS without using the API
+- two options for tooltips - use same one that animates between dots, and one where each dot has its own tooltip
+
 ISSUES
 - need to find a better way to ensure dots track their target elements, because you're currently re-rendering the whole pulsey app, which is disruptive
 - properly import velocity.ui.js from node_modules
 - options are not currently specific to each dot and each tooltip - they're global and shouldn't be
 
-NEW FEATURE IDEAS
-- give each dot a class of "pulsey-dot-" + po.dot.id so users can easily customize the CSS without using the API
+NOTES
+triggering next dot
+- we initialize the state of showDot to this.props.po.dot.id == options.dot.firstDotId, which is set to 1 by default
+- click next button, triggers onClick event which triggers pulsey handler,
+- which sets a pulsey state of showDot to Pulsey's state id to += 1
+- Dot has state of showDot: this.props.nextDot == this.po.dot.id
+- and then we have this.state.showDot ? dot : null;
