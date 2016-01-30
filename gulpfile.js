@@ -28,7 +28,7 @@ gulp.task('clean', function(cb) {
     del(['dist'], cb)
 });
 
-gulp.task('build', ['scripts', 'styles', 'views']);
+gulp.task('build', ['clean', 'scripts', 'styles', 'views']);
 
 
 gulp.task('watch', function() {

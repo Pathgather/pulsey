@@ -120,6 +120,7 @@ class Pulsey extends React.Component {
     super(props);
     this.state = {
       currentStep: options.dot.firstDot,
+      pulseyObjects: pulseyObjects,
     }
   }
   reset() {
@@ -130,13 +131,25 @@ class Pulsey extends React.Component {
       currentStep: this.state.currentStep + 1,
     });
   }
+  componentDidMount() {
+    this.resetPulseyObjects();
+    // window.onresize = function () {
+    //   console.log('resizing');
+    // }
+  }
+  resetPulseyObjects() {
+    createPulseyObjects();
+    this.setState({
+      pulseyObjects: pulseyObjects,
+    });
+  }
   render() {
     var dots = [];
     for (var i=0;i<pulseyAnchors.length;i++) {
       dots.push(
         <Dot
           key={Math.random()}
-          po={this.props.po[i]}
+          po={this.state.pulseyObjects[i]}
           nextStep={this.nextStep.bind(this)}
           currentStep={this.state.currentStep}
         />);
@@ -344,11 +357,11 @@ function pulsey() {
   ReactDOM.render(<Pulsey po={pulseyObjects} />, document.getElementById('pulsey'));
 }
 
-window.onresize = function renderResize() {
-  pulsey();
-}
-window.onscroll = function renderScroll() {
-  pulsey();
-}
+// window.onresize = function renderResize() {
+//   pulsey();
+// }
+// window.onscroll = function renderScroll() {
+//   pulsey();
+// }
 
   pulsey();

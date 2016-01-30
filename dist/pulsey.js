@@ -207,7 +207,8 @@ var Pulsey = function (_React$Component4) {
     var _this4 = _possibleConstructorReturn(this, Object.getPrototypeOf(Pulsey).call(this, props));
 
     _this4.state = {
-      currentStep: options.dot.firstDot
+      currentStep: options.dot.firstDot,
+      pulseyObjects: pulseyObjects
     };
     return _this4;
   }
@@ -225,13 +226,29 @@ var Pulsey = function (_React$Component4) {
       });
     }
   }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.resetPulseyObjects();
+      // window.onresize = function () {
+      //   console.log('resizing');
+      // }
+    }
+  }, {
+    key: 'resetPulseyObjects',
+    value: function resetPulseyObjects() {
+      createPulseyObjects();
+      this.setState({
+        pulseyObjects: pulseyObjects
+      });
+    }
+  }, {
     key: 'render',
     value: function render() {
       var dots = [];
       for (var i = 0; i < pulseyAnchors.length; i++) {
         dots.push(_react2.default.createElement(Dot, {
           key: Math.random(),
-          po: this.props.po[i],
+          po: this.state.pulseyObjects[i],
           nextStep: this.nextStep.bind(this),
           currentStep: this.state.currentStep
         }));
@@ -447,12 +464,12 @@ function pulsey() {
   _reactDom2.default.render(_react2.default.createElement(Pulsey, { po: pulseyObjects }), document.getElementById('pulsey'));
 }
 
-window.onresize = function renderResize() {
-  pulsey();
-};
-window.onscroll = function renderScroll() {
-  pulsey();
-};
+// window.onresize = function renderResize() {
+//   pulsey();
+// }
+// window.onscroll = function renderScroll() {
+//   pulsey();
+// }
 
 pulsey();
 },{"./velocity.ui":244,"react":161,"react-dom":3,"velocity-react":162}],2:[function(require,module,exports){
