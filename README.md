@@ -91,15 +91,9 @@ STYLES
 - progress
 
 
-fixing the scrolling and window resize
--- create a state in Pulsey called pulseyObjects
--- it equals the pulseyObects array
--- create a method componentDidMount, give it two listeners window.onresize and window.onscroll
--- within those you call createPulseyObjects(), and do this.setState to set resetProps to pulseyObjects
-- finally, when you create your dots within the dot for loop within Pulsey, set the prop po to this.state.pulseyObjects
-
 NEXT FEATURES
-- fix the way you handle screen size changes and scrolling
+- fix next button
+- fix animations when going form one dot to another
 - tooltips recognize whether they are overflowing the screen and reposition themselves automatically, unless user decides to turn this functionality off
 - detect if next pulse is offscreen and animate document scroll to it
 
@@ -120,6 +114,7 @@ NEXT FEATURES
 - optional progress bar, whose look can be customized
 
 COMPLETED FEATURES
+- fix the way you handle screen size changes and scrolling
 - user chooses html elements to be dotted
 - no jQuery required (requires Velocity)
 - each element has its own class that the user can easily identify and use to modify the styles without having to dive into the code or api
@@ -130,7 +125,6 @@ NEW FEATURE IDEAS
 - two options for tooltips - use same one that animates between dots, and one where each dot has its own tooltip
 
 ISSUES
-- need to find a better way to ensure dots track their target elements, because you're currently re-rendering the whole pulsey app, which is disruptive
 - properly import velocity.ui.js from node_modules
 - options are not currently specific to each dot and each tooltip - they're global and shouldn't be
 

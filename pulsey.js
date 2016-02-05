@@ -112,7 +112,6 @@ class Dot extends React.Component {
       <div>
         {this.state.hideDot ? dot : null}
         <Tooltip
-          po={this.props.po}
           pa={this.props.pa}
           toggle={this.toggle.bind(this)}
           show={this.state.show}
@@ -120,7 +119,6 @@ class Dot extends React.Component {
           id={this.props.id}
         />
         <Underlay
-          po={this.props.po}
           toggle={this.toggle.bind(this)}
           show={this.state.show}
         />
@@ -320,6 +318,7 @@ var styles = {
     top: '0',
     width: '100vw',
     height: '100vh',
+    position: 'fixed',
   },
   reset: {
     width: '150px',

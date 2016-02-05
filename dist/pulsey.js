@@ -193,7 +193,6 @@ var Dot = function (_React$Component3) {
         null,
         this.state.hideDot ? dot : null,
         _react2.default.createElement(Tooltip, {
-          po: this.props.po,
           pa: this.props.pa,
           toggle: this.toggle.bind(this),
           show: this.state.show,
@@ -201,7 +200,6 @@ var Dot = function (_React$Component3) {
           id: this.props.id
         }),
         _react2.default.createElement(Underlay, {
-          po: this.props.po,
           toggle: this.toggle.bind(this),
           show: this.state.show
         })
@@ -425,7 +423,8 @@ var styles = {
     left: '0',
     top: '0',
     width: '100vw',
-    height: '100vh'
+    height: '100vh',
+    position: 'fixed'
   },
   reset: {
     width: '150px',
