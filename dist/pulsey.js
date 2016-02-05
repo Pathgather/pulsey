@@ -125,10 +125,12 @@ var Dot = function (_React$Component3) {
 
     var _this3 = _possibleConstructorReturn(this, Object.getPrototypeOf(Dot).call(this, props));
 
+    console.log('creating', props);
     _this3.state = {
-      hideDot: !localStorage.getItem("dot" + _this3.props.po.dot.id),
-      show: _this3.props.po.dot.id == _this3.props.currentStep
+      hideDot: !localStorage.getItem("dot" + _this3.props.id),
+      show: _this3.props.id == _this3.props.currentStep
     };
+    console.log(_this3.state.pos);
     return _this3;
   }
 
@@ -136,17 +138,16 @@ var Dot = function (_React$Component3) {
     key: 'dotClick',
     value: function dotClick() {
       this.setState({
-        hideDot: localStorage.setItem("dot" + this.props.po.dot.id, true)
+        hideDot: localStorage.setItem("dot" + this.props.id, true)
       });
       this.setState({
         show: !this.state.show
       });
-      console.log(this.props.po.dot.id);
     }
   }, {
     key: 'nextStep',
     value: function nextStep() {
-      hideDot: localStorage.setItem("dot" + parseInt(this.props.po.dot.id + 1), true);
+      hideDot: localStorage.setItem("dot" + parseInt(this.props.id + 1), true);
       this.props.nextStep();
     }
   }, {
@@ -159,18 +160,29 @@ var Dot = function (_React$Component3) {
   }, {
     key: 'render',
     value: function render() {
-      var pod = this.props.po.dot;
+      var pa = this.props.pa;
+      var pos = pa.getBoundingClientRect();
+      var targetStyle = window.getComputedStyle(pa, null),
+          fixed = targetStyle.getPropertyValue('position') === "fixed",
+          tooltipHeader = pa.getAttribute('data-ps-header'),
+          tooltipNote = pa.getAttribute('data-ps-note'),
+          step = parseInt(pa.getAttribute('data-ps-step')),
+          customHTML = pa.getAttribute('data-ps-custom'),
+          tooltip = {
+        header: tooltipHeader ? tooltipHeader : options.tooltip.content.header,
+        note: tooltipNote ? tooltipNote : options.tooltip.content.note
+      };
       var position = {
-        top: pod.fixed ? pod.top + pod.height / 2 + options.dot.offset.top : pod.top + pod.height / 2 + options.dot.offset.top + window.scrollY,
-        left: pod.fixed ? pod.left + pod.width / 2 + options.dot.offset.left : pod.left + pod.width / 2 + options.dot.offset.left + window.scrollX,
-        position: pod.fixed ? 'fixed' : 'absolute'
+        top: fixed ? pos.top + pos.height / 2 + options.dot.offset.top : pos.top + pos.height / 2 + options.dot.offset.top + window.scrollY,
+        left: fixed ? pos.left + pos.width / 2 + options.dot.offset.left : pos.left + pos.width / 2 + options.dot.offset.left + window.scrollX,
+        position: fixed ? 'fixed' : 'absolute'
       };
       var dotStyle = Object.assign(position, styles.dot.back);
       var dot = _react2.default.createElement(
         'div',
         {
           style: dotStyle,
-          className: "pulsey-dot-" + this.props.po.dot.id,
+          className: "pulsey-dot-" + this.props.id,
           onClick: this.dotClick.bind(this) },
         _react2.default.createElement('div', {
           style: styles.dot.front,
@@ -208,7 +220,8 @@ var Pulsey = function (_React$Component4) {
 
     _this4.state = {
       currentStep: options.dot.firstDot,
-      pulseyObjects: pulseyObjects
+      pulseyObjects: pulseyObjects,
+      pa: document.getElementsByClassName('ps-anchor')
     };
     return _this4;
   }
@@ -228,17 +241,19 @@ var Pulsey = function (_React$Component4) {
   }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
-      this.resetPulseyObjects();
-      // window.onresize = function () {
-      //   console.log('resizing');
-      // }
+      window.onresize = function () {
+        this.updatePos();
+        console.log('obeyyebo');
+      }.bind(this);
+      window.onscroll = function () {
+        this.updatePos();
+      }.bind(this);
     }
   }, {
-    key: 'resetPulseyObjects',
-    value: function resetPulseyObjects() {
-      createPulseyObjects();
+    key: 'updatePos',
+    value: function updatePos() {
       this.setState({
-        pulseyObjects: pulseyObjects
+        pos: document.getElementsByClassName('ps-anchor')
       });
     }
   }, {
@@ -247,10 +262,12 @@ var Pulsey = function (_React$Component4) {
       var dots = [];
       for (var i = 0; i < pulseyAnchors.length; i++) {
         dots.push(_react2.default.createElement(Dot, {
-          key: Math.random(),
+          key: i,
           po: this.state.pulseyObjects[i],
+          pa: this.state.pa[i],
           nextStep: this.nextStep.bind(this),
-          currentStep: this.state.currentStep
+          currentStep: this.state.currentStep,
+          id: i
         }));
       }
       return _react2.default.createElement(
@@ -461,15 +478,8 @@ var styles = {
 
 function pulsey() {
   createPulseyObjects();
-  _reactDom2.default.render(_react2.default.createElement(Pulsey, { po: pulseyObjects }), document.getElementById('pulsey'));
+  _reactDom2.default.render(_react2.default.createElement(Pulsey, { po: pulseyObjects, pa: pulseyAnchors }), document.getElementById('pulsey'));
 }
-
-// window.onresize = function renderResize() {
-//   pulsey();
-// }
-// window.onscroll = function renderScroll() {
-//   pulsey();
-// }
 
 pulsey();
 },{"./velocity.ui":244,"react":161,"react-dom":3,"velocity-react":162}],2:[function(require,module,exports){

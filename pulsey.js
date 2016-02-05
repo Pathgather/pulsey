@@ -55,22 +55,23 @@ class Tooltip extends React.Component {
 class Dot extends React.Component {
   constructor(props) {
     super(props);
+    console.log('creating', props);
     this.state = {
-      hideDot: !localStorage.getItem("dot" + this.props.po.dot.id),
-      show: this.props.po.dot.id == this.props.currentStep,
+      hideDot: !localStorage.getItem("dot" + this.props.id),
+      show: this.props.id == this.props.currentStep,
     }
+    console.log(this.state.pos);
   }
   dotClick() {
     this.setState({
-      hideDot: localStorage.setItem("dot" + this.props.po.dot.id, true)
+      hideDot: localStorage.setItem("dot" + this.props.id, true)
     });
     this.setState({
       show: !this.state.show,
     });
-    console.log(this.props.po.dot.id);
   }
   nextStep() {
-    hideDot: localStorage.setItem("dot" + parseInt(this.props.po.dot.id + 1), true)
+    hideDot: localStorage.setItem("dot" + parseInt(this.props.id + 1), true)
     this.props.nextStep();
   }
   toggle() {
@@ -79,17 +80,28 @@ class Dot extends React.Component {
     });
   }
   render() {
-    var pod = this.props.po.dot;
+    var pa = this.props.pa
+    var pos = pa.getBoundingClientRect();
+    var targetStyle = window.getComputedStyle(pa,null),
+        fixed = targetStyle.getPropertyValue('position') === "fixed",
+        tooltipHeader = pa.getAttribute('data-ps-header'),
+        tooltipNote = pa.getAttribute('data-ps-note'),
+        step = parseInt(pa.getAttribute('data-ps-step')),
+        customHTML = pa.getAttribute('data-ps-custom'),
+        tooltip = {
+          header: tooltipHeader ? tooltipHeader : options.tooltip.content.header,
+          note: tooltipNote ? tooltipNote : options.tooltip.content.note,
+        };
     var position = {
-      top: pod.fixed ? pod.top + pod.height/2 + options.dot.offset.top : pod.top + pod.height/2 + options.dot.offset.top + window.scrollY,
-      left: pod.fixed ? pod.left + pod.width/2 + options.dot.offset.left : pod.left + pod.width/2 + options.dot.offset.left + window.scrollX,
-      position: pod.fixed ? 'fixed' : 'absolute',
+      top: fixed ? pos.top + pos.height/2 + options.dot.offset.top : pos.top + pos.height/2 + options.dot.offset.top + window.scrollY,
+      left: fixed ? pos.left + pos.width/2 + options.dot.offset.left : pos.left + pos.width/2 + options.dot.offset.left + window.scrollX,
+      position: fixed ? 'fixed' : 'absolute',
     }
     var dotStyle = Object.assign(position,styles.dot.back);
     var dot =
       <div
         style={dotStyle}
-        className={"pulsey-dot-" + this.props.po.dot.id}
+        className={"pulsey-dot-" + this.props.id}
         onClick={this.dotClick.bind(this)}>
         <div
           style={styles.dot.front}
@@ -121,6 +133,7 @@ class Pulsey extends React.Component {
     this.state = {
       currentStep: options.dot.firstDot,
       pulseyObjects: pulseyObjects,
+      pa: document.getElementsByClassName('ps-anchor'),
     }
   }
   reset() {
@@ -132,15 +145,17 @@ class Pulsey extends React.Component {
     });
   }
   componentDidMount() {
-    this.resetPulseyObjects();
-    // window.onresize = function () {
-    //   console.log('resizing');
-    // }
+    window.onresize = function () {
+      this.updatePos();
+      console.log('obeyyebo');
+    }.bind(this);
+    window.onscroll = function () {
+      this.updatePos();
+    }.bind(this);
   }
-  resetPulseyObjects() {
-    createPulseyObjects();
+  updatePos() {
     this.setState({
-      pulseyObjects: pulseyObjects,
+      pos: document.getElementsByClassName('ps-anchor'),
     });
   }
   render() {
@@ -148,10 +163,12 @@ class Pulsey extends React.Component {
     for (var i=0;i<pulseyAnchors.length;i++) {
       dots.push(
         <Dot
-          key={Math.random()}
+          key={i}
           po={this.state.pulseyObjects[i]}
+          pa={this.state.pa[i]}
           nextStep={this.nextStep.bind(this)}
           currentStep={this.state.currentStep}
+          id={i}
         />);
     }
     return (
@@ -354,14 +371,7 @@ var styles = {
 
 function pulsey() {
   createPulseyObjects();
-  ReactDOM.render(<Pulsey po={pulseyObjects} />, document.getElementById('pulsey'));
+  ReactDOM.render(<Pulsey po={pulseyObjects} pa={pulseyAnchors} />, document.getElementById('pulsey'));
 }
 
-// window.onresize = function renderResize() {
-//   pulsey();
-// }
-// window.onscroll = function renderScroll() {
-//   pulsey();
-// }
-
-  pulsey();
+pulsey();
