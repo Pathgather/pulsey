@@ -134,7 +134,6 @@ class Pulsey extends React.Component {
     super(props);
     this.state = {
       currentStep: options.dot.firstDot,
-      pulseyObjects: pulseyObjects,
       pa: document.getElementsByClassName('ps-anchor'),
     }
   }
@@ -149,7 +148,6 @@ class Pulsey extends React.Component {
   componentDidMount() {
     window.onresize = function () {
       this.updatePos();
-      console.log('obeyyebo');
     }.bind(this);
     window.onscroll = function () {
       this.updatePos();
@@ -157,20 +155,20 @@ class Pulsey extends React.Component {
   }
   updatePos() {
     this.setState({
-      pos: document.getElementsByClassName('ps-anchor'),
+      pa: document.getElementsByClassName('ps-anchor'),
     });
   }
   render() {
     var dots = [];
+    var pulseyAnchors = document.getElementsByClassName('ps-anchor');
     for (var i=0;i<pulseyAnchors.length;i++) {
       dots.push(
         <Dot
           key={i}
-          po={this.state.pulseyObjects[i]}
+          id={i}
           pa={this.state.pa[i]}
           nextStep={this.nextStep.bind(this)}
           currentStep={this.state.currentStep}
-          id={i}
         />);
     }
     return (
@@ -179,38 +177,6 @@ class Pulsey extends React.Component {
         <button style={styles.reset} onClick={this.reset.bind(this)}>Reset Dots</button>
       </div>
     );
-  }
-}
-
-// Initialize array for pulsey objects
-var pulseyObjects = []
-
-// Create array of user-selected dom anchors
-var pulseyAnchors = document.getElementsByClassName('ps-anchor');
-
-// Initialize pulsey objects with data based on html anchors
-function createPulseyObjects() {
-  for (var i=0;i<pulseyAnchors.length;i++) {
-    var elementStyles = window.getComputedStyle(pulseyAnchors[i],null),
-        tooltipHeader = pulseyAnchors[i].getAttribute('data-ps-header'),
-        tooltipNote = pulseyAnchors[i].getAttribute('data-ps-note'),
-        step = parseInt(pulseyAnchors[i].getAttribute('data-ps-step')),
-        customHTML = pulseyAnchors[i].getAttribute('data-ps-custom');
-    pulseyObjects[i] = {
-      dot: {
-        id: i,
-        hideDot: false,
-        top: pulseyAnchors[i].getBoundingClientRect().top,
-        left: pulseyAnchors[i].getBoundingClientRect().left,
-        width: pulseyAnchors[i].getBoundingClientRect().width,
-        height: pulseyAnchors[i].getBoundingClientRect().height,
-        fixed: elementStyles.getPropertyValue('position') === "fixed",
-      },
-      tooltip: {
-        header: tooltipHeader ? tooltipHeader : options.tooltip.content.header,
-        note: tooltipNote ? tooltipNote : options.tooltip.content.note,
-      }
-    }
   }
 }
 
@@ -372,8 +338,8 @@ var styles = {
 }
 
 function pulsey() {
-  createPulseyObjects();
-  ReactDOM.render(<Pulsey po={pulseyObjects} pa={pulseyAnchors} />, document.getElementById('pulsey'));
+  ReactDOM.render(<Pulsey/>,
+  document.getElementById('pulsey'));
 }
 
 pulsey();

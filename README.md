@@ -92,11 +92,11 @@ STYLES
 
 
 fixing the scrolling and window resize
-- create a state in Pulsey called resetProps
-- it equals the pulseyObects array
-- create a method componentDidMount, give it two listeners window.onresize and window.onscroll
-- within those you call createPulseyObjects(), and do this.setState to set resetProps to pulseyObjects
-- finally, when you create your dots within the dot for loop within Pulsey, set the prop po to this.state.resetProps
+-- create a state in Pulsey called pulseyObjects
+-- it equals the pulseyObects array
+-- create a method componentDidMount, give it two listeners window.onresize and window.onscroll
+-- within those you call createPulseyObjects(), and do this.setState to set resetProps to pulseyObjects
+- finally, when you create your dots within the dot for loop within Pulsey, set the prop po to this.state.pulseyObjects
 
 NEXT FEATURES
 - fix the way you handle screen size changes and scrolling
