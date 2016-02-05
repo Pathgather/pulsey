@@ -60,18 +60,28 @@ var Tooltip = function (_React$Component2) {
   _createClass(Tooltip, [{
     key: 'render',
     value: function render() {
-      var pod = this.props.po.dot;
-      var pot = this.props.po.tooltip;
+      var pa = this.props.pa,
+          pos = pa.getBoundingClientRect(),
+          targetStyle = window.getComputedStyle(pa, null),
+          fixed = targetStyle.getPropertyValue('position') === "fixed",
+          tooltipHeader = pa.getAttribute('data-ps-header'),
+          tooltipNote = pa.getAttribute('data-ps-note'),
+          step = parseInt(pa.getAttribute('data-ps-step')),
+          customHTML = pa.getAttribute('data-ps-custom'),
+          tooltip = {
+        header: tooltipHeader ? tooltipHeader : options.tooltip.content.header,
+        note: tooltipNote ? tooltipNote : options.tooltip.content.note
+      };
       var position = {
-        top: pod.fixed ? pod.top + pod.height / 2 + options.tooltip.offset.top : pod.top + pod.height / 2 + options.tooltip.offset.top + window.scrollY,
-        left: pod.fixed ? pod.left + pod.width / 2 - styles.tooltip.width / 2 + options.tooltip.offset.left : pod.left + pod.width / 2 - styles.tooltip.width / 2 + options.tooltip.offset.left + window.scrollX,
-        position: pod.fixed ? 'fixed' : 'absolute'
+        top: fixed ? pos.top + pos.height / 2 + options.tooltip.offset.top : pos.top + pos.height / 2 + options.tooltip.offset.top + window.scrollY,
+        left: fixed ? pos.left + pos.width / 2 - styles.tooltip.width / 2 + options.tooltip.offset.left : pos.left + pos.width / 2 - styles.tooltip.width / 2 + options.tooltip.offset.left + window.scrollX,
+        position: fixed ? 'fixed' : 'absolute'
       };
       var tooltipStyle = Object.assign(position, styles.tooltip);
       var tip = options.tooltip.tip.display ? _react2.default.createElement('div', { style: styles.tooltip.tip }) : null;
       var tooltip = _react2.default.createElement(
         'div',
-        { style: tooltipStyle, className: "pulsey-tooltip-" + pod.id },
+        { style: tooltipStyle, className: "pulsey-tooltip-" + this.props.id },
         _react2.default.createElement(
           'div',
           { style: styles.tooltip.close, onClick: this.props.toggle },
@@ -80,12 +90,12 @@ var Tooltip = function (_React$Component2) {
         _react2.default.createElement(
           'div',
           { style: styles.tooltip.header },
-          pot.header
+          tooltip.header
         ),
         _react2.default.createElement(
           'div',
           { style: styles.tooltip.note },
-          pot.note
+          tooltip.note
         ),
         _react2.default.createElement(
           'div',
@@ -125,12 +135,10 @@ var Dot = function (_React$Component3) {
 
     var _this3 = _possibleConstructorReturn(this, Object.getPrototypeOf(Dot).call(this, props));
 
-    console.log('creating', props);
     _this3.state = {
       hideDot: !localStorage.getItem("dot" + _this3.props.id),
       show: _this3.props.id == _this3.props.currentStep
     };
-    console.log(_this3.state.pos);
     return _this3;
   }
 
@@ -163,15 +171,7 @@ var Dot = function (_React$Component3) {
       var pa = this.props.pa;
       var pos = pa.getBoundingClientRect();
       var targetStyle = window.getComputedStyle(pa, null),
-          fixed = targetStyle.getPropertyValue('position') === "fixed",
-          tooltipHeader = pa.getAttribute('data-ps-header'),
-          tooltipNote = pa.getAttribute('data-ps-note'),
-          step = parseInt(pa.getAttribute('data-ps-step')),
-          customHTML = pa.getAttribute('data-ps-custom'),
-          tooltip = {
-        header: tooltipHeader ? tooltipHeader : options.tooltip.content.header,
-        note: tooltipNote ? tooltipNote : options.tooltip.content.note
-      };
+          fixed = targetStyle.getPropertyValue('position') === "fixed";
       var position = {
         top: fixed ? pos.top + pos.height / 2 + options.dot.offset.top : pos.top + pos.height / 2 + options.dot.offset.top + window.scrollY,
         left: fixed ? pos.left + pos.width / 2 + options.dot.offset.left : pos.left + pos.width / 2 + options.dot.offset.left + window.scrollX,
@@ -194,9 +194,11 @@ var Dot = function (_React$Component3) {
         this.state.hideDot ? dot : null,
         _react2.default.createElement(Tooltip, {
           po: this.props.po,
+          pa: this.props.pa,
           toggle: this.toggle.bind(this),
           show: this.state.show,
-          nextStep: this.nextStep.bind(this)
+          nextStep: this.nextStep.bind(this),
+          id: this.props.id
         }),
         _react2.default.createElement(Underlay, {
           po: this.props.po,

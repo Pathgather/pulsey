@@ -18,21 +18,31 @@ class Underlay extends React.Component {
 
 class Tooltip extends React.Component {
   render() {
-    var pod = this.props.po.dot;
-    var pot = this.props.po.tooltip;
+    var pa = this.props.pa,
+        pos = pa.getBoundingClientRect(),
+        targetStyle = window.getComputedStyle(pa,null),
+        fixed = targetStyle.getPropertyValue('position') === "fixed",
+        tooltipHeader = pa.getAttribute('data-ps-header'),
+        tooltipNote = pa.getAttribute('data-ps-note'),
+        step = parseInt(pa.getAttribute('data-ps-step')),
+        customHTML = pa.getAttribute('data-ps-custom'),
+        tooltip = {
+          header: tooltipHeader ? tooltipHeader : options.tooltip.content.header,
+          note: tooltipNote ? tooltipNote : options.tooltip.content.note,
+        };
     var position = {
-      top: pod.fixed ? pod.top + pod.height/2 + options.tooltip.offset.top : pod.top + pod.height/2 + options.tooltip.offset.top + window.scrollY,
-      left: pod.fixed ? pod.left + pod.width/2 - styles.tooltip.width/2 + options.tooltip.offset.left : pod.left + pod.width/2 - styles.tooltip.width/2 + options.tooltip.offset.left + window.scrollX,
-      position: pod.fixed ? 'fixed' : 'absolute',
+      top: fixed ? pos.top + pos.height/2 + options.tooltip.offset.top : pos.top + pos.height/2 + options.tooltip.offset.top + window.scrollY,
+      left: fixed ? pos.left + pos.width/2 - styles.tooltip.width/2 + options.tooltip.offset.left : pos.left + pos.width/2 - styles.tooltip.width/2 + options.tooltip.offset.left + window.scrollX,
+      position: fixed ? 'fixed' : 'absolute',
     }
     var tooltipStyle = Object.assign(position,styles.tooltip);
     var tip = options.tooltip.tip.display ?
       <div style={styles.tooltip.tip}></div> : null;
     var tooltip =
-      <div style={tooltipStyle} className={"pulsey-tooltip-" + pod.id}>
+      <div style={tooltipStyle} className={"pulsey-tooltip-" + this.props.id}>
         <div style={styles.tooltip.close} onClick={this.props.toggle}> + </div>
-          <div style={styles.tooltip.header}>{pot.header}</div>
-          <div style={styles.tooltip.note}>{pot.note}</div>
+          <div style={styles.tooltip.header}>{tooltip.header}</div>
+          <div style={styles.tooltip.note}>{tooltip.note}</div>
           <div style={styles.tooltip.buttons}>
             <button style={styles.tooltip.exitButton}>Exit</button>
             <button
@@ -55,12 +65,10 @@ class Tooltip extends React.Component {
 class Dot extends React.Component {
   constructor(props) {
     super(props);
-    console.log('creating', props);
     this.state = {
       hideDot: !localStorage.getItem("dot" + this.props.id),
       show: this.props.id == this.props.currentStep,
     }
-    console.log(this.state.pos);
   }
   dotClick() {
     this.setState({
@@ -80,18 +88,10 @@ class Dot extends React.Component {
     });
   }
   render() {
-    var pa = this.props.pa
+    var pa = this.props.pa;
     var pos = pa.getBoundingClientRect();
     var targetStyle = window.getComputedStyle(pa,null),
-        fixed = targetStyle.getPropertyValue('position') === "fixed",
-        tooltipHeader = pa.getAttribute('data-ps-header'),
-        tooltipNote = pa.getAttribute('data-ps-note'),
-        step = parseInt(pa.getAttribute('data-ps-step')),
-        customHTML = pa.getAttribute('data-ps-custom'),
-        tooltip = {
-          header: tooltipHeader ? tooltipHeader : options.tooltip.content.header,
-          note: tooltipNote ? tooltipNote : options.tooltip.content.note,
-        };
+        fixed = targetStyle.getPropertyValue('position') === "fixed";
     var position = {
       top: fixed ? pos.top + pos.height/2 + options.dot.offset.top : pos.top + pos.height/2 + options.dot.offset.top + window.scrollY,
       left: fixed ? pos.left + pos.width/2 + options.dot.offset.left : pos.left + pos.width/2 + options.dot.offset.left + window.scrollX,
@@ -113,9 +113,11 @@ class Dot extends React.Component {
         {this.state.hideDot ? dot : null}
         <Tooltip
           po={this.props.po}
+          pa={this.props.pa}
           toggle={this.toggle.bind(this)}
           show={this.state.show}
           nextStep={this.nextStep.bind(this)}
+          id={this.props.id}
         />
         <Underlay
           po={this.props.po}
