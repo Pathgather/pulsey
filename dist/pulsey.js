@@ -35,7 +35,7 @@ var Underlay = function (_React$Component) {
   _createClass(Underlay, [{
     key: 'render',
     value: function render() {
-      var underlay = _react2.default.createElement('div', { style: styles.underlay });
+      var underlay = _react2.default.createElement('div', { style: styles.underlay, onClick: this.props.close });
       var showUnderlay = this.props.id == this.props.step ? underlay : null;
       return _react2.default.createElement(
         _velocityReact.VelocityTransitionGroup,
@@ -207,7 +207,8 @@ var Dot = function (_React$Component3) {
         _react2.default.createElement(Underlay, {
           showTooltip: this.state.showTooltip,
           id: this.props.id,
-          step: this.props.step
+          step: this.props.step,
+          close: this.close.bind(this)
         })
       );
     }

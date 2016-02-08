@@ -6,7 +6,7 @@ require('./velocity.ui');
 class Underlay extends React.Component {
   render() {
     var underlay =
-      <div style={styles.underlay}></div>
+      <div style={styles.underlay} onClick={this.props.close}></div>
     var showUnderlay = this.props.id == this.props.step ? underlay : null;
     return (
       <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
@@ -130,6 +130,7 @@ class Dot extends React.Component {
           showTooltip={this.state.showTooltip}
           id={this.props.id}
           step={this.props.step}
+          close={this.close.bind(this)}
         />
       </div>
     );
