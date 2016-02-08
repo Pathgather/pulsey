@@ -48,7 +48,7 @@ class Tooltip extends React.Component {
       <div style={styles.tooltip.tip}></div> : null;
     var tooltip =
       <div style={tooltipStyle} className={"pulsey-tooltip-" + this.props.id}>
-        <div style={styles.tooltip.close}> + </div>
+        <div style={styles.tooltip.close} onClick={this.props.close}> + </div>
           <div style={styles.tooltip.header}>{tooltip.header}</div>
           <div style={styles.tooltip.note}>{tooltip.note}</div>
           <div style={styles.tooltip.buttons}>
@@ -88,9 +88,12 @@ class Dot extends React.Component {
   }
   nextStep() {
     this.setState({
-      showDot: localStorage.setItem("dot" + parseInt(this.props.id+1), true)
+      showDot: localStorage.setItem("dot" + parseInt(this.props.id), true)
     });
     this.props.nextStep();
+  }
+  close() {
+    this.props.close();
   }
   render() {
     var pa = this.props.pa;
@@ -118,10 +121,10 @@ class Dot extends React.Component {
         {this.state.showDot ? dot : null}
         <Tooltip
           pa={this.props.pa}
-          showTooltip={this.state.showTooltip}
           nextStep={this.nextStep.bind(this)}
           id={this.props.id}
           step={this.props.step}
+          close={this.close.bind(this)}
         />
         <Underlay
           showTooltip={this.state.showTooltip}
@@ -154,6 +157,11 @@ class Pulsey extends React.Component {
       step: options.dot.step,
     });
   }
+  close() {
+    this.setState({
+      step: null,
+    });
+  }
   componentDidMount() {
     window.onresize = function () {
       this.setState({
@@ -177,6 +185,7 @@ class Pulsey extends React.Component {
           pa={this.state.pa[i]}
           nextStep={this.nextStep.bind(this)}
           dotClick={this.dotClick.bind(this)}
+          close={this.close.bind(this)}
           step={this.state.step}
         />);
     }

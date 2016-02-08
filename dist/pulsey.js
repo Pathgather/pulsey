@@ -90,7 +90,7 @@ var Tooltip = function (_React$Component2) {
         { style: tooltipStyle, className: "pulsey-tooltip-" + this.props.id },
         _react2.default.createElement(
           'div',
-          { style: styles.tooltip.close },
+          { style: styles.tooltip.close, onClick: this.props.close },
           ' + '
         ),
         _react2.default.createElement(
@@ -161,9 +161,14 @@ var Dot = function (_React$Component3) {
     key: 'nextStep',
     value: function nextStep() {
       this.setState({
-        showDot: localStorage.setItem("dot" + parseInt(this.props.id + 1), true)
+        showDot: localStorage.setItem("dot" + parseInt(this.props.id), true)
       });
       this.props.nextStep();
+    }
+  }, {
+    key: 'close',
+    value: function close() {
+      this.props.close();
     }
   }, {
     key: 'render',
@@ -194,10 +199,10 @@ var Dot = function (_React$Component3) {
         this.state.showDot ? dot : null,
         _react2.default.createElement(Tooltip, {
           pa: this.props.pa,
-          showTooltip: this.state.showTooltip,
           nextStep: this.nextStep.bind(this),
           id: this.props.id,
-          step: this.props.step
+          step: this.props.step,
+          close: this.close.bind(this)
         }),
         _react2.default.createElement(Underlay, {
           showTooltip: this.state.showTooltip,
@@ -246,6 +251,13 @@ var Pulsey = function (_React$Component4) {
       });
     }
   }, {
+    key: 'close',
+    value: function close() {
+      this.setState({
+        step: null
+      });
+    }
+  }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
       window.onresize = function () {
@@ -271,6 +283,7 @@ var Pulsey = function (_React$Component4) {
           pa: this.state.pa[i],
           nextStep: this.nextStep.bind(this),
           dotClick: this.dotClick.bind(this),
+          close: this.close.bind(this),
           step: this.state.step
         }));
       }
