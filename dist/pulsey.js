@@ -35,8 +35,8 @@ var Underlay = function (_React$Component) {
   _createClass(Underlay, [{
     key: 'render',
     value: function render() {
-      var underlay = _react2.default.createElement('div', { style: styles.underlay, onClick: this.props.toggle });
-      var showUnderlay = this.props.show ? underlay : null;
+      var underlay = _react2.default.createElement('div', { style: styles.underlay });
+      var showUnderlay = this.props.id == this.props.step ? underlay : null;
       return _react2.default.createElement(
         _velocityReact.VelocityTransitionGroup,
         { enter: { animation: "fadeIn" }, leave: { animation: "fadeOut" } },
@@ -51,10 +51,16 @@ var Underlay = function (_React$Component) {
 var Tooltip = function (_React$Component2) {
   _inherits(Tooltip, _React$Component2);
 
-  function Tooltip() {
+  function Tooltip(props) {
     _classCallCheck(this, Tooltip);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(Tooltip).apply(this, arguments));
+    var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(Tooltip).call(this, props));
+
+    _this2.state = {
+      showDot: !localStorage.getItem("dot" + _this2.props.id) && !_this2.props.id == _this2.props.step,
+      showTooltip: _this2.props.id == _this2.props.step
+    };
+    return _this2;
   }
 
   _createClass(Tooltip, [{
@@ -84,7 +90,7 @@ var Tooltip = function (_React$Component2) {
         { style: tooltipStyle, className: "pulsey-tooltip-" + this.props.id },
         _react2.default.createElement(
           'div',
-          { style: styles.tooltip.close, onClick: this.props.toggle },
+          { style: styles.tooltip.close },
           ' + '
         ),
         _react2.default.createElement(
@@ -115,7 +121,7 @@ var Tooltip = function (_React$Component2) {
         ),
         tip
       );
-      var showTooltip = this.props.show ? tooltip : null;
+      var showTooltip = this.props.id == this.props.step ? tooltip : null;
       return _react2.default.createElement(
         _velocityReact.VelocityTransitionGroup,
         { enter: { animation: "transition.expandIn" }, leave: { animation: "transition.expandOut" } },
@@ -136,8 +142,7 @@ var Dot = function (_React$Component3) {
     var _this3 = _possibleConstructorReturn(this, Object.getPrototypeOf(Dot).call(this, props));
 
     _this3.state = {
-      hideDot: !localStorage.getItem("dot" + _this3.props.id),
-      show: _this3.props.id == _this3.props.currentStep
+      showDot: !localStorage.getItem("dot" + _this3.props.id) && (!_this3.props.id == _this3.props.step || _this3.props.step == null)
     };
     return _this3;
   }
@@ -146,24 +151,19 @@ var Dot = function (_React$Component3) {
     key: 'dotClick',
     value: function dotClick() {
       this.setState({
-        hideDot: localStorage.setItem("dot" + this.props.id, true)
+        showDot: localStorage.setItem("dot" + this.props.id, true)
       });
-      this.setState({
-        show: !this.state.show
-      });
+      options.dot.step = this.props.id;
+      this.props.nextStep();
+      this.props.dotClick();
     }
   }, {
     key: 'nextStep',
     value: function nextStep() {
-      hideDot: localStorage.setItem("dot" + parseInt(this.props.id + 1), true);
-      this.props.nextStep();
-    }
-  }, {
-    key: 'toggle',
-    value: function toggle() {
       this.setState({
-        show: !this.state.show
+        showDot: localStorage.setItem("dot" + parseInt(this.props.id + 1), true)
       });
+      this.props.nextStep();
     }
   }, {
     key: 'render',
@@ -191,17 +191,18 @@ var Dot = function (_React$Component3) {
       return _react2.default.createElement(
         'div',
         null,
-        this.state.hideDot ? dot : null,
+        this.state.showDot ? dot : null,
         _react2.default.createElement(Tooltip, {
           pa: this.props.pa,
-          toggle: this.toggle.bind(this),
-          show: this.state.show,
+          showTooltip: this.state.showTooltip,
           nextStep: this.nextStep.bind(this),
-          id: this.props.id
+          id: this.props.id,
+          step: this.props.step
         }),
         _react2.default.createElement(Underlay, {
-          toggle: this.toggle.bind(this),
-          show: this.state.show
+          showTooltip: this.state.showTooltip,
+          id: this.props.id,
+          step: this.props.step
         })
       );
     }
@@ -219,7 +220,7 @@ var Pulsey = function (_React$Component4) {
     var _this4 = _possibleConstructorReturn(this, Object.getPrototypeOf(Pulsey).call(this, props));
 
     _this4.state = {
-      currentStep: options.dot.firstDot,
+      step: options.dot.step, // inits as null
       pa: document.getElementsByClassName('ps-anchor')
     };
     return _this4;
@@ -234,25 +235,29 @@ var Pulsey = function (_React$Component4) {
     key: 'nextStep',
     value: function nextStep() {
       this.setState({
-        currentStep: this.state.currentStep + 1
+        step: this.state.step + 1
+      });
+    }
+  }, {
+    key: 'dotClick',
+    value: function dotClick() {
+      this.setState({
+        step: options.dot.step
       });
     }
   }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
       window.onresize = function () {
-        this.updatePos();
+        this.setState({
+          pa: document.getElementsByClassName('ps-anchor')
+        });
       }.bind(this);
       window.onscroll = function () {
-        this.updatePos();
+        this.setState({
+          pa: document.getElementsByClassName('ps-anchor')
+        });
       }.bind(this);
-    }
-  }, {
-    key: 'updatePos',
-    value: function updatePos() {
-      this.setState({
-        pa: document.getElementsByClassName('ps-anchor')
-      });
     }
   }, {
     key: 'render',
@@ -265,7 +270,8 @@ var Pulsey = function (_React$Component4) {
           id: i,
           pa: this.state.pa[i],
           nextStep: this.nextStep.bind(this),
-          currentStep: this.state.currentStep
+          dotClick: this.dotClick.bind(this),
+          step: this.state.step
         }));
       }
       return _react2.default.createElement(
@@ -287,7 +293,7 @@ var Pulsey = function (_React$Component4) {
 var options = {
   utilities: {},
   dot: {
-    firstDot: null,
+    step: null,
     offset: {
       top: 0,
       left: 0

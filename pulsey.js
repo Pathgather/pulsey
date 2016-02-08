@@ -6,8 +6,8 @@ require('./velocity.ui');
 class Underlay extends React.Component {
   render() {
     var underlay =
-      <div style={styles.underlay} onClick={this.props.toggle}></div>
-    var showUnderlay = this.props.show ? underlay : null;
+      <div style={styles.underlay}></div>
+    var showUnderlay = this.props.id == this.props.step ? underlay : null;
     return (
       <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
         {showUnderlay}
@@ -17,6 +17,14 @@ class Underlay extends React.Component {
 }
 
 class Tooltip extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showDot: !localStorage.getItem("dot" + this.props.id)
+               && !this.props.id == this.props.step,
+      showTooltip: this.props.id == this.props.step,
+    }
+  }
   render() {
     var pa = this.props.pa,
         pos = pa.getBoundingClientRect(),
@@ -40,7 +48,7 @@ class Tooltip extends React.Component {
       <div style={styles.tooltip.tip}></div> : null;
     var tooltip =
       <div style={tooltipStyle} className={"pulsey-tooltip-" + this.props.id}>
-        <div style={styles.tooltip.close} onClick={this.props.toggle}> + </div>
+        <div style={styles.tooltip.close}> + </div>
           <div style={styles.tooltip.header}>{tooltip.header}</div>
           <div style={styles.tooltip.note}>{tooltip.note}</div>
           <div style={styles.tooltip.buttons}>
@@ -53,7 +61,7 @@ class Tooltip extends React.Component {
           </div>
           {tip}
       </div>
-    var showTooltip = this.props.show ? tooltip : null;
+    var showTooltip = this.props.id == this.props.step ? tooltip : null;
     return (
       <VelocityTransitionGroup enter={{animation: "transition.expandIn"}} leave={{animation: "transition.expandOut"}}>
         {showTooltip}
@@ -66,26 +74,23 @@ class Dot extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      hideDot: !localStorage.getItem("dot" + this.props.id),
-      show: this.props.id == this.props.currentStep,
+      showDot: !localStorage.getItem("dot" + this.props.id)
+               && (!this.props.id == this.props.step || this.props.step == null),
     }
   }
   dotClick() {
     this.setState({
-      hideDot: localStorage.setItem("dot" + this.props.id, true)
+      showDot: localStorage.setItem("dot" + this.props.id, true)
     });
-    this.setState({
-      show: !this.state.show,
-    });
+    options.dot.step = this.props.id;
+    this.props.nextStep();
+    this.props.dotClick();
   }
   nextStep() {
-    hideDot: localStorage.setItem("dot" + parseInt(this.props.id + 1), true)
-    this.props.nextStep();
-  }
-  toggle() {
     this.setState({
-      show: !this.state.show,
+      showDot: localStorage.setItem("dot" + parseInt(this.props.id+1), true)
     });
+    this.props.nextStep();
   }
   render() {
     var pa = this.props.pa;
@@ -110,17 +115,18 @@ class Dot extends React.Component {
       </div>
     return (
       <div>
-        {this.state.hideDot ? dot : null}
+        {this.state.showDot ? dot : null}
         <Tooltip
           pa={this.props.pa}
-          toggle={this.toggle.bind(this)}
-          show={this.state.show}
+          showTooltip={this.state.showTooltip}
           nextStep={this.nextStep.bind(this)}
           id={this.props.id}
+          step={this.props.step}
         />
         <Underlay
-          toggle={this.toggle.bind(this)}
-          show={this.state.show}
+          showTooltip={this.state.showTooltip}
+          id={this.props.id}
+          step={this.props.step}
         />
       </div>
     );
@@ -131,7 +137,7 @@ class Pulsey extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentStep: options.dot.firstDot,
+      step: options.dot.step, // inits as null
       pa: document.getElementsByClassName('ps-anchor'),
     }
   }
@@ -140,21 +146,25 @@ class Pulsey extends React.Component {
   }
   nextStep() {
     this.setState({
-      currentStep: this.state.currentStep + 1,
+      step: this.state.step + 1,
+    });
+  }
+  dotClick() {
+    this.setState({
+      step: options.dot.step,
     });
   }
   componentDidMount() {
     window.onresize = function () {
-      this.updatePos();
+      this.setState({
+        pa: document.getElementsByClassName('ps-anchor'),
+      });
     }.bind(this);
     window.onscroll = function () {
-      this.updatePos();
+      this.setState({
+        pa: document.getElementsByClassName('ps-anchor'),
+      });
     }.bind(this);
-  }
-  updatePos() {
-    this.setState({
-      pa: document.getElementsByClassName('ps-anchor'),
-    });
   }
   render() {
     var dots = [];
@@ -166,7 +176,8 @@ class Pulsey extends React.Component {
           id={i}
           pa={this.state.pa[i]}
           nextStep={this.nextStep.bind(this)}
-          currentStep={this.state.currentStep}
+          dotClick={this.dotClick.bind(this)}
+          step={this.state.step}
         />);
     }
     return (
@@ -181,7 +192,7 @@ class Pulsey extends React.Component {
 var options = {
   utilities : {},
   dot: {
-    firstDot: null,
+    step: null,
     offset: {
       top: 0,
       left: 0,
