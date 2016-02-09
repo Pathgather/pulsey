@@ -57,8 +57,7 @@ var Tooltip = function (_React$Component2) {
     var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(Tooltip).call(this, props));
 
     _this2.state = {
-      showDot: !localStorage.getItem("dot" + _this2.props.id) && !_this2.props.id == _this2.props.step,
-      showTooltip: _this2.props.id == _this2.props.step
+      showDot: !localStorage.getItem("dot" + _this2.props.id) && !_this2.props.id == _this2.props.step
     };
     return _this2;
   }
@@ -142,7 +141,7 @@ var Dot = function (_React$Component3) {
     var _this3 = _possibleConstructorReturn(this, Object.getPrototypeOf(Dot).call(this, props));
 
     _this3.state = {
-      showDot: !localStorage.getItem("dot" + _this3.props.id) && (!_this3.props.id == _this3.props.step || _this3.props.step == null)
+      showDot: !localStorage.getItem("dot" + _this3.props.id)
     };
     return _this3;
   }
@@ -151,7 +150,7 @@ var Dot = function (_React$Component3) {
     key: 'dotClick',
     value: function dotClick() {
       this.setState({
-        showDot: localStorage.setItem("dot" + this.props.id, true)
+        showDot: localStorage.setItem("dot" + parseInt(this.props.id), true)
       });
       options.dot.step = this.props.id;
       this.props.nextStep();
@@ -161,8 +160,9 @@ var Dot = function (_React$Component3) {
     key: 'nextStep',
     value: function nextStep() {
       this.setState({
-        showDot: localStorage.setItem("dot" + parseInt(this.props.id), true)
+        showDot: localStorage.setItem("dot" + parseInt(this.props.id + 1), true)
       });
+      console.log(this.props.step);
       this.props.nextStep();
     }
   }, {
@@ -196,7 +196,11 @@ var Dot = function (_React$Component3) {
       return _react2.default.createElement(
         'div',
         null,
-        this.state.showDot ? dot : null,
+        _react2.default.createElement(
+          _velocityReact.VelocityTransitionGroup,
+          { enter: { animation: "fadeIn" }, leave: { animation: "fadeOut" } },
+          this.state.showDot && !localStorage.getItem("dot" + this.props.id) && (!(this.props.id == this.props.step) || this.props.step == null) ? dot : null
+        ),
         _react2.default.createElement(Tooltip, {
           pa: this.props.pa,
           nextStep: this.nextStep.bind(this),
@@ -205,7 +209,6 @@ var Dot = function (_React$Component3) {
           close: this.close.bind(this)
         }),
         _react2.default.createElement(Underlay, {
-          showTooltip: this.state.showTooltip,
           id: this.props.id,
           step: this.props.step,
           close: this.close.bind(this)

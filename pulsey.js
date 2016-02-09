@@ -22,7 +22,6 @@ class Tooltip extends React.Component {
     this.state = {
       showDot: !localStorage.getItem("dot" + this.props.id)
                && !this.props.id == this.props.step,
-      showTooltip: this.props.id == this.props.step,
     }
   }
   render() {
@@ -74,13 +73,12 @@ class Dot extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showDot: !localStorage.getItem("dot" + this.props.id)
-               && (!this.props.id == this.props.step || this.props.step == null),
+      showDot: !localStorage.getItem("dot" + this.props.id),
     }
   }
   dotClick() {
     this.setState({
-      showDot: localStorage.setItem("dot" + this.props.id, true)
+      showDot: localStorage.setItem("dot" + parseInt(this.props.id), true),
     });
     options.dot.step = this.props.id;
     this.props.nextStep();
@@ -88,8 +86,9 @@ class Dot extends React.Component {
   }
   nextStep() {
     this.setState({
-      showDot: localStorage.setItem("dot" + parseInt(this.props.id), true)
+      showDot: localStorage.setItem("dot" + parseInt(this.props.id + 1), true)
     });
+    console.log(this.props.step);
     this.props.nextStep();
   }
   close() {
@@ -118,7 +117,9 @@ class Dot extends React.Component {
       </div>
     return (
       <div>
-        {this.state.showDot ? dot : null}
+        <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+          {this.state.showDot && !localStorage.getItem("dot" + this.props.id) && (!(this.props.id == this.props.step) || this.props.step == null) ? dot : null}
+        </VelocityTransitionGroup>
         <Tooltip
           pa={this.props.pa}
           nextStep={this.nextStep.bind(this)}
@@ -127,7 +128,6 @@ class Dot extends React.Component {
           close={this.close.bind(this)}
         />
         <Underlay
-          showTooltip={this.state.showTooltip}
           id={this.props.id}
           step={this.props.step}
           close={this.close.bind(this)}
