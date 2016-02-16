@@ -85,12 +85,29 @@ class Dot extends React.Component {
   }
   nextStep() {
     for (var i = 0; i < options.utilities.numDots; i++) {
-      var id = this.props.id;
-      if (localStorage.getItem('dot'+parseInt(id + i + 1))) {
+      var next = this.props.id + i + 1;
+      if (localStorage.getItem('dot'+parseInt(next))) {
         null;
       }
+      else if (next === options.utilities.numDots) {
+        for (var e = 0; e < options.utilities.numDots; e++) {
+          next = e;
+          if (!localStorage.getItem('dot'+parseInt(next))) {
+            this.setState({
+              showDot: localStorage.setItem("dot" + parseInt(next), true)
+            });
+            this.props.nextStep(next);
+            console.log('going to next step via else if');
+            break;
+          }
+          else {
+            break;
+          }
+        }
+        break;
+      }
       else {
-        var next = id + i + 1;
+        console.log('going to next step ');
         this.setState({
           showDot: localStorage.setItem("dot" + parseInt(next), true)
         });
@@ -206,13 +223,6 @@ class Pulsey extends React.Component {
       </div>
     );
   }
-}
-
-var dotStatus = {
-  1: false,
-  2: false,
-  3: false,
-  4: true,
 }
 
 var options = {

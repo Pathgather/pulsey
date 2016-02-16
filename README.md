@@ -93,7 +93,7 @@ STYLES
 NEXT FEATURES
 
 CORE
-- clicking next button should skip to next dot that has not yet been clicked, or else do nothing if none are left
+- swap next button with finish button and trigger simple toggle if its the last dot
 
 - detect if next pulse is offscreen and animate document scroll to it
 - tooltips recognize whether they are overflowing the screen and reposition themselves automatically, unless user decides to turn this functionality off
