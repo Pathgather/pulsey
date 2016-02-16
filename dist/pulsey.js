@@ -154,16 +154,6 @@ var Dot = function (_React$Component3) {
       });
       options.dot.step = this.props.id;
       this.props.dotClick();
-      // document.getElementById('doofus').velocity('scroll',{
-      //   duration: 500,
-      //   offset: -40,
-      //   easing: 'ease-in-out',
-      // });
-      Velocity(document.getElementById('doofus'), 'scroll', {
-        duration: 500,
-        offset: -40,
-        easing: 'ease-in-out'
-      });
     }
   }, {
     key: 'nextStep',
@@ -187,6 +177,7 @@ var Dot = function (_React$Component3) {
                 showDot: localStorage.setItem("dot" + parseInt(next), true)
               });
               this.props.nextStep(next);
+              this.scrollToDot(next);
               break;
             } else {
               break;
@@ -198,9 +189,20 @@ var Dot = function (_React$Component3) {
             showDot: localStorage.setItem("dot" + parseInt(next), true)
           });
           this.props.nextStep(next);
+          this.scrollToDot(next);
           break;
         }
       }
+    }
+  }, {
+    key: 'scrollToDot',
+    value: function scrollToDot(next) {
+      var nextNode = document.querySelectorAll("[data-ps-step]")[next];
+      Velocity(nextNode, 'scroll', {
+        duration: 500,
+        offset: -40,
+        easing: 'ease-in-out'
+      });
     }
   }, {
     key: 'close',

@@ -82,16 +82,6 @@ class Dot extends React.Component {
     });
     options.dot.step = this.props.id;
     this.props.dotClick();
-    // document.getElementById('doofus').velocity('scroll',{
-    //   duration: 500,
-    //   offset: -40,
-    //   easing: 'ease-in-out',
-    // });
-    Velocity(document.getElementById('doofus'), 'scroll',{
-      duration: 500,
-      offset: -40,
-      easing: 'ease-in-out',
-    });
   }
   nextStep() {
     var numDots = options.utilities.numDots;
@@ -115,6 +105,7 @@ class Dot extends React.Component {
               showDot: localStorage.setItem("dot" + parseInt(next), true)
             });
             this.props.nextStep(next);
+            this.scrollToDot(next);
             break;
           }
           else {
@@ -128,9 +119,18 @@ class Dot extends React.Component {
           showDot: localStorage.setItem("dot" + parseInt(next), true)
         });
         this.props.nextStep(next);
+        this.scrollToDot(next);
         break;
       }
     }
+  }
+  scrollToDot(next) {
+    var nextNode = document.querySelectorAll("[data-ps-step]")[next];
+    Velocity(nextNode, 'scroll', {
+      duration: 500,
+      offset: -40,
+      easing: 'ease-in-out',
+    });
   }
   close() {
     this.props.close();
