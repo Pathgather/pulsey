@@ -158,19 +158,25 @@ var Dot = function (_React$Component3) {
   }, {
     key: 'nextStep',
     value: function nextStep() {
-      for (var i = 0; i < options.utilities.numDots; i++) {
+      var numDots = options.utilities.numDots;
+      for (var i = 0; i < numDots; i++) {
         var next = this.props.id + i + 1;
         if (localStorage.getItem('dot' + parseInt(next))) {
-          null;
-        } else if (next === options.utilities.numDots) {
-          for (var e = 0; e < options.utilities.numDots; e++) {
+          for (var e = 0; e < numDots; e++) {
+            if (localStorage.getItem('dot' + parseInt(e)) && e === numDots - 1) {
+              this.props.close();
+            } else {
+              null;
+            }
+          }
+        } else if (next === numDots) {
+          for (var e = 0; e < numDots; e++) {
             next = e;
             if (!localStorage.getItem('dot' + parseInt(next))) {
               this.setState({
                 showDot: localStorage.setItem("dot" + parseInt(next), true)
               });
               this.props.nextStep(next);
-              console.log('going to next step via else if');
               break;
             } else {
               break;
@@ -178,7 +184,6 @@ var Dot = function (_React$Component3) {
           }
           break;
         } else {
-          console.log('going to next step ');
           this.setState({
             showDot: localStorage.setItem("dot" + parseInt(next), true)
           });
