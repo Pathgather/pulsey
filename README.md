@@ -90,11 +90,9 @@ STYLES
 - welcome
 - progress
 
-
 NEXT FEATURES
 
 CORE
-- next dot should disappear properly after clicking next button
 - clicking next button should skip to next dot that has not yet been clicked, or else do nothing if none are left
 
 - detect if next pulse is offscreen and animate document scroll to it
@@ -133,9 +131,7 @@ ISSUES
 - options are not currently specific to each dot and each tooltip - they're global and shouldn't be
 
 NOTES
-triggering next dot
-- we initialize the state of showDot to this.props.po.dot.id == options.dot.firstDotId, which is set to 1 by default
-- click next button, triggers onClick event which triggers pulsey handler,
-- which sets a pulsey state of showDot to Pulsey's state id to += 1
-- Dot has state of showDot: this.props.nextDot == this.po.dot.id
-- and then we have this.state.showDot ? dot : null;
+skipping clicked dots
+- fill the dotStatus store with keys equaling each dot id
+- create a for loop that sets the values to true unless localstorage shows that the dot has been clicked, and otherwise false
+- in the nextStep() method, wrap all the functions in the while loop - the functions are called if dotStatus[i] is true and then the loop breaks, otherwise i is incremented and the loop runs again.

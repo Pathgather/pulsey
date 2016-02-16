@@ -153,17 +153,24 @@ var Dot = function (_React$Component3) {
         showDot: localStorage.setItem("dot" + parseInt(this.props.id), true)
       });
       options.dot.step = this.props.id;
-      this.props.nextStep();
       this.props.dotClick();
     }
   }, {
     key: 'nextStep',
     value: function nextStep() {
-      this.setState({
-        showDot: localStorage.setItem("dot" + parseInt(this.props.id + 1), true)
-      });
-      console.log(this.props.step);
-      this.props.nextStep();
+      for (var i = 0; i < options.utilities.numDots; i++) {
+        var id = this.props.id;
+        if (localStorage.getItem('dot' + parseInt(id + i + 1))) {
+          null;
+        } else {
+          var next = id + i + 1;
+          this.setState({
+            showDot: localStorage.setItem("dot" + parseInt(next), true)
+          });
+          this.props.nextStep(next);
+          break;
+        }
+      }
     }
   }, {
     key: 'close',
@@ -242,9 +249,9 @@ var Pulsey = function (_React$Component4) {
     }
   }, {
     key: 'nextStep',
-    value: function nextStep() {
+    value: function nextStep(next) {
       this.setState({
-        step: this.state.step + 1
+        step: this.state.step = next
       });
     }
   }, {
@@ -280,7 +287,8 @@ var Pulsey = function (_React$Component4) {
     value: function render() {
       var dots = [];
       var pulseyAnchors = document.getElementsByClassName('ps-anchor');
-      for (var i = 0; i < pulseyAnchors.length; i++) {
+      options.utilities.numDots = pulseyAnchors.length;
+      for (var i = 0; i < options.utilities.numDots; i++) {
         dots.push(_react2.default.createElement(Dot, {
           key: i,
           id: i,
@@ -307,8 +315,17 @@ var Pulsey = function (_React$Component4) {
   return Pulsey;
 }(_react2.default.Component);
 
+var dotStatus = {
+  1: false,
+  2: false,
+  3: false,
+  4: true
+};
+
 var options = {
-  utilities: {},
+  utilities: {
+    numDots: null
+  },
   dot: {
     step: null,
     offset: {
