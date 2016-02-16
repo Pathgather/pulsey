@@ -108,6 +108,14 @@ class Dot extends React.Component {
             this.scrollToDot(next);
             break;
           }
+          else if (localStorage.getItem('dot'+parseInt(next))) {
+            if (localStorage.getItem('dot'+parseInt(e)) && e === numDots-1) {
+              this.props.close();
+            }
+            else {
+              null;
+            }
+          }
           else {
             break;
           }

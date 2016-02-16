@@ -94,6 +94,8 @@ NEXT FEATURES
 
 CORE
 - detect if next pulse is offscreen and animate document scroll to it
+- fix finding next dot such that you use data attribute ordering instead of DOM order.
+
 - tooltips recognize whether they are overflowing the screen and reposition themselves automatically, unless user decides to turn this functionality off
 - give users option for Tooltip component to animate between dots, in addition to current version.
 - Pulsey shows ordered or unordered dots
