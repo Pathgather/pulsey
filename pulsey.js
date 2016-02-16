@@ -82,6 +82,16 @@ class Dot extends React.Component {
     });
     options.dot.step = this.props.id;
     this.props.dotClick();
+    // document.getElementById('doofus').velocity('scroll',{
+    //   duration: 500,
+    //   offset: -40,
+    //   easing: 'ease-in-out',
+    // });
+    Velocity(document.getElementById('doofus'), 'scroll',{
+      duration: 500,
+      offset: -40,
+      easing: 'ease-in-out',
+    });
   }
   nextStep() {
     var numDots = options.utilities.numDots;

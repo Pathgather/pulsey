@@ -93,17 +93,15 @@ STYLES
 NEXT FEATURES
 
 CORE
-- swap next button with finish button and trigger simple toggle if its the last dot
-
 - detect if next pulse is offscreen and animate document scroll to it
 - tooltips recognize whether they are overflowing the screen and reposition themselves automatically, unless user decides to turn this functionality off
-
 - give users option for Tooltip component to animate between dots, in addition to current version.
 - Pulsey shows ordered or unordered dots
 - option to show dot or not (in case they just want to use the next button)
 - basic optional welcome screen with customizable header, message, button, etc.
 
 NICETIES
+- swap text of next button with 'finish' if its the last dot
 - option to nav by keyboard
 - detect if no dots are left, and show "finish" in place of "next" in the next button
 - provide user with multiple pre-designed options for look and animation of dots and tooltips just by changing one option.  or they can choose to use their own css.
@@ -129,9 +127,3 @@ NEW FEATURE IDEAS
 
 ISSUES
 - options are not currently specific to each dot and each tooltip - they're global and shouldn't be
-
-NOTES
-skipping clicked dots
-- fill the dotStatus store with keys equaling each dot id
-- create a for loop that sets the values to true unless localstorage shows that the dot has been clicked, and otherwise false
-- in the nextStep() method, wrap all the functions in the while loop - the functions are called if dotStatus[i] is true and then the loop breaks, otherwise i is incremented and the loop runs again.
