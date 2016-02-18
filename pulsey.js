@@ -84,12 +84,28 @@ class Dot extends React.Component {
     this.props.dotClick();
 }
   nextStep() {
-    var numDots = options.utilities.numDots;
-    for (var i = 0; i < numDots; i++) {
+    var numTargets = pulseyTargets.length;
+    var test = [3,1,54,23,1];
+    var unclicked = [];
+    for (i = 0; i < numTargets; i++) {
+      unclicked.push(pulseyTargets[i]);
+    }
+    unclicked.sort(function(a,b) {
+      return a.getAttribute('data-ps-step') - b.getAttribute('data-ps-step');
+    });
+    console.log(pulseyTargets);
+    console.log(unclicked);
+    for (i = 0; i < numTargets; i++) {
+      var next = this.props.id + i + 1;
+      if (localStorage.getItem('dot' + next)) {
+        unclickedAnchors.push()
+      }
+    }
+    for (var i = 0; i < numTargets; i++) {
       var next = this.props.id + i + 1;
       if (localStorage.getItem('dot'+parseInt(next))) {
-        for (var e = 0; e < numDots; e++) {
-          if (localStorage.getItem('dot'+parseInt(e)) && e === numDots-1) {
+        for (var e = 0; e < numTargets; e++) {
+          if (localStorage.getItem('dot'+parseInt(e)) && e === numTargets-1) {
             this.props.close();
           }
           else {
@@ -97,15 +113,15 @@ class Dot extends React.Component {
           }
         }
       }
-      else if (next === numDots) {
-        for (var e = 0; e < numDots; e++) {
+      else if (next === numTargets) {
+        for (var e = 0; e < numTargets; e++) {
           next = e;
           if (!localStorage.getItem('dot'+parseInt(next))) {
             this.setState({
               showDot: localStorage.setItem("dot" + parseInt(next), true)
             });
             this.props.nextStep(next);
-            var getDot = document.getElementsByClassName('ps-anchor')[next];
+            var getDot = pulseyTargets[next];
             var dotPos = getDot.getBoundingClientRect().top;
             var winHeight = window.innerHeight;
             if ( (dotPos > winHeight - 200) || (dotPos < 100) ) {
@@ -114,7 +130,7 @@ class Dot extends React.Component {
             break;
           }
           else if (localStorage.getItem('dot'+parseInt(next))) {
-            if (localStorage.getItem('dot'+parseInt(e)) && e === numDots-1) {
+            if (localStorage.getItem('dot'+parseInt(e)) && e === numTargets-1) {
               this.props.close();
             }
             else {
@@ -201,7 +217,7 @@ class Pulsey extends React.Component {
     super(props);
     this.state = {
       step: options.dot.step, // inits as null
-      pa: document.getElementsByClassName('ps-anchor'),
+      pa: pulseyTargets,
     }
   }
   reset() {
@@ -225,20 +241,18 @@ class Pulsey extends React.Component {
   componentDidMount() {
     window.onresize = function () {
       this.setState({
-        pa: document.getElementsByClassName('ps-anchor'),
+        pa: pulseyTargets,
       });
     }.bind(this);
     window.onscroll = function () {
       this.setState({
-        pa: document.getElementsByClassName('ps-anchor'),
+        pa: pulseyTargets,
       });
     }.bind(this);
   }
   render() {
     var dots = [];
-    var pulseyAnchors = document.getElementsByClassName('ps-anchor');
-    options.utilities.numDots = pulseyAnchors.length;
-    for (var i=0;i<options.utilities.numDots;i++) {
+    for (var i=0;i<pulseyTargets.length;i++) {
       dots.push(
         <Dot
           key={i}
@@ -259,9 +273,11 @@ class Pulsey extends React.Component {
   }
 }
 
+var pulseyTargets = document.getElementsByClassName('ps-anchor');
+
 var options = {
   utilities : {
-    numDots: null,
+    numTargets: pulseyTargets.length,
   },
   dot: {
     step: null,
