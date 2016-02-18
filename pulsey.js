@@ -82,7 +82,7 @@ class Dot extends React.Component {
     });
     options.dot.step = this.props.id;
     this.props.dotClick();
-  }
+}
   nextStep() {
     var numDots = options.utilities.numDots;
     for (var i = 0; i < numDots; i++) {
@@ -105,7 +105,12 @@ class Dot extends React.Component {
               showDot: localStorage.setItem("dot" + parseInt(next), true)
             });
             this.props.nextStep(next);
-            this.scrollToDot(next);
+            var getDot = document.getElementsByClassName('ps-anchor')[next];
+            var dotPos = getDot.getBoundingClientRect().top;
+            var winHeight = window.innerHeight;
+            if ( (dotPos > winHeight - 200) || (dotPos < 100) ) {
+              this.scrollToDot(next);
+            }
             break;
           }
           else if (localStorage.getItem('dot'+parseInt(next))) {
@@ -127,7 +132,12 @@ class Dot extends React.Component {
           showDot: localStorage.setItem("dot" + parseInt(next), true)
         });
         this.props.nextStep(next);
-        this.scrollToDot(next);
+        var getDot = document.getElementsByClassName('ps-anchor')[next];
+        var dotPos = getDot.getBoundingClientRect().top;
+        var winHeight = window.innerHeight;
+        if ( (dotPos > winHeight - 200) || (dotPos < 100) ) {
+          this.scrollToDot(next);
+        }
         break;
       }
     }

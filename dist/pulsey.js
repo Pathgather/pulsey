@@ -177,7 +177,12 @@ var Dot = function (_React$Component3) {
                 showDot: localStorage.setItem("dot" + parseInt(next), true)
               });
               this.props.nextStep(next);
-              this.scrollToDot(next);
+              var getDot = document.getElementsByClassName('ps-anchor')[next];
+              var dotPos = getDot.getBoundingClientRect().top;
+              var winHeight = window.innerHeight;
+              if (dotPos > winHeight - 200 || dotPos < 100) {
+                this.scrollToDot(next);
+              }
               break;
             } else if (localStorage.getItem('dot' + parseInt(next))) {
               if (localStorage.getItem('dot' + parseInt(e)) && e === numDots - 1) {
@@ -195,7 +200,12 @@ var Dot = function (_React$Component3) {
             showDot: localStorage.setItem("dot" + parseInt(next), true)
           });
           this.props.nextStep(next);
-          this.scrollToDot(next);
+          var getDot = document.getElementsByClassName('ps-anchor')[next];
+          var dotPos = getDot.getBoundingClientRect().top;
+          var winHeight = window.innerHeight;
+          if (dotPos > winHeight - 200 || dotPos < 100) {
+            this.scrollToDot(next);
+          }
           break;
         }
       }
