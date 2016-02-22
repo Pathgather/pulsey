@@ -150,86 +150,57 @@ var Dot = function (_React$Component3) {
     key: 'dotClick',
     value: function dotClick() {
       this.setState({
-        showDot: localStorage.setItem("dot" + parseInt(this.props.id), true)
+        showDot: localStorage.setItem("dot" + this.props.id, true)
       });
       options.dot.step = this.props.id;
       this.props.dotClick();
+      var step = parseInt(stepsArray.indexOf(this.props.id));
+      var getDot = targetsArray[step];
+      var dotPos = getDot.getBoundingClientRect().top;
+      var winHeight = window.innerHeight;
+      if (dotPos > winHeight - 200 || dotPos < 100) {
+        this.scrollToDot(step);
+      }
     }
   }, {
     key: 'nextStep',
     value: function nextStep() {
-      var numTargets = pulseyTargets.length;
-      var test = [3, 1, 54, 23, 1];
-      var unclicked = [];
-      for (i = 0; i < numTargets; i++) {
-        unclicked.push(pulseyTargets[i]);
-      }
-      unclicked.sort(function (a, b) {
-        return a.getAttribute('data-ps-step') - b.getAttribute('data-ps-step');
-      });
-      console.log(pulseyTargets);
-      console.log(unclicked);
-      for (i = 0; i < numTargets; i++) {
-        var next = this.props.id + i + 1;
-        if (localStorage.getItem('dot' + next)) {
-          unclickedAnchors.push();
-        }
-      }
-      for (var i = 0; i < numTargets; i++) {
-        var next = this.props.id + i + 1;
-        if (localStorage.getItem('dot' + parseInt(next))) {
-          for (var e = 0; e < numTargets; e++) {
-            if (localStorage.getItem('dot' + parseInt(e)) && e === numTargets - 1) {
-              this.props.close();
-            } else {
-              null;
-            }
-          }
-        } else if (next === numTargets) {
-          for (var e = 0; e < numTargets; e++) {
-            next = e;
-            if (!localStorage.getItem('dot' + parseInt(next))) {
-              this.setState({
-                showDot: localStorage.setItem("dot" + parseInt(next), true)
-              });
-              this.props.nextStep(next);
-              var getDot = pulseyTargets[next];
-              var dotPos = getDot.getBoundingClientRect().top;
-              var winHeight = window.innerHeight;
-              if (dotPos > winHeight - 200 || dotPos < 100) {
-                this.scrollToDot(next);
-              }
-              break;
-            } else if (localStorage.getItem('dot' + parseInt(next))) {
-              if (localStorage.getItem('dot' + parseInt(e)) && e === numTargets - 1) {
-                this.props.close();
-              } else {
-                null;
-              }
-            } else {
-              break;
-            }
-          }
-          break;
-        } else {
-          this.setState({
-            showDot: localStorage.setItem("dot" + parseInt(next), true)
-          });
-          this.props.nextStep(next);
-          var getDot = document.getElementsByClassName('ps-anchor')[next];
+      var step = parseInt(stepsArray.indexOf(this.props.id));
+      var nextStep = stepsArray[step + 1];
+      if (nextStep === undefined) {
+        stepsArray.splice(step, 1);
+        targetsArray.splice(step, 1);
+        this.props.nextStep(stepsArray[0]);
+        this.setState({
+          showDot: localStorage.setItem("dot" + stepsArray[0], true)
+        });
+        var getDot = targetsArray[0];
+        if (getDot) {
           var dotPos = getDot.getBoundingClientRect().top;
           var winHeight = window.innerHeight;
           if (dotPos > winHeight - 200 || dotPos < 100) {
-            this.scrollToDot(next);
+            this.scrollToDot(0);
           }
-          break;
+        }
+      } else {
+        stepsArray.splice(step, 1);
+        targetsArray.splice(step, 1);
+        this.props.nextStep(stepsArray[step]);
+        this.setState({
+          showDot: localStorage.setItem("dot" + stepsArray[step], true)
+        });
+        var getDot = targetsArray[step];
+        var dotPos = getDot.getBoundingClientRect().top;
+        var winHeight = window.innerHeight;
+        if (dotPos > winHeight - 200 || dotPos < 100) {
+          this.scrollToDot(step);
         }
       }
     }
   }, {
     key: 'scrollToDot',
-    value: function scrollToDot(next) {
-      var nextNode = document.querySelectorAll("[data-ps-step]")[next];
+    value: function scrollToDot(step) {
+      var nextNode = targetsArray[step];
       Velocity(nextNode, 'scroll', {
         duration: 500,
         offset: -40,
@@ -240,6 +211,8 @@ var Dot = function (_React$Component3) {
     key: 'close',
     value: function close() {
       this.props.close();
+      var step = parseInt(stepsArray.indexOf(this.props.id));
+      stepsArray.splice(step, 1);
     }
   }, {
     key: 'render',
@@ -351,9 +324,10 @@ var Pulsey = function (_React$Component4) {
     value: function render() {
       var dots = [];
       for (var i = 0; i < pulseyTargets.length; i++) {
+        var id = parseInt(unclickedSteps[i]);
         dots.push(_react2.default.createElement(Dot, {
           key: i,
-          id: i,
+          id: id,
           pa: this.state.pa[i],
           nextStep: this.nextStep.bind(this),
           dotClick: this.dotClick.bind(this),
@@ -377,7 +351,39 @@ var Pulsey = function (_React$Component4) {
   return Pulsey;
 }(_react2.default.Component);
 
-var pulseyTargets = document.getElementsByClassName('ps-anchor');
+var pulseyTargets = document.getElementsByClassName('ps-anchor'),
+    unclicked = [],
+    unclickedSteps = [],
+    noStepGiven = 0;
+for (var i = 0; i < pulseyTargets.length; i++) {
+  unclicked.push(pulseyTargets[i]);
+  var step = pulseyTargets[i].getAttribute('data-ps-step');
+  if (step == '' || step == null) {
+    noStepGiven++;
+  } else {
+    unclickedSteps.push(parseInt(step));
+  }
+}
+unclickedSteps.sort(function (a, b) {
+  return a - b;
+});
+
+var lastStep = unclickedSteps.slice(-1)[0] ? unclickedSteps.slice(-1)[0] : 0;
+for (var i = 0; i < noStepGiven; i++) {
+  lastStep++;
+  unclickedSteps.push(lastStep);
+}
+
+var stepsArray = unclickedSteps.slice();
+var targetsArray = unclicked.slice();
+
+for (var i = 0; i < pulseyTargets.length; i++) {
+  if (localStorage.getItem('dot' + parseInt(stepsArray[i]))) {
+    stepsArray.splice(i, 1);
+    targetsArray.splice(i, 1);
+    i--;
+  }
+}
 
 var options = {
   utilities: {
