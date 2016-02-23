@@ -54,17 +54,19 @@ var Tooltip = function (_React$Component2) {
   function Tooltip(props) {
     _classCallCheck(this, Tooltip);
 
-    var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(Tooltip).call(this, props));
-
-    _this2.state = {
-      showDot: !localStorage.getItem("dot" + _this2.props.id) && !_this2.props.id == _this2.props.step
-    };
-    return _this2;
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(Tooltip).call(this, props));
   }
 
   _createClass(Tooltip, [{
     key: 'render',
     value: function render() {
+      this.props.id == this.props.step ? onkeydown = function (e) {
+        e.keyCode === 39 ? (stepsArray.sort(function (a, b) {
+          return a - b;
+        }), this.props.nextStep()) : e.keyCode === 37 ? (stepsArray.sort(function (a, b) {
+          return b - a;
+        }), this.props.nextStep()) : null;
+      }.bind(this) : null;
       var pa = this.props.pa,
           pos = pa.getBoundingClientRect(),
           targetStyle = window.getComputedStyle(pa, null),
@@ -158,8 +160,8 @@ var Dot = function (_React$Component3) {
       var getDot = targetsArray[step];
       var dotPos = getDot.getBoundingClientRect().top;
       var winHeight = window.innerHeight;
-      if (dotPos > winHeight - 200 || dotPos < 100) {
-        this.scrollToDot(step);
+      if (dotPos > winHeight - 200 || dotPos < 150) {
+        this.scrollToDot(getDot);
       }
     }
   }, {
@@ -167,7 +169,7 @@ var Dot = function (_React$Component3) {
     value: function nextStep() {
       var step = parseInt(stepsArray.indexOf(this.props.id));
       var nextStep = stepsArray[step + 1];
-      if (nextStep === undefined) {
+      if (nextStep === undefined && stepsArray.length > 0) {
         stepsArray.splice(step, 1);
         targetsArray.splice(step, 1);
         this.props.nextStep(stepsArray[0]);
@@ -178,8 +180,8 @@ var Dot = function (_React$Component3) {
         if (getDot) {
           var dotPos = getDot.getBoundingClientRect().top;
           var winHeight = window.innerHeight;
-          if (dotPos > winHeight - 200 || dotPos < 100) {
-            this.scrollToDot(0);
+          if (dotPos > winHeight - 200 || dotPos < 150) {
+            this.scrollToDot(getDot);
           }
         }
       } else {
@@ -192,16 +194,15 @@ var Dot = function (_React$Component3) {
         var getDot = targetsArray[step];
         var dotPos = getDot.getBoundingClientRect().top;
         var winHeight = window.innerHeight;
-        if (dotPos > winHeight - 200 || dotPos < 100) {
-          this.scrollToDot(step);
+        if (dotPos > winHeight - 200 || dotPos < 150) {
+          this.scrollToDot(getDot);
         }
       }
     }
   }, {
     key: 'scrollToDot',
-    value: function scrollToDot(step) {
-      var nextNode = targetsArray[step];
-      Velocity(nextNode, 'scroll', {
+    value: function scrollToDot(getDot) {
+      Velocity(getDot, 'scroll', {
         duration: 500,
         offset: -40,
         easing: 'ease-in-out'

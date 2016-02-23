@@ -92,14 +92,13 @@ STYLES
 
 
 NEXT FEATURES (no additions allowed!)
-Completed: 0/16
+Completed: 2/17
 
-- detect if next pulse is offscreen and animate document scroll to it
-- find next dot correctly in cases where data-ps-step was set, and fallback if steps do not have them set (perhaps the orderedStep option is set to false if upon looping through the ps-anchors array no data-ps-step attribute is found)
+- give users option for Tooltip component to animate between dots, in addition to current version (UniTooltip)
+- option for dots to be hidden
+
 - tooltips recognize whether they are overflowing the screen and reposition themselves automatically, unless user decides to turn this functionality off
-- give users option for Tooltip component to animate between dots, in addition to current version.
-- option for dots to be ordered, unordered, or hidden
-- basic optional welcome screen with customizable header, message, button, etc.
+- basic optional welcome screen and finish screen with customizable header, message, button, etc.
 - progress/step badges and/or progress bar
 - option to nav by keyboard
 - detect if no dots are left, and show "finish" in place of "next" in the next button
@@ -110,6 +109,7 @@ Completed: 0/16
 - option to use sessionStorage instead of localStorage
 - allow user to put html inside tooltip via data attribute
 - provide user with multiple pre-designed options for look and animation of dots and tooltips just by changing one option.  or they can choose to use their own css.
+- option to be able to go back and forth between dots (as opposed to current situation where we store them in local storage and you can't return to them)
 
 ICEBOX
 

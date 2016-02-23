@@ -19,12 +19,22 @@ class Underlay extends React.Component {
 class Tooltip extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      showDot: !localStorage.getItem("dot" + this.props.id)
-               && !this.props.id == this.props.step,
-    }
   }
   render() {
+    this.props.id == this.props.step ?
+      onkeydown = function(e) {
+        e.keyCode === 39 ? (
+          stepsArray.sort(function(a,b) {
+            return a - b;
+          }),
+          this.props.nextStep()
+        ) : e.keyCode === 37 ? (
+          stepsArray.sort(function(a,b) {
+            return b - a;
+          }),
+          this.props.nextStep()
+        ) : null;
+      }.bind(this) : null;
     var pa = this.props.pa,
         pos = pa.getBoundingClientRect(),
         targetStyle = window.getComputedStyle(pa,null),
@@ -86,14 +96,14 @@ class Dot extends React.Component {
     var getDot = targetsArray[step];
     var dotPos = getDot.getBoundingClientRect().top;
     var winHeight = window.innerHeight;
-    if ( (dotPos > winHeight - 200) || (dotPos < 100) ) {
-      this.scrollToDot(step);
+    if ( (dotPos > winHeight - 200) || (dotPos < 150) ) {
+      this.scrollToDot(getDot);
     }
-}
+  }
   nextStep() {
     var step = parseInt(stepsArray.indexOf(this.props.id));
     var nextStep = stepsArray[step+1];
-    if (nextStep === undefined) {
+    if (nextStep === undefined && stepsArray.length > 0) {
       stepsArray.splice(step,1);
       targetsArray.splice(step,1);
       this.props.nextStep(stepsArray[0]);
@@ -104,8 +114,8 @@ class Dot extends React.Component {
       if (getDot) {
         var dotPos = getDot.getBoundingClientRect().top;
         var winHeight = window.innerHeight;
-        if ( (dotPos > winHeight - 200) || (dotPos < 100) ) {
-          this.scrollToDot(0);
+        if ( (dotPos > winHeight - 200) || (dotPos < 150) ) {
+          this.scrollToDot(getDot);
         }
       }
     }
@@ -119,14 +129,13 @@ class Dot extends React.Component {
       var getDot = targetsArray[step];
       var dotPos = getDot.getBoundingClientRect().top;
       var winHeight = window.innerHeight;
-      if ( (dotPos > winHeight - 200) || (dotPos < 100) ) {
-        this.scrollToDot(step);
+      if ( (dotPos > winHeight - 200) || (dotPos < 150) ) {
+        this.scrollToDot(getDot);
       }
     }
   }
-  scrollToDot(step) {
-    var nextNode = targetsArray[step];
-    Velocity(nextNode, 'scroll', {
+  scrollToDot(getDot) {
+    Velocity(getDot, 'scroll', {
       duration: 500,
       offset: -40,
       easing: 'ease-in-out',
