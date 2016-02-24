@@ -92,7 +92,7 @@ STYLES
 
 
 NEXT FEATURES (no additions allowed!)
-Completed: 2/17
+Completed: 3/17
 
 - give users option for Tooltip component to animate between dots, in addition to current version (UniTooltip)
 - option for dots to be hidden
@@ -100,7 +100,6 @@ Completed: 2/17
 - tooltips recognize whether they are overflowing the screen and reposition themselves automatically, unless user decides to turn this functionality off
 - basic optional welcome screen and finish screen with customizable header, message, button, etc.
 - progress/step badges and/or progress bar
-- option to nav by keyboard
 - detect if no dots are left, and show "finish" in place of "next" in the next button
 - ability to turn clickToClose off for underlay
 - option for introjs-like highlight of target element - pretty simple, make z-index super high and add a div of same size underneath it to add box-shadow
@@ -109,7 +108,7 @@ Completed: 2/17
 - option to use sessionStorage instead of localStorage
 - allow user to put html inside tooltip via data attribute
 - provide user with multiple pre-designed options for look and animation of dots and tooltips just by changing one option.  or they can choose to use their own css.
-- option to be able to go back and forth between dots (as opposed to current situation where we store them in local storage and you can't return to them)
+- option to be able to go back and forth between dots (as opposed to current situation where we store them in local storage and you can)
 
 ICEBOX
 

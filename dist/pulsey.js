@@ -65,7 +65,7 @@ var Tooltip = function (_React$Component2) {
           return a - b;
         }), this.props.nextStep()) : e.keyCode === 37 ? (stepsArray.sort(function (a, b) {
           return b - a;
-        }), this.props.nextStep()) : null;
+        }), this.props.prevStep()) : null;
       }.bind(this) : null;
       var pa = this.props.pa,
           pos = pa.getBoundingClientRect(),
@@ -151,9 +151,9 @@ var Dot = function (_React$Component3) {
   _createClass(Dot, [{
     key: 'dotClick',
     value: function dotClick() {
-      this.setState({
+      options.removeStepOnClick ? this.setState({
         showDot: localStorage.setItem("dot" + this.props.id, true)
-      });
+      }) : null;
       options.dot.step = this.props.id;
       this.props.dotClick();
       var step = parseInt(stepsArray.indexOf(this.props.id));
@@ -170,12 +170,10 @@ var Dot = function (_React$Component3) {
       var step = parseInt(stepsArray.indexOf(this.props.id));
       var nextStep = stepsArray[step + 1];
       if (nextStep === undefined && stepsArray.length > 0) {
-        stepsArray.splice(step, 1);
-        targetsArray.splice(step, 1);
-        this.props.nextStep(stepsArray[0]);
-        this.setState({
+        options.removeStepOnClick ? (stepsArray.splice(step, 1), targetsArray.splice(step, 1), this.props.nextStep(stepsArray[0])) : this.props.stepCount < options.utilities.numTargets ? (this.props.nextStep(stepsArray[0]), console.log(this.props.stepCount)) : null;
+        options.removeStepOnClick ? this.setState({
           showDot: localStorage.setItem("dot" + stepsArray[0], true)
-        });
+        }) : null;
         var getDot = targetsArray[0];
         if (getDot) {
           var dotPos = getDot.getBoundingClientRect().top;
@@ -185,12 +183,10 @@ var Dot = function (_React$Component3) {
           }
         }
       } else {
-        stepsArray.splice(step, 1);
-        targetsArray.splice(step, 1);
-        this.props.nextStep(stepsArray[step]);
-        this.setState({
+        options.removeStepOnClick ? (stepsArray.splice(step, 1), targetsArray.splice(step, 1), this.props.nextStep(stepsArray[step])) : this.props.stepCount < options.utilities.numTargets ? (this.props.nextStep(stepsArray[step + 1]), console.log(this.props.stepCount), console.log('doing something')) : null;
+        options.removeStepOnClick ? this.setState({
           showDot: localStorage.setItem("dot" + stepsArray[step], true)
-        });
+        }) : null;
         var getDot = targetsArray[step];
         var dotPos = getDot.getBoundingClientRect().top;
         var winHeight = window.innerHeight;
@@ -198,6 +194,12 @@ var Dot = function (_React$Component3) {
           this.scrollToDot(getDot);
         }
       }
+    }
+  }, {
+    key: 'prevStep',
+    value: function prevStep() {
+      var step = parseInt(stepsArray.indexOf(this.props.id));
+      options.removeStepOnClick ? (stepsArray.splice(step, 1), targetsArray.splice(step, 1), this.props.prevStep(stepsArray[step - 1])) : this.props.stepCount < options.utilities.numTargets ? (this.props.prevStep(stepsArray[step - 1]), console.log(this.props.stepCount), console.log('doing something')) : null;
     }
   }, {
     key: 'scrollToDot',
@@ -249,6 +251,7 @@ var Dot = function (_React$Component3) {
         _react2.default.createElement(Tooltip, {
           pa: this.props.pa,
           nextStep: this.nextStep.bind(this),
+          prevStep: this.prevStep.bind(this),
           id: this.props.id,
           step: this.props.step,
           close: this.close.bind(this)
@@ -275,7 +278,8 @@ var Pulsey = function (_React$Component4) {
 
     _this4.state = {
       step: options.dot.step, // inits as null
-      pa: pulseyTargets
+      pa: pulseyTargets,
+      stepCount: 0
     };
     return _this4;
   }
@@ -288,9 +292,14 @@ var Pulsey = function (_React$Component4) {
   }, {
     key: 'nextStep',
     value: function nextStep(next) {
-      this.setState({
-        step: this.state.step = next
-      });
+      this.setState({ step: this.state.step = next });
+      this.setState({ stepCount: this.state.stepCount + 1 });
+    }
+  }, {
+    key: 'prevStep',
+    value: function prevStep(next) {
+      this.setState({ step: this.state.step = next - 2 });
+      this.setState({ stepCount: this.state.stepCount - 1 });
     }
   }, {
     key: 'dotClick',
@@ -331,9 +340,11 @@ var Pulsey = function (_React$Component4) {
           id: id,
           pa: this.state.pa[i],
           nextStep: this.nextStep.bind(this),
+          prevStep: this.prevStep.bind(this),
           dotClick: this.dotClick.bind(this),
           close: this.close.bind(this),
-          step: this.state.step
+          step: this.state.step,
+          stepCount: this.state.stepCount
         }));
       }
       return _react2.default.createElement(
@@ -415,7 +426,8 @@ var options = {
   },
   underlay: {},
   welcome: {},
-  progress: {}
+  progress: {},
+  removeStepOnClick: false
 };
 
 var tipSide = options.tooltip.tip.side;
