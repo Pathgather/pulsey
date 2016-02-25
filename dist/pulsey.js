@@ -63,15 +63,20 @@ var Highlighter = function (_React$Component2) {
       var highlighterStyle = {
         width: '200',
         height: '300',
-        background: 'blue',
+        background: '#fbfbfb',
         position: 'absolute',
         top: '20',
         left: '20'
       };
+      console.log(this.props.stepCount);
+      for (i = 0; i < pulseyTargets.length; i++) {
+        document.getElementsByClassName('ps-anchor')[i].className = 'ps-anchor';
+        document.getElementsByClassName('ps-anchor')[this.props.stepCount].className = 'ps-anchor highlight-target';
+      }
       return _react2.default.createElement(
         'div',
-        { style: highlighterStyle },
-        '\'yebo\''
+        { style: highlighterStyle, className: "highlight-back" },
+        'Highlighter placeholder'
       );
     }
   }]);
@@ -312,7 +317,6 @@ var Dot = function (_React$Component4) {
           decrementStepCount: this.props.decrementStepCount,
           stepCount: this.props.stepCount
         }),
-        _react2.default.createElement(Highlighter, null),
         _react2.default.createElement(Underlay, {
           id: this.props.id,
           step: this.props.step,
@@ -416,7 +420,10 @@ var Pulsey = function (_React$Component5) {
           'button',
           { style: styles.reset, onClick: this.reset.bind(this) },
           'Reset Dots'
-        )
+        ),
+        _react2.default.createElement(Highlighter, {
+          stepCount: this.state.stepCount
+        })
       );
     }
   }]);

@@ -29,6 +29,18 @@ body {
   animation: sk-scaleout 1.0s infinite ease-in-out;
 }
 
+.highlight-back {
+  z-index: 99998;
+  background: orange;
+  position: absolute;
+}
+
+.highlight-target {
+  z-index: 100000;
+  background: #4c93ea !important;
+  position: absolute !important;
+}
+
 @-webkit-keyframes sk-scaleout {
   0% {
     -webkit-transform: scale(0);

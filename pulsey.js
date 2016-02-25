@@ -24,14 +24,19 @@ class Highlighter extends React.Component {
     var highlighterStyle = {
       width: '200',
       height: '300',
-      background: 'blue',
+      background: '#fbfbfb',
       position: 'absolute',
       top: '20',
       left: '20',
     }
+    console.log(this.props.stepCount);
+    for (i = 0; i < pulseyTargets.length; i++) {
+      document.getElementsByClassName('ps-anchor')[i].className = 'ps-anchor';
+      document.getElementsByClassName('ps-anchor')[this.props.stepCount].className = 'ps-anchor highlight-target';
+    }
     return (
-      <div style={highlighterStyle}>
-        'yebo'
+      <div style={highlighterStyle} className={"highlight-back"}>
+        Highlighter placeholder
       </div>
     );
   }
@@ -231,7 +236,6 @@ class Dot extends React.Component {
           decrementStepCount={this.props.decrementStepCount}
           stepCount={this.props.stepCount}
         />
-        <Highlighter />
         <Underlay
           id={this.props.id}
           step={this.props.step}
@@ -309,6 +313,9 @@ class Pulsey extends React.Component {
       <div style={styles.tour}>
         {dots}
         <button style={styles.reset} onClick={this.reset.bind(this)}>Reset Dots</button>
+        <Highlighter
+          stepCount={this.state.stepCount}
+        />
       </div>
     );
   }
