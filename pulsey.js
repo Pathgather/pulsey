@@ -16,6 +16,27 @@ class Underlay extends React.Component {
   }
 }
 
+class Highlighter extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    var highlighterStyle = {
+      width: '200',
+      height: '300',
+      background: 'blue',
+      position: 'absolute',
+      top: '20',
+      left: '20',
+    }
+    return (
+      <div style={highlighterStyle}>
+        'yebo'
+      </div>
+    );
+  }
+}
+
 class Tooltip extends React.Component {
   constructor(props) {
     super(props);
@@ -210,6 +231,7 @@ class Dot extends React.Component {
           decrementStepCount={this.props.decrementStepCount}
           stepCount={this.props.stepCount}
         />
+        <Highlighter />
         <Underlay
           id={this.props.id}
           step={this.props.step}

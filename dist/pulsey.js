@@ -48,8 +48,39 @@ var Underlay = function (_React$Component) {
   return Underlay;
 }(_react2.default.Component);
 
-var Tooltip = function (_React$Component2) {
-  _inherits(Tooltip, _React$Component2);
+var Highlighter = function (_React$Component2) {
+  _inherits(Highlighter, _React$Component2);
+
+  function Highlighter(props) {
+    _classCallCheck(this, Highlighter);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(Highlighter).call(this, props));
+  }
+
+  _createClass(Highlighter, [{
+    key: 'render',
+    value: function render() {
+      var highlighterStyle = {
+        width: '200',
+        height: '300',
+        background: 'blue',
+        position: 'absolute',
+        top: '20',
+        left: '20'
+      };
+      return _react2.default.createElement(
+        'div',
+        { style: highlighterStyle },
+        '\'yebo\''
+      );
+    }
+  }]);
+
+  return Highlighter;
+}(_react2.default.Component);
+
+var Tooltip = function (_React$Component3) {
+  _inherits(Tooltip, _React$Component3);
 
   function Tooltip(props) {
     _classCallCheck(this, Tooltip);
@@ -150,18 +181,18 @@ var Tooltip = function (_React$Component2) {
   return Tooltip;
 }(_react2.default.Component);
 
-var Dot = function (_React$Component3) {
-  _inherits(Dot, _React$Component3);
+var Dot = function (_React$Component4) {
+  _inherits(Dot, _React$Component4);
 
   function Dot(props) {
     _classCallCheck(this, Dot);
 
-    var _this3 = _possibleConstructorReturn(this, Object.getPrototypeOf(Dot).call(this, props));
+    var _this4 = _possibleConstructorReturn(this, Object.getPrototypeOf(Dot).call(this, props));
 
-    _this3.state = {
-      showDot: !localStorage.getItem("dot" + _this3.props.id)
+    _this4.state = {
+      showDot: !localStorage.getItem("dot" + _this4.props.id)
     };
-    return _this3;
+    return _this4;
   }
 
   _createClass(Dot, [{
@@ -281,6 +312,7 @@ var Dot = function (_React$Component3) {
           decrementStepCount: this.props.decrementStepCount,
           stepCount: this.props.stepCount
         }),
+        _react2.default.createElement(Highlighter, null),
         _react2.default.createElement(Underlay, {
           id: this.props.id,
           step: this.props.step,
@@ -293,20 +325,20 @@ var Dot = function (_React$Component3) {
   return Dot;
 }(_react2.default.Component);
 
-var Pulsey = function (_React$Component4) {
-  _inherits(Pulsey, _React$Component4);
+var Pulsey = function (_React$Component5) {
+  _inherits(Pulsey, _React$Component5);
 
   function Pulsey(props) {
     _classCallCheck(this, Pulsey);
 
-    var _this4 = _possibleConstructorReturn(this, Object.getPrototypeOf(Pulsey).call(this, props));
+    var _this5 = _possibleConstructorReturn(this, Object.getPrototypeOf(Pulsey).call(this, props));
 
-    _this4.state = {
+    _this5.state = {
       step: options.dot.step,
       pa: pulseyTargets,
       stepCount: 0
     };
-    return _this4;
+    return _this5;
   }
 
   _createClass(Pulsey, [{
