@@ -41,6 +41,9 @@ class Tooltip extends React.Component {
             this.props.decrementStepCount();
           }
         }
+        else if (e.keyCode === 27) {
+          this.props.close();
+        }
       }.bind(this);
     }
     var pa = this.props.pa,
@@ -199,6 +202,7 @@ class Dot extends React.Component {
         <Tooltip
           pa={this.props.pa}
           nextStep={this.nextStep.bind(this)}
+          close={this.close.bind(this)}
           id={this.props.id}
           step={this.props.step}
           close={this.close.bind(this)}
@@ -461,7 +465,7 @@ var styles = {
   },
   underlay: {
     zIndex: '99998',
-    background: 'rgba(76,147,234,0.4)',
+    background: 'rgba(0,0,0,0.25)', //'rgba(76,147,234,0.4)',
     position: 'absolute',
     left: '0',
     top: '0',

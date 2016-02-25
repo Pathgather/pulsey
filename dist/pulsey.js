@@ -78,6 +78,8 @@ var Tooltip = function (_React$Component2) {
               this.props.nextStep();
               this.props.decrementStepCount();
             }
+          } else if (e.keyCode === 27) {
+            this.props.close();
           }
         }.bind(this);
       }
@@ -271,6 +273,7 @@ var Dot = function (_React$Component3) {
         _react2.default.createElement(Tooltip, {
           pa: this.props.pa,
           nextStep: this.nextStep.bind(this),
+          close: this.close.bind(this),
           id: this.props.id,
           step: this.props.step,
           close: this.close.bind(this),
@@ -561,7 +564,7 @@ var styles = {
   },
   underlay: {
     zIndex: '99998',
-    background: 'rgba(76,147,234,0.4)',
+    background: 'rgba(0,0,0,0.25)', //'rgba(76,147,234,0.4)',
     position: 'absolute',
     left: '0',
     top: '0',
