@@ -156,7 +156,7 @@ var Tooltip = function (_React$Component3) {
           { style: styles.tooltip.buttons },
           _react2.default.createElement(
             'button',
-            { style: styles.tooltip.exitButton },
+            { style: styles.tooltip.exitButton, onClick: this.props.close },
             'Exit'
           ),
           _react2.default.createElement(

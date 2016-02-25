@@ -93,7 +93,7 @@ class Tooltip extends React.Component {
           <div style={styles.tooltip.header}>{tooltip.header}</div>
           <div style={styles.tooltip.note}>{tooltip.note}</div>
           <div style={styles.tooltip.buttons}>
-            <button style={styles.tooltip.exitButton}>Exit</button>
+            <button style={styles.tooltip.exitButton} onClick={this.props.close}>Exit</button>
             <button
               style={styles.tooltip.nextButton}
               onClick={this.props.nextStep}>
