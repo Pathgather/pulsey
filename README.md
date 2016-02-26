@@ -121,3 +121,4 @@ ISSUES
 - options are not currently specific to each dot and each tooltip - they're global and shouldn't be
 - auto-scrolling not working correctly (not properly aligned with steps)
 - need to stress-test the way clicking through dots works, their ordering, etc.
+- on screenresize (and probably scroll) don't want highlight-back element to have a transition duration (currently lags and looks bad)
