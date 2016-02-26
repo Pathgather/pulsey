@@ -132,13 +132,13 @@ class Dot extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showDot: !localStorage.getItem("dot" + this.props.id),
+      showDot: !window[storage].getItem("dot" + this.props.id),
     }
   }
   dotClick() {
     options.removeStepOnClick ?
       this.setState({
-        showDot: localStorage.setItem("dot" + this.props.id, true),
+        showDot: window[storage].setItem("dot" + this.props.id, true),
       }) : null;
     options.dot.step = this.props.id;
     this.props.dotClick();
@@ -159,7 +159,7 @@ class Dot extends React.Component {
         targetsArray.splice(step,1);
         this.props.nextStep(stepsArray[0]);
         this.setState({
-          showDot: localStorage.setItem("dot" + stepsArray[0], true),
+          showDot: window[storage].setItem("dot" + stepsArray[0], true),
         });
       }
       else {
@@ -180,7 +180,7 @@ class Dot extends React.Component {
         targetsArray.splice(step,1);
         this.props.nextStep(stepsArray[step]);
         this.setState({
-          showDot: localStorage.setItem("dot" + stepsArray[step], true),
+          showDot: window[storage].setItem("dot" + stepsArray[step], true),
         });
       }
       else {
@@ -232,7 +232,7 @@ class Dot extends React.Component {
         <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
           {
             this.state.showDot &&
-            !localStorage.getItem("dot" + this.props.id) &&
+            !window[storage].getItem("dot" + this.props.id) &&
             (!(this.props.id == this.props.step) || this.props.step == null) &&
             options.dot.showDots ? dot : null
           }
@@ -268,7 +268,7 @@ class Pulsey extends React.Component {
     }
   }
   reset() {
-    localStorage.clear();
+    window[storage].clear();
   }
   nextStep(next) {
     this.setState({step: next});
@@ -354,14 +354,6 @@ for (var i = 0; i < noStepGiven; i++) {
 var stepsArray = unclickedSteps.slice();
 var targetsArray = unclicked.slice();
 
-for (var i = 0; i < pulseyTargets.length; i++) {
-  if (localStorage.getItem('dot' + parseInt(stepsArray[i]))) {
-    stepsArray.splice(i,1);
-    targetsArray.splice(i,1);
-    i--;
-  }
-}
-
 var options = {
   utilities : {
     numTargets: pulseyTargets.length,
@@ -394,9 +386,23 @@ var options = {
   underlay: {
     clickToClose: true,
   },
+  storage: 'localStorage',
   welcome: {},
   progress: {},
   removeStepOnClick: true,
+}
+
+var storage =
+  options.storage === 'localStorage' ||
+  options.storage === 'sessionStorage' ?
+    options.storage : 'localStorage';
+
+for (var i = 0; i < pulseyTargets.length; i++) {
+  if (window[storage].getItem('dot' + parseInt(stepsArray[i]))) {
+    stepsArray.splice(i,1);
+    targetsArray.splice(i,1);
+    i--;
+  }
 }
 
 var tipSide = options.tooltip.tip.side;
