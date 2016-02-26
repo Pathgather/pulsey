@@ -60,24 +60,29 @@ var Highlighter = function (_React$Component2) {
   _createClass(Highlighter, [{
     key: 'render',
     value: function render() {
-      var highlighterStyle = {
-        width: '200',
-        height: '300',
-        background: '#fbfbfb',
-        position: 'absolute',
-        top: '20',
-        left: '20'
-      };
-      console.log(this.props.stepCount);
+      var step = this.props.step ? this.props.step : 0;
       for (i = 0; i < pulseyTargets.length; i++) {
         document.getElementsByClassName('ps-anchor')[i].className = 'ps-anchor';
-        document.getElementsByClassName('ps-anchor')[this.props.stepCount].className = 'ps-anchor highlight-target';
+        document.getElementsByClassName('ps-anchor')[step].className = 'ps-anchor highlight-target';
       }
-      return _react2.default.createElement(
-        'div',
-        { style: highlighterStyle, className: "highlight-back" },
-        'Highlighter placeholder'
-      );
+      var pa = this.props.pa[step],
+          pos = pa.getBoundingClientRect(),
+          targetStyle = window.getComputedStyle(pa, null),
+          fixed = targetStyle.getPropertyValue('position') === "fixed",
+          position = {
+        height: pos.height + 10,
+        width: pos.width + 10,
+        position: 'absolute',
+        left: pos.left - 5 + window.scrollX,
+        top: pos.top - 5 + window.scrollY,
+        borderRadius: 3,
+        boxShadow: '0 0 20px 3px rgba(255,255,255,0.25)',
+        transition: 'all 0.3s ease-in'
+      },
+          highlighterStyle = Object.assign(position, styles.highlighter);
+      return _react2.default.createElement('div', {
+        style: highlighterStyle,
+        className: "highlight-back" });
     }
   }]);
 
@@ -130,15 +135,15 @@ var Tooltip = function (_React$Component3) {
           tooltip = {
         header: tooltipHeader ? tooltipHeader : options.tooltip.content.header,
         note: tooltipNote ? tooltipNote : options.tooltip.content.note
-      };
-      var position = {
+      },
+          position = {
         top: fixed ? pos.top + pos.height / 2 + options.tooltip.offset.top : pos.top + pos.height / 2 + options.tooltip.offset.top + window.scrollY,
         left: fixed ? pos.left + pos.width / 2 - styles.tooltip.width / 2 + options.tooltip.offset.left : pos.left + pos.width / 2 - styles.tooltip.width / 2 + options.tooltip.offset.left + window.scrollX,
         position: fixed ? 'fixed' : 'absolute'
-      };
-      var tooltipStyle = Object.assign(position, styles.tooltip);
-      var tip = options.tooltip.tip.display ? _react2.default.createElement('div', { style: styles.tooltip.tip }) : null;
-      var tooltip = _react2.default.createElement(
+      },
+          tooltipStyle = Object.assign(position, styles.tooltip),
+          tip = options.tooltip.tip.display ? _react2.default.createElement('div', { style: styles.tooltip.tip }) : null,
+          tooltip = _react2.default.createElement(
         'div',
         { style: tooltipStyle, className: "pulsey-tooltip-" + this.props.id },
         _react2.default.createElement(
@@ -173,8 +178,8 @@ var Tooltip = function (_React$Component3) {
           )
         ),
         tip
-      );
-      var showTooltip = this.props.id == this.props.step ? tooltip : null;
+      ),
+          showTooltip = this.props.id == this.props.step ? tooltip : null;
       return _react2.default.createElement(
         _velocityReact.VelocityTransitionGroup,
         { enter: { animation: "transition.expandIn" }, leave: { animation: "transition.expandOut" } },
@@ -422,7 +427,9 @@ var Pulsey = function (_React$Component5) {
           'Reset Dots'
         ),
         _react2.default.createElement(Highlighter, {
-          stepCount: this.state.stepCount
+          stepCount: this.state.stepCount,
+          step: this.state.step,
+          pa: this.state.pa
         })
       );
     }
@@ -525,6 +532,9 @@ var styles = {
       transform: 'translate(-50%,-50%)',
       background: '#fff'
     }
+  },
+  highlighter: {
+    background: '#fbfbfb'
   },
   tooltip: {
     zIndex: '99999',

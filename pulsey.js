@@ -21,22 +21,30 @@ class Highlighter extends React.Component {
     super(props);
   }
   render() {
-    var highlighterStyle = {
-      width: '200',
-      height: '300',
-      background: '#fbfbfb',
-      position: 'absolute',
-      top: '20',
-      left: '20',
-    }
-    console.log(this.props.stepCount);
+    var step = this.props.step ? this.props.step : 0;
     for (i = 0; i < pulseyTargets.length; i++) {
       document.getElementsByClassName('ps-anchor')[i].className = 'ps-anchor';
-      document.getElementsByClassName('ps-anchor')[this.props.stepCount].className = 'ps-anchor highlight-target';
+      document.getElementsByClassName('ps-anchor')[step].className = 'ps-anchor highlight-target';
     }
+    var pa = this.props.pa[step],
+        pos = pa.getBoundingClientRect(),
+        targetStyle = window.getComputedStyle(pa,null),
+        fixed = targetStyle.getPropertyValue('position') === "fixed",
+        position = {
+          height: pos.height + 10,
+          width: pos.width + 10,
+          position: 'absolute',
+          left: pos.left - 5 + window.scrollX,
+          top: pos.top - 5 + window.scrollY,
+          borderRadius: 3,
+          boxShadow: '0 0 20px 3px rgba(255,255,255,0.25)',
+          transition: 'all 0.3s ease-in',
+        },
+        highlighterStyle = Object.assign(position,styles.highlighter);
     return (
-      <div style={highlighterStyle} className={"highlight-back"}>
-        Highlighter placeholder
+      <div
+        style={highlighterStyle}
+        className={"highlight-back"}>
       </div>
     );
   }
@@ -83,31 +91,31 @@ class Tooltip extends React.Component {
         tooltip = {
           header: tooltipHeader ? tooltipHeader : options.tooltip.content.header,
           note: tooltipNote ? tooltipNote : options.tooltip.content.note,
-        };
-    var position = {
-      top: fixed ? pos.top + pos.height/2 + options.tooltip.offset.top : pos.top + pos.height/2 + options.tooltip.offset.top + window.scrollY,
-      left: fixed ? pos.left + pos.width/2 - styles.tooltip.width/2 + options.tooltip.offset.left : pos.left + pos.width/2 - styles.tooltip.width/2 + options.tooltip.offset.left + window.scrollX,
-      position: fixed ? 'fixed' : 'absolute',
-    }
-    var tooltipStyle = Object.assign(position,styles.tooltip);
-    var tip = options.tooltip.tip.display ?
-      <div style={styles.tooltip.tip}></div> : null;
-    var tooltip =
-      <div style={tooltipStyle} className={"pulsey-tooltip-" + this.props.id}>
-        <div style={styles.tooltip.close} onClick={this.props.close}> + </div>
-          <div style={styles.tooltip.header}>{tooltip.header}</div>
-          <div style={styles.tooltip.note}>{tooltip.note}</div>
-          <div style={styles.tooltip.buttons}>
-            <button style={styles.tooltip.exitButton} onClick={this.props.close}>Exit</button>
-            <button
-              style={styles.tooltip.nextButton}
-              onClick={this.props.nextStep}>
-              Next
-            </button>
-          </div>
-          {tip}
-      </div>
-    var showTooltip = this.props.id == this.props.step ? tooltip : null;
+        },
+        position = {
+          top: fixed ? pos.top + pos.height/2 + options.tooltip.offset.top : pos.top + pos.height/2 + options.tooltip.offset.top + window.scrollY,
+          left: fixed ? pos.left + pos.width/2 - styles.tooltip.width/2 + options.tooltip.offset.left : pos.left + pos.width/2 - styles.tooltip.width/2 + options.tooltip.offset.left + window.scrollX,
+          position: fixed ? 'fixed' : 'absolute',
+        },
+        tooltipStyle = Object.assign(position,styles.tooltip),
+        tip = options.tooltip.tip.display ?
+          <div style={styles.tooltip.tip}></div> : null,
+        tooltip =
+          <div style={tooltipStyle} className={"pulsey-tooltip-" + this.props.id}>
+            <div style={styles.tooltip.close} onClick={this.props.close}> + </div>
+              <div style={styles.tooltip.header}>{tooltip.header}</div>
+              <div style={styles.tooltip.note}>{tooltip.note}</div>
+              <div style={styles.tooltip.buttons}>
+                <button style={styles.tooltip.exitButton} onClick={this.props.close}>Exit</button>
+                <button
+                  style={styles.tooltip.nextButton}
+                  onClick={this.props.nextStep}>
+                  Next
+                </button>
+              </div>
+              {tip}
+          </div>,
+        showTooltip = this.props.id == this.props.step ? tooltip : null;
     return (
       <VelocityTransitionGroup enter={{animation: "transition.expandIn"}} leave={{animation: "transition.expandOut"}}>
         {showTooltip}
@@ -315,6 +323,8 @@ class Pulsey extends React.Component {
         <button style={styles.reset} onClick={this.reset.bind(this)}>Reset Dots</button>
         <Highlighter
           stepCount={this.state.stepCount}
+          step={this.state.step}
+          pa={this.state.pa}
         />
       </div>
     );
@@ -416,6 +426,9 @@ var styles = {
       transform: 'translate(-50%,-50%)',
       background: '#fff',
     }
+  },
+  highlighter: {
+    background: '#fbfbfb',
   },
   tooltip: {
     zIndex: '99999',
