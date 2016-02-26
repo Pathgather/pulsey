@@ -32,6 +32,7 @@ body {
 .highlight-target {
   z-index: 100000;
   position: relative !important;
+  /*background: tomato !important;*/
 }
 
 @-webkit-keyframes sk-scaleout {

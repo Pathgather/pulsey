@@ -51,20 +51,20 @@ var Underlay = function (_React$Component) {
 var Highlighter = function (_React$Component2) {
   _inherits(Highlighter, _React$Component2);
 
-  function Highlighter(props) {
+  function Highlighter() {
     _classCallCheck(this, Highlighter);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(Highlighter).call(this, props));
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(Highlighter).apply(this, arguments));
   }
 
   _createClass(Highlighter, [{
     key: 'render',
     value: function render() {
-      var step = this.props.step ? this.props.step : 0;
+      var step = this.props.step - 1 >= 0 ? this.props.step - 1 : 0;
       for (i = 0; i < pulseyTargets.length; i++) {
         document.getElementsByClassName('ps-anchor')[i].className = 'ps-anchor';
-        document.getElementsByClassName('ps-anchor')[step].className = 'ps-anchor highlight-target';
       }
+      document.getElementsByClassName('ps-anchor')[step].className = 'ps-anchor highlight-target';
       var pa = this.props.pa[step],
           pos = pa.getBoundingClientRect(),
           targetStyle = window.getComputedStyle(pa, null),
@@ -77,12 +77,12 @@ var Highlighter = function (_React$Component2) {
         top: pos.top - 5 + window.scrollY,
         borderRadius: 3,
         boxShadow: '0 0 20px 3px rgba(255,255,255,0.25)',
-        transition: 'all 0.3s ease-in'
+        transition: 'all 0.3s ease-in',
+        zIndex: 99998
       },
           highlighterStyle = Object.assign(position, styles.highlighter);
       return _react2.default.createElement('div', {
-        style: highlighterStyle,
-        className: "highlight-back" });
+        style: position });
     }
   }]);
 
@@ -358,14 +358,12 @@ var Pulsey = function (_React$Component5) {
   }, {
     key: 'nextStep',
     value: function nextStep(next) {
-      this.setState({ step: this.state.step = next });
+      this.setState({ step: next });
     }
   }, {
     key: 'dotClick',
     value: function dotClick() {
-      this.setState({
-        step: options.dot.step
-      });
+      this.setState({ step: options.dot.step });
     }
   }, {
     key: 'incrementStepCount',
@@ -380,22 +378,16 @@ var Pulsey = function (_React$Component5) {
   }, {
     key: 'close',
     value: function close() {
-      this.setState({
-        step: null
-      });
+      this.setState({ step: null });
     }
   }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
       window.onresize = function () {
-        this.setState({
-          pa: pulseyTargets
-        });
+        this.setState({ pa: pulseyTargets });
       }.bind(this);
       window.onscroll = function () {
-        this.setState({
-          pa: pulseyTargets
-        });
+        this.setState({ pa: pulseyTargets });
       }.bind(this);
     }
   }, {
@@ -496,7 +488,7 @@ var options = {
       size: '10'
     },
     offset: {
-      top: 25,
+      top: 75,
       left: 0
     }
   },
@@ -612,7 +604,7 @@ var styles = {
     }
   },
   underlay: {
-    zIndex: '99998',
+    zIndex: '99997',
     background: 'rgba(0,0,0,0.25)', //'rgba(76,147,234,0.4)',
     position: 'absolute',
     left: '0',

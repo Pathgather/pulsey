@@ -17,15 +17,13 @@ class Underlay extends React.Component {
 }
 
 class Highlighter extends React.Component {
-  constructor(props) {
-    super(props);
-  }
   render() {
-    var step = this.props.step ? this.props.step : 0;
+    var step =
+      (this.props.step - 1 >= 0) ? this.props.step - 1 : 0;
     for (i = 0; i < pulseyTargets.length; i++) {
       document.getElementsByClassName('ps-anchor')[i].className = 'ps-anchor';
-      document.getElementsByClassName('ps-anchor')[step].className = 'ps-anchor highlight-target';
     }
+    document.getElementsByClassName('ps-anchor')[step].className = 'ps-anchor highlight-target';
     var pa = this.props.pa[step],
         pos = pa.getBoundingClientRect(),
         targetStyle = window.getComputedStyle(pa,null),
@@ -39,12 +37,12 @@ class Highlighter extends React.Component {
           borderRadius: 3,
           boxShadow: '0 0 20px 3px rgba(255,255,255,0.25)',
           transition: 'all 0.3s ease-in',
+          zIndex: 99998,
         },
         highlighterStyle = Object.assign(position,styles.highlighter);
     return (
       <div
-        style={highlighterStyle}
-        className={"highlight-back"}>
+        style={position}>
       </div>
     );
   }
@@ -267,12 +265,10 @@ class Pulsey extends React.Component {
     localStorage.clear();
   }
   nextStep(next) {
-    this.setState({step: this.state.step = next});
+    this.setState({step: next});
   }
   dotClick() {
-    this.setState({
-      step: options.dot.step,
-    });
+    this.setState({step: options.dot.step});
   }
   incrementStepCount() {
     this.state.stepCount < options.utilities.numTargets ?
@@ -283,20 +279,14 @@ class Pulsey extends React.Component {
       this.setState({stepCount: this.state.stepCount - 1}) : null;
   }
   close() {
-    this.setState({
-      step: null,
-    });
+    this.setState({step: null});
   }
   componentDidMount() {
     window.onresize = function () {
-      this.setState({
-        pa: pulseyTargets,
-      });
+      this.setState({pa: pulseyTargets});
     }.bind(this);
     window.onscroll = function () {
-      this.setState({
-        pa: pulseyTargets,
-      });
+      this.setState({pa: pulseyTargets});
     }.bind(this);
   }
   render() {
@@ -390,7 +380,7 @@ var options = {
       size: '10',
     },
     offset: {
-      top: 25,
+      top: 75,
       left: 0,
     },
   },
@@ -506,7 +496,7 @@ var styles = {
     },
   },
   underlay: {
-    zIndex: '99998',
+    zIndex: '99997',
     background: 'rgba(0,0,0,0.25)', //'rgba(76,147,234,0.4)',
     position: 'absolute',
     left: '0',
