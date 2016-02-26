@@ -92,15 +92,11 @@ STYLES
 
 
 NEXT FEATURES (no additions allowed!)
-Completed: 5/17
-
-- option for introjs-like highlight of target element - pretty simple, make z-index super high and add a div of same size underneath it to add box-shadow
-- give users option for Tooltip component to animate between dots, in addition to current version (UniTooltip)
+Completed: 7/16
 
 - basic optional welcome screen and finish screen with customizable header, message, button, etc.
 - progress/step badges and/or progress bar
 - detect if no dots are left, and show "finish" in place of "next" in the next button
-- ability to turn clickToClose off for underlay
 - send an event whenever a dot is clicked or tour is started or completed so user can listen for the events and do something
 - ability to pass Pulsey a custom ID that the user can use to identify who is taking the tour and that they've completed it (as opposed to relying on localStorage)
 - option to use sessionStorage instead of localStorage
@@ -122,3 +118,6 @@ ISSUES
 - auto-scrolling not working correctly (not properly aligned with steps)
 - need to stress-test the way clicking through dots works, their ordering, etc.
 - on screenresize (and probably scroll) don't want highlight-back element to have a transition duration (currently lags and looks bad)
+- tooltip needs to be based off the outside of the pulsey target, not off the center
+- only want to remove highlight-target class from target element after highlighter has completed transition to next step
+- only want to transition underlay on dotclick() and close()

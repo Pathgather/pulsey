@@ -5,8 +5,10 @@ require('./velocity.ui');
 
 class Underlay extends React.Component {
   render() {
+    var close = options.underlay.clickToClose ?
+      this.props.close : null;
     var underlay =
-      <div style={styles.underlay} onClick={this.props.close}></div>
+      <div style={styles.underlay} onClick={close}></div>
     var showUnderlay = this.props.id == this.props.step ? underlay : null;
     return (
       <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
@@ -23,7 +25,6 @@ class Highlighter extends React.Component {
     for (i = 0; i < pulseyTargets.length; i++) {
       document.getElementsByClassName('ps-anchor')[i].className = 'ps-anchor';
     }
-    document.getElementsByClassName('ps-anchor')[step].className = 'ps-anchor highlight-target';
     var pa = this.props.pa[step],
         pos = pa.getBoundingClientRect(),
         targetStyle = window.getComputedStyle(pa,null),
@@ -40,9 +41,14 @@ class Highlighter extends React.Component {
           zIndex: 99998,
         },
         highlighterStyle = Object.assign(position,styles.highlighter);
+    var highlighter = options.highlighter && this.props.step ?
+      <div style={position}></div> : null;
+    options.highlighter && this.props.step ? document.getElementsByClassName('ps-anchor')[step].className = 'ps-anchor highlight-target' : null;
     return (
-      <div
-        style={position}>
+      <div>
+        <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+          {highlighter}
+        </VelocityTransitionGroup>
       </div>
     );
   }
@@ -384,7 +390,10 @@ var options = {
       left: 0,
     },
   },
-  underlay: {},
+  highlighter: true,
+  underlay: {
+    clickToClose: true,
+  },
   welcome: {},
   progress: {},
   removeStepOnClick: true,

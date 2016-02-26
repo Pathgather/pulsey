@@ -35,7 +35,8 @@ var Underlay = function (_React$Component) {
   _createClass(Underlay, [{
     key: 'render',
     value: function render() {
-      var underlay = _react2.default.createElement('div', { style: styles.underlay, onClick: this.props.close });
+      var close = options.underlay.clickToClose ? this.props.close : null;
+      var underlay = _react2.default.createElement('div', { style: styles.underlay, onClick: close });
       var showUnderlay = this.props.id == this.props.step ? underlay : null;
       return _react2.default.createElement(
         _velocityReact.VelocityTransitionGroup,
@@ -64,7 +65,6 @@ var Highlighter = function (_React$Component2) {
       for (i = 0; i < pulseyTargets.length; i++) {
         document.getElementsByClassName('ps-anchor')[i].className = 'ps-anchor';
       }
-      document.getElementsByClassName('ps-anchor')[step].className = 'ps-anchor highlight-target';
       var pa = this.props.pa[step],
           pos = pa.getBoundingClientRect(),
           targetStyle = window.getComputedStyle(pa, null),
@@ -81,8 +81,17 @@ var Highlighter = function (_React$Component2) {
         zIndex: 99998
       },
           highlighterStyle = Object.assign(position, styles.highlighter);
-      return _react2.default.createElement('div', {
-        style: position });
+      var highlighter = options.highlighter && this.props.step ? _react2.default.createElement('div', { style: position }) : null;
+      options.highlighter && this.props.step ? document.getElementsByClassName('ps-anchor')[step].className = 'ps-anchor highlight-target' : null;
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          _velocityReact.VelocityTransitionGroup,
+          { enter: { animation: "fadeIn" }, leave: { animation: "fadeOut" } },
+          highlighter
+        )
+      );
     }
   }]);
 
@@ -492,7 +501,10 @@ var options = {
       left: 0
     }
   },
-  underlay: {},
+  highlighter: true,
+  underlay: {
+    clickToClose: true
+  },
   welcome: {},
   progress: {},
   removeStepOnClick: true
