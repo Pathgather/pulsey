@@ -97,9 +97,10 @@ Completed: 8/16
 - basic optional welcome screen and finish screen with customizable header, message, button, etc.
 - progress/step badges and/or progress bar
 - detect if no dots are left, and show "finish" in place of "next" in the next button
+- allow user to put html inside tooltip via data attribute
+
 - send an event whenever a dot is clicked or tour is started or completed so user can listen for the events and do something
 - ability to pass Pulsey a custom ID that the user can use to identify who is taking the tour and that they've completed it (as opposed to relying on localStorage)
-- allow user to put html inside tooltip via data attribute
 - provide user with multiple pre-designed options for look and animation of dots and tooltips just by changing one option.  or they can choose to use their own css.
 - tooltips recognize whether they are overflowing the screen and reposition themselves automatically, unless user decides to turn this functionality off
 

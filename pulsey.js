@@ -20,16 +20,16 @@ class Underlay extends React.Component {
 
 class Highlighter extends React.Component {
   render() {
-    var step =
-      (this.props.step - 1 >= 0) ? this.props.step - 1 : 0;
-    for (i = 0; i < pulseyTargets.length; i++) {
+    var step = parseInt(stepsArray.indexOf(this.props.step)),
+        highlighterStep = (step - 1 >= 0) ? step - 1 : 0;
+    for (var i = 0; i < pulseyTargets.length; i++) {
       document.getElementsByClassName('ps-anchor')[i].className = 'ps-anchor';
     }
-    var pa = this.props.pa[step],
+    var pa = this.props.pa[this.props.stepCount],
         pos = pa.getBoundingClientRect(),
         targetStyle = window.getComputedStyle(pa,null),
         fixed = targetStyle.getPropertyValue('position') === "fixed",
-        position = {
+        highlighterStyles = {
           height: pos.height + 10,
           width: pos.width + 10,
           position: 'absolute',
@@ -40,10 +40,30 @@ class Highlighter extends React.Component {
           transition: 'all 0.3s ease-in',
           zIndex: 99998,
         },
-        highlighterStyle = Object.assign(position,styles.highlighter);
-    var highlighter = options.highlighter && this.props.step ?
-      <div style={position}></div> : null;
-    options.highlighter && this.props.step ? document.getElementsByClassName('ps-anchor')[step].className = 'ps-anchor highlight-target' : null;
+        welcomeStyles = {
+          width: 500,
+          height: 300,
+          position: 'absolute',
+          left: '50%',
+          top: '50%',
+          transform: 'translate(-50%,-50%)',
+          background: 'white',
+        };
+    if (options.welcome.display && !this.props.step) {
+      console.log('welcoming');
+      var highlighter =
+      this.props.step == null ? welcomeStyles : Object.assign(highlighterStyles,styles.highlighter);
+    }
+    else if (options.farewell.display && !this.props.step) {
+      console.log('fare thee well');
+    }
+    else if (options.highlighter.display && this.props.step != null) {
+      console.log('highlighting');
+      Object.assign(highlighterStyles,styles.highlighter);
+    }
+    var highlighter = options.highlighter.show ?
+      <div style={highlighterStyle}></div> : null;
+    options.highlighter.display && this.props.stepCount ? document.getElementsByClassName('ps-anchor')[step].className = 'ps-anchor highlight-target' : null;
     return (
       <div>
         <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
@@ -74,12 +94,15 @@ class Tooltip extends React.Component {
           stepsArray.sort(function(a,b) {
             return b - a;
           });
-          if (this.props.stepCount > 0) {
+          console.log(this.props.stepCount);
+          if (this.props.stepCount < pulseyTargets.length) {
+            console.log('left key 1');
             this.props.nextStep();
             this.props.decrementStepCount();
           }
         }
         else if (e.keyCode === 27) {
+          console.log('left key 2');
           this.props.close();
         }
       }.bind(this);
@@ -152,6 +175,7 @@ class Dot extends React.Component {
   }
   nextStep() {
     var step = parseInt(stepsArray.indexOf(this.props.id));
+    console.log(stepsArray);
     var nextStep = stepsArray[step+1];
     if (nextStep === undefined && stepsArray.length > 0) {
       if (options.removeStepOnClick) {
@@ -175,6 +199,8 @@ class Dot extends React.Component {
       }
     }
     else {
+      console.log('id',this.props.id);
+      console.log('step',step);
       if (options.removeStepOnClick) {
         stepsArray.splice(step,1);
         targetsArray.splice(step,1);
@@ -205,7 +231,7 @@ class Dot extends React.Component {
     this.props.close();
     var step = parseInt(stepsArray.indexOf(this.props.id));
     stepsArray.splice(step,1);
-}
+  }
   render() {
     var pa = this.props.pa;
     var pos = pa.getBoundingClientRect();
@@ -277,7 +303,7 @@ class Pulsey extends React.Component {
     this.setState({step: options.dot.step});
   }
   incrementStepCount() {
-    this.state.stepCount < options.utilities.numTargets ?
+    this.state.stepCount < options.pulsey.numTargets ?
     this.setState({stepCount: this.state.stepCount + 1}) : null;
   }
   decrementStepCount() {
@@ -298,7 +324,7 @@ class Pulsey extends React.Component {
   render() {
     var dots = [];
     for (var i=0;i<pulseyTargets.length;i++) {
-      var id = parseInt(unclickedSteps[i]);
+      var id = parseInt(pulseyTargetsSteps[i]);
       dots.push(
         <Dot
           key={i}
@@ -327,36 +353,38 @@ class Pulsey extends React.Component {
   }
 }
 
-var pulseyTargets = document.getElementsByClassName('ps-anchor'),
-    unclicked = [],
-    unclickedSteps = [],
+var psAnchors = document.getElementsByClassName('ps-anchor'),
+    pulseyTargets = Array.prototype.slice.call(psAnchors),
+    pulseyTargetsSteps = [],
     noStepGiven = 0;
 for (var i = 0; i < pulseyTargets.length; i++) {
-  unclicked.push(pulseyTargets[i]);
   var step = pulseyTargets[i].getAttribute('data-ps-step');
   if (step == '' || step == null) {
     noStepGiven++;
   }
   else {
-    unclickedSteps.push(parseInt(step));
+    pulseyTargetsSteps.push(parseInt(step));
   }
 }
-unclickedSteps.sort(function(a,b) {
+
+var targetsArray = pulseyTargets.slice();
+var stepsArray = pulseyTargetsSteps.slice();
+
+stepsArray.sort(function(a,b) {
   return a - b;
 });
 
-var lastStep = unclickedSteps.slice(-1)[0] ? unclickedSteps.slice(-1)[0] : 0;
+var lastStep = stepsArray.slice(-1)[0] ? stepsArray.slice(-1)[0] : 0;
 for (var i = 0; i < noStepGiven; i++) {
   lastStep++;
-  unclickedSteps.push(lastStep);
+  stepsArray.push(lastStep);
 }
 
-var stepsArray = unclickedSteps.slice();
-var targetsArray = unclicked.slice();
-
 var options = {
-  utilities : {
+  pulsey : {
     numTargets: pulseyTargets.length,
+    tourStarted: false,
+    tourFinished: false,
   },
   dot: {
     step: null,
@@ -382,7 +410,15 @@ var options = {
       left: 0,
     },
   },
-  highlighter: true,
+  highlighter: {
+    display: true,
+  },
+  welcome: {
+    display: false,
+  },
+  farewell: {
+    display: false,
+  },
   underlay: {
     clickToClose: true,
   },
@@ -434,6 +470,12 @@ var styles = {
   },
   highlighter: {
     background: '#fbfbfb',
+  },
+  welcome: {
+    background: '#f67b45',
+  },
+  farewell: {
+    background: '#4c93ea',
   },
   tooltip: {
     zIndex: '99999',
