@@ -62,11 +62,12 @@ var Highlighter = function (_React$Component2) {
     key: 'render',
     value: function render() {
       var step = parseInt(stepsArray.indexOf(this.props.step)),
-          highlighterStep = step - 1 >= 0 ? step - 1 : 0;
+          highlighterStep = step - 1 >= 0 ? step - 1 : 0,
+          badStepName = parseInt(pulseyTargetsSteps.indexOf(this.props.step));
       for (var i = 0; i < pulseyTargets.length; i++) {
         document.getElementsByClassName('ps-anchor')[i].className = 'ps-anchor';
       }
-      var pa = this.props.pa[this.props.stepCount],
+      var pa = pulseyTargets[badStepName >= 0 ? badStepName : 0],
           pos = pa.getBoundingClientRect(),
           targetStyle = window.getComputedStyle(pa, null),
           fixed = targetStyle.getPropertyValue('position') === "fixed",
@@ -79,7 +80,8 @@ var Highlighter = function (_React$Component2) {
         borderRadius: 3,
         boxShadow: '0 0 20px 3px rgba(255,255,255,0.25)',
         transition: 'all 0.3s ease-in',
-        zIndex: 99998
+        zIndex: 99998,
+        background: 'white !important'
       },
           welcomeStyles = {
         width: 500,
@@ -99,8 +101,8 @@ var Highlighter = function (_React$Component2) {
         console.log('highlighting');
         Object.assign(highlighterStyles, styles.highlighter);
       }
-      var highlighter = options.highlighter.show ? _react2.default.createElement('div', { style: highlighterStyle }) : null;
-      options.highlighter.display && this.props.stepCount ? document.getElementsByClassName('ps-anchor')[step].className = 'ps-anchor highlight-target' : null;
+      var highlighter = options.highlighter.display && badStepName >= 0 ? _react2.default.createElement('div', { style: highlighterStyles }) : null;
+      options.highlighter.display && this.props.stepCount ? pulseyTargets[badStepName].className = 'ps-anchor highlight-target' : null;
       return _react2.default.createElement(
         'div',
         null,
@@ -272,6 +274,7 @@ var Dot = function (_React$Component4) {
         if (getDot) {
           var dotPos = getDot.getBoundingClientRect().top;
           var winHeight = window.innerHeight;
+          console.log('(dotPos > winHeight - 200) || (dotPos < 150)', dotPos);
           if (dotPos > winHeight - 200 || dotPos < 150) {
             this.scrollToDot(getDot);
           }
@@ -292,6 +295,7 @@ var Dot = function (_React$Component4) {
         var getDot = targetsArray[step];
         var dotPos = getDot.getBoundingClientRect().top;
         var winHeight = window.innerHeight;
+        console.log('(dotPos > winHeight - 200) || (dotPos < 150)', dotPos);
         if (dotPos > winHeight - 200 || dotPos < 150) {
           this.scrollToDot(getDot);
         }
