@@ -371,6 +371,29 @@ for (var i = 0; i < pulseyTargets.length; i++) {
   }
 }
 
+var ptsClone = pulseyTargetsSteps.slice();
+ptsClone.sort(function(a,b) {
+  return a - b;
+});
+
+var nextPsStep = ptsClone.slice(-1)[0] ? ptsClone.slice(-1)[0] + 1 : 1;
+console.log(ptsClone);
+console.log(pulseyTargetsSteps);
+console.log(nextPsStep);
+if (noStepGiven > 0) {
+  // var count = noStepGiven - pulseyTargetsSteps.length;
+  for (var i = 0; i < noStepGiven; i++) {
+    pulseyTargetsSteps.push(nextPsStep);
+    nextPsStep++;
+  }
+}
+else {
+  for (var i = 0; i < noStepGiven; i++) {
+    nextPsStep++;
+    stepsArray.push(nextPsStep);
+  }
+}
+
 var targetsArray = pulseyTargets.slice();
 var stepsArray = pulseyTargetsSteps.slice();
 
@@ -378,11 +401,7 @@ stepsArray.sort(function(a,b) {
   return a - b;
 });
 
-var lastStep = stepsArray.slice(-1)[0] ? stepsArray.slice(-1)[0] : 0;
-for (var i = 0; i < noStepGiven; i++) {
-  lastStep++;
-  stepsArray.push(lastStep);
-}
+console.log(stepsArray);
 
 var options = {
   pulsey : {
