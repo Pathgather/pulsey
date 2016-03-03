@@ -52,15 +52,12 @@ class Highlighter extends React.Component {
           background: 'white',
         };
     if (options.welcome.display && !this.props.step) {
-      console.log('welcoming');
       var highlighter =
       this.props.step == null ? welcomeStyles : Object.assign(highlighterStyles,styles.highlighter);
     }
     else if (options.farewell.display && !this.props.step) {
-      console.log('fare thee well');
     }
     else if (options.highlighter.display && this.props.step != null) {
-      console.log('highlighting');
       Object.assign(highlighterStyles,styles.highlighter);
     }
     var highlighter = options.highlighter.display && badStepName >= 0 ?
@@ -68,7 +65,10 @@ class Highlighter extends React.Component {
     options.highlighter.display && this.props.stepCount ? pulseyTargets[badStepName].className = 'ps-anchor highlight-target' : null;
     return (
       <div>
-        <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+        <VelocityTransitionGroup
+          enter={{animation: "fadeIn"}}
+          leave={{animation: "fadeOut"}}
+          className={'pulsey-tour'}>
           {highlighter}
         </VelocityTransitionGroup>
       </div>
@@ -96,15 +96,12 @@ class Tooltip extends React.Component {
           stepsArray.sort(function(a,b) {
             return b - a;
           });
-          console.log(this.props.stepCount);
           if (this.props.stepCount < pulseyTargets.length) {
-            console.log('left key 1');
             this.props.nextStep();
             this.props.decrementStepCount();
           }
         }
         else if (e.keyCode === 27) {
-          console.log('left key 2');
           this.props.close();
         }
       }.bind(this);
@@ -130,12 +127,12 @@ class Tooltip extends React.Component {
         tip = options.tooltip.tip.display ?
           <div style={styles.tooltip.tip}></div> : null,
         tooltip =
-          <div style={tooltipStyle} className={"pulsey-tooltip-" + this.props.id}>
+          <div style={tooltipStyle} className={"pulsey-tour pulsey-tooltip-" + this.props.id}>
             <div style={styles.tooltip.close} onClick={this.props.close}> + </div>
               <div style={styles.tooltip.header}>{tooltip.header}</div>
               <div style={styles.tooltip.note}>{tooltip.note}</div>
               <div style={styles.tooltip.buttons}>
-                <button style={styles.tooltip.exitButton} onClick={this.props.close}>Exit</button>
+                <button style={styles.tooltip.exitButton} onClick={this.props.skip}>Skip</button>
                 <button
                   style={styles.tooltip.nextButton}
                   onClick={this.props.nextStep}>
@@ -160,6 +157,12 @@ class Dot extends React.Component {
       showDot: !window[storage].getItem("dot" + this.props.id),
     }
   }
+  tourStatusCheck(next) {
+    stepsArray.length === 0 + next ? (
+      options.pulsey.tourComplete = true,
+      window[storage].setItem('tourComplete',true)
+    ) : null;
+  }
   dotClick() {
     options.removeStepOnClick ?
       this.setState({
@@ -174,10 +177,11 @@ class Dot extends React.Component {
     if ( (dotPos > winHeight - 200) || (dotPos < 150) ) {
       this.scrollToDot(getDot);
     }
+    console.log(stepsArray.length)
+    this.tourStatusCheck(0);
   }
   nextStep() {
     var step = parseInt(stepsArray.indexOf(this.props.id));
-    console.log(stepsArray);
     var nextStep = stepsArray[step+1];
     if (nextStep === undefined && stepsArray.length > 0) {
       if (options.removeStepOnClick) {
@@ -195,15 +199,12 @@ class Dot extends React.Component {
       if (getDot) {
         var dotPos = getDot.getBoundingClientRect().top;
         var winHeight = window.innerHeight;
-        console.log('(dotPos > winHeight - 200) || (dotPos < 150)', dotPos);
         if ( (dotPos > winHeight - 200) || (dotPos < 150) ) {
           this.scrollToDot(getDot);
         }
       }
     }
     else {
-      console.log('id',this.props.id);
-      console.log('step',step);
       if (options.removeStepOnClick) {
         stepsArray.splice(step,1);
         targetsArray.splice(step,1);
@@ -218,11 +219,12 @@ class Dot extends React.Component {
       var getDot = targetsArray[step];
       var dotPos = getDot.getBoundingClientRect().top;
       var winHeight = window.innerHeight;
-      console.log('(dotPos > winHeight - 200) || (dotPos < 150)', dotPos);
       if ( (dotPos > winHeight - 200) || (dotPos < 150) ) {
         this.scrollToDot(getDot);
       }
     }
+    console.log(stepsArray.length)
+    this.tourStatusCheck(1);
   }
   scrollToDot(getDot) {
     Velocity(getDot, 'scroll', {
@@ -235,6 +237,13 @@ class Dot extends React.Component {
     this.props.close();
     var step = parseInt(stepsArray.indexOf(this.props.id));
     stepsArray.splice(step,1);
+  }
+  skip() {
+    this.props.close();
+    var step = parseInt(stepsArray.indexOf(this.props.id));
+    stepsArray.splice(step,1);
+    options.pulsey.tourSkipped.push([this.props.id,stepsArray.length]);
+    this.props.skip();
   }
   render() {
     var pa = this.props.pa;
@@ -250,7 +259,7 @@ class Dot extends React.Component {
     var dot =
       <div
         style={dotStyle}
-        className={"pulsey-dot-" + this.props.id}
+        className={"pulsey-tour pulsey-dot-" + this.props.id}
         onClick={this.dotClick.bind(this)}>
         <div
           style={styles.dot.front}
@@ -274,6 +283,7 @@ class Dot extends React.Component {
           id={this.props.id}
           step={this.props.step}
           close={this.close.bind(this)}
+          skip={this.skip.bind(this)}
           incrementStepCount={this.props.incrementStepCount}
           decrementStepCount={this.props.decrementStepCount}
           stepCount={this.props.stepCount}
@@ -295,6 +305,7 @@ class Pulsey extends React.Component {
       step: options.dot.step,
       pa: pulseyTargets,
       stepCount: 0,
+      tourSkipped: false || window[storage].getItem('tourSkipped'),
     }
   }
   reset() {
@@ -317,6 +328,12 @@ class Pulsey extends React.Component {
   close() {
     this.setState({step: null});
   }
+  skip() {
+    this.setState({
+      tourSkipped: true,
+    });
+    window[storage].setItem('tourSkipped',true);
+  }
   componentDidMount() {
     window.onresize = function () {
       this.setState({pa: pulseyTargets});
@@ -324,10 +341,16 @@ class Pulsey extends React.Component {
     window.onscroll = function () {
       this.setState({pa: pulseyTargets});
     }.bind(this);
+    options.pulsey.tourStarted = true;
+    window[storage].setItem('tourStarted',true);
   }
   render() {
+    var tourStyles = {
+      position: 'absolute',
+      zIndex: '99999',
+    }
     var dots = [];
-    for (var i=0;i<pulseyTargets.length;i++) {
+    for (var i = 0; i < pulseyTargets.length; i++) {
       var id = parseInt(pulseyTargetsSteps[i]);
       dots.push(
         <Dot
@@ -341,10 +364,11 @@ class Pulsey extends React.Component {
           close={this.close.bind(this)}
           step={this.state.step}
           stepCount={this.state.stepCount}
+          skip={this.skip.bind(this)}
         />);
     }
-    return (
-      <div style={styles.tour}>
+    var pulseyTour = !this.state.tourSkipped ?
+      <div style={tourStyles}>
         {dots}
         <button style={styles.reset} onClick={this.reset.bind(this)}>Reset Dots</button>
         <Highlighter
@@ -352,6 +376,12 @@ class Pulsey extends React.Component {
           step={this.state.step}
           pa={this.state.pa}
         />
+      </div> : null;
+    return (
+      <div>
+        <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+          {pulseyTour}
+        </VelocityTransitionGroup>
       </div>
     );
   }
@@ -377,11 +407,7 @@ ptsClone.sort(function(a,b) {
 });
 
 var nextPsStep = ptsClone.slice(-1)[0] ? ptsClone.slice(-1)[0] + 1 : 1;
-console.log(ptsClone);
-console.log(pulseyTargetsSteps);
-console.log(nextPsStep);
 if (noStepGiven > 0) {
-  // var count = noStepGiven - pulseyTargetsSteps.length;
   for (var i = 0; i < noStepGiven; i++) {
     pulseyTargetsSteps.push(nextPsStep);
     nextPsStep++;
@@ -401,13 +427,12 @@ stepsArray.sort(function(a,b) {
   return a - b;
 });
 
-console.log(stepsArray);
-
 var options = {
   pulsey : {
     numTargets: pulseyTargets.length,
     tourStarted: false,
-    tourFinished: false,
+    tourCompleted: false,
+    tourSkipped: [],
   },
   dot: {
     step: null,
@@ -464,14 +489,11 @@ for (var i = 0; i < pulseyTargets.length; i++) {
   }
 }
 
+/// ASSORTED VARIABLES
 var tipSide = options.tooltip.tip.side;
 var tipSize = options.tooltip.tip.size;
 
 var styles = {
-  tour: {
-    zIndex: '99999',
-    position: 'absolute',
-  },
   dot: {
     zIndex: '99997',
     size: '25',

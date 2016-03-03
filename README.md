@@ -91,18 +91,18 @@ STYLES
 - progress
 
 
-NEXT FEATURES (no additions allowed!)
-Completed: 8/16
-
-- basic optional welcome screen and finish screen with customizable header, message, button, etc.
-- progress/step badges and/or progress bar
-- detect if no dots are left, and show "finish" in place of "next" in the next button
-- allow user to put html inside tooltip via data attribute
+NEXT FEATURES
+Completed: 8/15
 
 - send an event whenever a dot is clicked or tour is started or completed so user can listen for the events and do something
-- ability to pass Pulsey a custom ID that the user can use to identify who is taking the tour and that they've completed it (as opposed to relying on localStorage)
-- provide user with multiple pre-designed options for look and animation of dots and tooltips just by changing one option.  or they can choose to use their own css.
+
+- detect if no dots are left, and show "finish" in place of "next" in the next button
+- basic optional welcome screen and finish screen with customizable header, message, button, etc.
+- progress/step badges and/or progress bar
+- allow user to put html inside tooltip via data attribute
 - tooltips recognize whether they are overflowing the screen and reposition themselves automatically, unless user decides to turn this functionality off
+
+- provide user with multiple pre-designed options for look and animation of dots and tooltips just by changing one option.  or they can choose to use their own css.
 
 FEATURES
 
@@ -114,10 +114,10 @@ FEATURES
 
 ISSUES
 
+- remove highlight-back when stepsArray is empty
+- add highlight-target to correct element on dotClick, not just nextStep
+- only want to remove highlight-target class from target element after highlighter has completed transition to next step
 - options are not currently specific to each dot and each tooltip - they're global and shouldn't be
-- auto-scrolling not working correctly (not properly aligned with steps)
-- need to stress-test the way clicking through dots works, their ordering, etc.
 - on screenresize (and probably scroll) don't want highlight-back element to have a transition duration (currently lags and looks bad)
 - tooltip needs to be based off the outside of the pulsey target, not off the center
-- only want to remove highlight-target class from target element after highlighter has completed transition to next step
-- only want to transition underlay on dotclick() and close()
+- only want to transition underlay on dotclick() and close() (not nextStep())

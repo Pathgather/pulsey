@@ -93,12 +93,8 @@ var Highlighter = function (_React$Component2) {
         background: 'white'
       };
       if (options.welcome.display && !this.props.step) {
-        console.log('welcoming');
         var highlighter = this.props.step == null ? welcomeStyles : Object.assign(highlighterStyles, styles.highlighter);
-      } else if (options.farewell.display && !this.props.step) {
-        console.log('fare thee well');
-      } else if (options.highlighter.display && this.props.step != null) {
-        console.log('highlighting');
+      } else if (options.farewell.display && !this.props.step) {} else if (options.highlighter.display && this.props.step != null) {
         Object.assign(highlighterStyles, styles.highlighter);
       }
       var highlighter = options.highlighter.display && badStepName >= 0 ? _react2.default.createElement('div', { style: highlighterStyles }) : null;
@@ -108,7 +104,10 @@ var Highlighter = function (_React$Component2) {
         null,
         _react2.default.createElement(
           _velocityReact.VelocityTransitionGroup,
-          { enter: { animation: "fadeIn" }, leave: { animation: "fadeOut" } },
+          {
+            enter: { animation: "fadeIn" },
+            leave: { animation: "fadeOut" },
+            className: 'pulsey-tour' },
           highlighter
         )
       );
@@ -144,14 +143,11 @@ var Tooltip = function (_React$Component3) {
             stepsArray.sort(function (a, b) {
               return b - a;
             });
-            console.log(this.props.stepCount);
             if (this.props.stepCount < pulseyTargets.length) {
-              console.log('left key 1');
               this.props.nextStep();
               this.props.decrementStepCount();
             }
           } else if (e.keyCode === 27) {
-            console.log('left key 2');
             this.props.close();
           }
         }.bind(this);
@@ -177,7 +173,7 @@ var Tooltip = function (_React$Component3) {
           tip = options.tooltip.tip.display ? _react2.default.createElement('div', { style: styles.tooltip.tip }) : null,
           tooltip = _react2.default.createElement(
         'div',
-        { style: tooltipStyle, className: "pulsey-tooltip-" + this.props.id },
+        { style: tooltipStyle, className: "pulsey-tour pulsey-tooltip-" + this.props.id },
         _react2.default.createElement(
           'div',
           { style: styles.tooltip.close, onClick: this.props.close },
@@ -198,8 +194,8 @@ var Tooltip = function (_React$Component3) {
           { style: styles.tooltip.buttons },
           _react2.default.createElement(
             'button',
-            { style: styles.tooltip.exitButton, onClick: this.props.close },
-            'Exit'
+            { style: styles.tooltip.exitButton, onClick: this.props.skip },
+            'Skip'
           ),
           _react2.default.createElement(
             'button',
@@ -238,6 +234,11 @@ var Dot = function (_React$Component4) {
   }
 
   _createClass(Dot, [{
+    key: 'tourStatusCheck',
+    value: function tourStatusCheck(next) {
+      stepsArray.length === 0 + next ? (options.pulsey.tourComplete = true, window[storage].setItem('tourComplete', true)) : null;
+    }
+  }, {
     key: 'dotClick',
     value: function dotClick() {
       options.removeStepOnClick ? this.setState({
@@ -252,12 +253,13 @@ var Dot = function (_React$Component4) {
       if (dotPos > winHeight - 200 || dotPos < 150) {
         this.scrollToDot(getDot);
       }
+      console.log(stepsArray.length);
+      this.tourStatusCheck(0);
     }
   }, {
     key: 'nextStep',
     value: function nextStep() {
       var step = parseInt(stepsArray.indexOf(this.props.id));
-      console.log(stepsArray);
       var nextStep = stepsArray[step + 1];
       if (nextStep === undefined && stepsArray.length > 0) {
         if (options.removeStepOnClick) {
@@ -274,14 +276,11 @@ var Dot = function (_React$Component4) {
         if (getDot) {
           var dotPos = getDot.getBoundingClientRect().top;
           var winHeight = window.innerHeight;
-          console.log('(dotPos > winHeight - 200) || (dotPos < 150)', dotPos);
           if (dotPos > winHeight - 200 || dotPos < 150) {
             this.scrollToDot(getDot);
           }
         }
       } else {
-        console.log('id', this.props.id);
-        console.log('step', step);
         if (options.removeStepOnClick) {
           stepsArray.splice(step, 1);
           targetsArray.splice(step, 1);
@@ -295,11 +294,12 @@ var Dot = function (_React$Component4) {
         var getDot = targetsArray[step];
         var dotPos = getDot.getBoundingClientRect().top;
         var winHeight = window.innerHeight;
-        console.log('(dotPos > winHeight - 200) || (dotPos < 150)', dotPos);
         if (dotPos > winHeight - 200 || dotPos < 150) {
           this.scrollToDot(getDot);
         }
       }
+      console.log(stepsArray.length);
+      this.tourStatusCheck(1);
     }
   }, {
     key: 'scrollToDot',
@@ -318,6 +318,15 @@ var Dot = function (_React$Component4) {
       stepsArray.splice(step, 1);
     }
   }, {
+    key: 'skip',
+    value: function skip() {
+      this.props.close();
+      var step = parseInt(stepsArray.indexOf(this.props.id));
+      stepsArray.splice(step, 1);
+      options.pulsey.tourSkipped.push([this.props.id, stepsArray.length]);
+      this.props.skip();
+    }
+  }, {
     key: 'render',
     value: function render() {
       var pa = this.props.pa;
@@ -334,7 +343,7 @@ var Dot = function (_React$Component4) {
         'div',
         {
           style: dotStyle,
-          className: "pulsey-dot-" + this.props.id,
+          className: "pulsey-tour pulsey-dot-" + this.props.id,
           onClick: this.dotClick.bind(this) },
         _react2.default.createElement('div', {
           style: styles.dot.front,
@@ -355,6 +364,7 @@ var Dot = function (_React$Component4) {
           id: this.props.id,
           step: this.props.step,
           close: this.close.bind(this),
+          skip: this.skip.bind(this),
           incrementStepCount: this.props.incrementStepCount,
           decrementStepCount: this.props.decrementStepCount,
           stepCount: this.props.stepCount
@@ -382,7 +392,8 @@ var Pulsey = function (_React$Component5) {
     _this5.state = {
       step: options.dot.step,
       pa: pulseyTargets,
-      stepCount: 0
+      stepCount: 0,
+      tourSkipped: false || window[storage].getItem('tourSkipped')
     };
     return _this5;
   }
@@ -418,6 +429,14 @@ var Pulsey = function (_React$Component5) {
       this.setState({ step: null });
     }
   }, {
+    key: 'skip',
+    value: function skip() {
+      this.setState({
+        tourSkipped: true
+      });
+      window[storage].setItem('tourSkipped', true);
+    }
+  }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
       window.onresize = function () {
@@ -426,10 +445,16 @@ var Pulsey = function (_React$Component5) {
       window.onscroll = function () {
         this.setState({ pa: pulseyTargets });
       }.bind(this);
+      options.pulsey.tourStarted = true;
+      window[storage].setItem('tourStarted', true);
     }
   }, {
     key: 'render',
     value: function render() {
+      var tourStyles = {
+        position: 'absolute',
+        zIndex: '99999'
+      };
       var dots = [];
       for (var i = 0; i < pulseyTargets.length; i++) {
         var id = parseInt(pulseyTargetsSteps[i]);
@@ -443,12 +468,13 @@ var Pulsey = function (_React$Component5) {
           dotClick: this.dotClick.bind(this),
           close: this.close.bind(this),
           step: this.state.step,
-          stepCount: this.state.stepCount
+          stepCount: this.state.stepCount,
+          skip: this.skip.bind(this)
         }));
       }
-      return _react2.default.createElement(
+      var pulseyTour = !this.state.tourSkipped ? _react2.default.createElement(
         'div',
-        { style: styles.tour },
+        { style: tourStyles },
         dots,
         _react2.default.createElement(
           'button',
@@ -460,6 +486,15 @@ var Pulsey = function (_React$Component5) {
           step: this.state.step,
           pa: this.state.pa
         })
+      ) : null;
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          _velocityReact.VelocityTransitionGroup,
+          { enter: { animation: "fadeIn" }, leave: { animation: "fadeOut" } },
+          pulseyTour
+        )
       );
     }
   }]);
@@ -486,11 +521,7 @@ ptsClone.sort(function (a, b) {
 });
 
 var nextPsStep = ptsClone.slice(-1)[0] ? ptsClone.slice(-1)[0] + 1 : 1;
-console.log(ptsClone);
-console.log(pulseyTargetsSteps);
-console.log(nextPsStep);
 if (noStepGiven > 0) {
-  // var count = noStepGiven - pulseyTargetsSteps.length;
   for (var i = 0; i < noStepGiven; i++) {
     pulseyTargetsSteps.push(nextPsStep);
     nextPsStep++;
@@ -509,13 +540,12 @@ stepsArray.sort(function (a, b) {
   return a - b;
 });
 
-console.log(stepsArray);
-
 var options = {
   pulsey: {
     numTargets: pulseyTargets.length,
     tourStarted: false,
-    tourFinished: false
+    tourCompleted: false,
+    tourSkipped: []
   },
   dot: {
     step: null,
@@ -569,14 +599,11 @@ for (var i = 0; i < pulseyTargets.length; i++) {
   }
 }
 
+/// ASSORTED VARIABLES
 var tipSide = options.tooltip.tip.side;
 var tipSize = options.tooltip.tip.size;
 
 var styles = {
-  tour: {
-    zIndex: '99999',
-    position: 'absolute'
-  },
   dot: {
     zIndex: '99997',
     size: '25',
