@@ -90,13 +90,20 @@ STYLES
 - welcome
 - progress
 
+<Highlighter
+  stepCount={this.state.stepCount}
+  step={this.state.step}
+  pa={this.state.pa}
+/>
+
 
 NEXT FEATURES
 Completed: 8/15
 
-- send an event whenever a dot is clicked or tour is started or completed so user can listen for the events and do something
-
 - detect if no dots are left, and show "finish" in place of "next" in the next button
+- add loopTillComplete option, set to true initially.  if false, you can't skip beyond last step to first.
+- add hideDotOnClick option that does as described.  allows removeStepOnClick to be true without having to keep showing the dot.
+
 - basic optional welcome screen and finish screen with customizable header, message, button, etc.
 - progress/step badges and/or progress bar
 - allow user to put html inside tooltip via data attribute

@@ -49,76 +49,66 @@ var Underlay = function (_React$Component) {
   return Underlay;
 }(_react2.default.Component);
 
-var Highlighter = function (_React$Component2) {
-  _inherits(Highlighter, _React$Component2);
+// class Highlighter extends React.Component {
+//   render() {
+//     var step = parseInt(stepsArray.indexOf(this.props.step)),
+//         highlighterStep = (step - 1 >= 0) ? step - 1 : 0,
+//         badStepName = parseInt(pulseyTargetsSteps.indexOf(this.props.step));
+//     for (var i = 0; i < pulseyTargets.length; i++) {
+//       document.getElementsByClassName('ps-anchor')[i].className = 'ps-anchor';
+//     }
+//     var pa = pulseyTargets[badStepName >= 0 ? badStepName : 0],
+//         pos = pa.getBoundingClientRect(),
+//         targetStyle = window.getComputedStyle(pa,null),
+//         fixed = targetStyle.getPropertyValue('position') === "fixed",
+//         highlighterStyles = {
+//           height: pos.height + 10,
+//           width: pos.width + 10,
+//           position: 'absolute',
+//           left: pos.left - 5 + window.scrollX,
+//           top: pos.top - 5 + window.scrollY,
+//           borderRadius: 3,
+//           boxShadow: '0 0 20px 3px rgba(255,255,255,0.25)',
+//           transition: 'all 0.3s ease-in',
+//           zIndex: 99998,
+//           background: 'white !important',
+//         },
+//         welcomeStyles = {
+//           width: 500,
+//           height: 300,
+//           position: 'absolute',
+//           left: '50%',
+//           top: '50%',
+//           transform: 'translate(-50%,-50%)',
+//           background: 'white',
+//         };
+//     if (options.welcome.display && !this.props.step) {
+//       var highlighter =
+//       this.props.step == null ? welcomeStyles : Object.assign(highlighterStyles,styles.highlighter);
+//     }
+//     else if (options.farewell.display && !this.props.step) {
+//     }
+//     else if (options.highlighter.display && this.props.step != null) {
+//       Object.assign(highlighterStyles,styles.highlighter);
+//     }
+//     var highlighter = options.highlighter.display && badStepName >= 0 ?
+//       <div style={highlighterStyles}></div> : null;
+//     options.highlighter.display && this.props.stepCount ? pulseyTargets[badStepName].className = 'ps-anchor highlight-target' : null;
+//     return (
+//       <div>
+//         <VelocityTransitionGroup
+//           enter={{animation: "fadeIn"}}
+//           leave={{animation: "fadeOut"}}
+//           className={'pulsey-tour'}>
+//           {highlighter}
+//         </VelocityTransitionGroup>
+//       </div>
+//     );
+//   }
+// }
 
-  function Highlighter() {
-    _classCallCheck(this, Highlighter);
-
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(Highlighter).apply(this, arguments));
-  }
-
-  _createClass(Highlighter, [{
-    key: 'render',
-    value: function render() {
-      var step = parseInt(stepsArray.indexOf(this.props.step)),
-          highlighterStep = step - 1 >= 0 ? step - 1 : 0,
-          badStepName = parseInt(pulseyTargetsSteps.indexOf(this.props.step));
-      for (var i = 0; i < pulseyTargets.length; i++) {
-        document.getElementsByClassName('ps-anchor')[i].className = 'ps-anchor';
-      }
-      var pa = pulseyTargets[badStepName >= 0 ? badStepName : 0],
-          pos = pa.getBoundingClientRect(),
-          targetStyle = window.getComputedStyle(pa, null),
-          fixed = targetStyle.getPropertyValue('position') === "fixed",
-          highlighterStyles = {
-        height: pos.height + 10,
-        width: pos.width + 10,
-        position: 'absolute',
-        left: pos.left - 5 + window.scrollX,
-        top: pos.top - 5 + window.scrollY,
-        borderRadius: 3,
-        boxShadow: '0 0 20px 3px rgba(255,255,255,0.25)',
-        transition: 'all 0.3s ease-in',
-        zIndex: 99998,
-        background: 'white !important'
-      },
-          welcomeStyles = {
-        width: 500,
-        height: 300,
-        position: 'absolute',
-        left: '50%',
-        top: '50%',
-        transform: 'translate(-50%,-50%)',
-        background: 'white'
-      };
-      if (options.welcome.display && !this.props.step) {
-        var highlighter = this.props.step == null ? welcomeStyles : Object.assign(highlighterStyles, styles.highlighter);
-      } else if (options.farewell.display && !this.props.step) {} else if (options.highlighter.display && this.props.step != null) {
-        Object.assign(highlighterStyles, styles.highlighter);
-      }
-      var highlighter = options.highlighter.display && badStepName >= 0 ? _react2.default.createElement('div', { style: highlighterStyles }) : null;
-      options.highlighter.display && this.props.stepCount ? pulseyTargets[badStepName].className = 'ps-anchor highlight-target' : null;
-      return _react2.default.createElement(
-        'div',
-        null,
-        _react2.default.createElement(
-          _velocityReact.VelocityTransitionGroup,
-          {
-            enter: { animation: "fadeIn" },
-            leave: { animation: "fadeOut" },
-            className: 'pulsey-tour' },
-          highlighter
-        )
-      );
-    }
-  }]);
-
-  return Highlighter;
-}(_react2.default.Component);
-
-var Tooltip = function (_React$Component3) {
-  _inherits(Tooltip, _React$Component3);
+var Tooltip = function (_React$Component2) {
+  _inherits(Tooltip, _React$Component2);
 
   function Tooltip(props) {
     _classCallCheck(this, Tooltip);
@@ -127,6 +117,16 @@ var Tooltip = function (_React$Component3) {
   }
 
   _createClass(Tooltip, [{
+    key: 'nextStep',
+    value: function nextStep() {
+      this.props.nextStep(1);
+    }
+  }, {
+    key: 'prevStep',
+    value: function prevStep() {
+      this.props.nextStep(-1);
+    }
+  }, {
     key: 'render',
     value: function render() {
       if (this.props.id == this.props.step) {
@@ -136,22 +136,22 @@ var Tooltip = function (_React$Component3) {
               return a - b;
             });
             if (this.props.stepCount < pulseyTargets.length) {
-              this.props.nextStep();
-              this.props.incrementStepCount();
+              this.props.nextStep(1);
             }
           } else if (e.keyCode === 37) {
             stepsArray.sort(function (a, b) {
               return b - a;
             });
             if (this.props.stepCount < pulseyTargets.length) {
-              this.props.nextStep();
-              this.props.decrementStepCount();
+              this.props.nextStep(-1);
             }
           } else if (e.keyCode === 27) {
             this.props.close();
           }
         }.bind(this);
       }
+      var nextLabel = options.tooltip.labels.next;
+      stepsArray.length === 1 ? nextLabel = options.tooltip.labels.finish : nextLabel = options.tooltip.labels.next;
       var pa = this.props.pa,
           pos = pa.getBoundingClientRect(),
           targetStyle = window.getComputedStyle(pa, null),
@@ -201,8 +201,8 @@ var Tooltip = function (_React$Component3) {
             'button',
             {
               style: styles.tooltip.nextButton,
-              onClick: this.props.nextStep },
-            'Next'
+              onClick: this.nextStep.bind(this) },
+            nextLabel
           )
         ),
         tip
@@ -219,48 +219,43 @@ var Tooltip = function (_React$Component3) {
   return Tooltip;
 }(_react2.default.Component);
 
-var Dot = function (_React$Component4) {
-  _inherits(Dot, _React$Component4);
+var Dot = function (_React$Component3) {
+  _inherits(Dot, _React$Component3);
 
   function Dot(props) {
     _classCallCheck(this, Dot);
 
-    var _this4 = _possibleConstructorReturn(this, Object.getPrototypeOf(Dot).call(this, props));
+    var _this3 = _possibleConstructorReturn(this, Object.getPrototypeOf(Dot).call(this, props));
 
-    _this4.state = {
-      showDot: !window[storage].getItem("dot" + _this4.props.id)
+    _this3.state = {
+      showDot: !window[storage].getItem("dot" + _this3.props.id),
+      nextLabel: 'Next'
     };
-    return _this4;
+    return _this3;
   }
 
   _createClass(Dot, [{
-    key: 'tourStatusCheck',
-    value: function tourStatusCheck(next) {
-      stepsArray.length === 0 + next ? (options.pulsey.tourComplete = true, window[storage].setItem('tourComplete', true)) : null;
-    }
-  }, {
     key: 'dotClick',
     value: function dotClick() {
       options.removeStepOnClick ? this.setState({
-        showDot: window[storage].setItem("dot" + this.props.id, true)
+        showDot: window[storage].setItem("dot" + this.props.id, true),
+        nextLabel: stepsArray.length === 1 ? 'Finish' : 'Next'
       }) : null;
       options.dot.step = this.props.id;
       this.props.dotClick();
-      var step = parseInt(stepsArray.indexOf(this.props.id));
-      var getDot = targetsArray[step];
-      var dotPos = getDot.getBoundingClientRect().top;
-      var winHeight = window.innerHeight;
-      if (dotPos > winHeight - 200 || dotPos < 150) {
-        this.scrollToDot(getDot);
-      }
-      console.log(stepsArray.length);
+      var scrollStep = parseInt(pulseyTargetsSteps.indexOf(this.props.id));
+      var getDot = pulseyTargets[scrollStep];
+      this.scrollToDot(getDot);
       this.tourStatusCheck(0);
     }
   }, {
     key: 'nextStep',
-    value: function nextStep() {
-      var step = parseInt(stepsArray.indexOf(this.props.id));
+    value: function nextStep(stepCountChange) {
+      var step = stepsArray.indexOf(this.props.id);
       var nextStep = stepsArray[step + 1];
+      var scrollStep = nextStep ? nextStep : stepsArray[0];
+      var scrollIndex = pulseyTargetsSteps.indexOf(scrollStep);
+      this.scrollToDot(pulseyTargets[scrollIndex]);
       if (nextStep === undefined && stepsArray.length > 0) {
         if (options.removeStepOnClick) {
           stepsArray.splice(step, 1);
@@ -271,14 +266,6 @@ var Dot = function (_React$Component4) {
           });
         } else {
           this.props.nextStep(stepsArray[0]);
-        }
-        var getDot = targetsArray[0];
-        if (getDot) {
-          var dotPos = getDot.getBoundingClientRect().top;
-          var winHeight = window.innerHeight;
-          if (dotPos > winHeight - 200 || dotPos < 150) {
-            this.scrollToDot(getDot);
-          }
         }
       } else {
         if (options.removeStepOnClick) {
@@ -291,24 +278,25 @@ var Dot = function (_React$Component4) {
         } else {
           this.props.nextStep(stepsArray[step + 1]);
         }
-        var getDot = targetsArray[step];
-        var dotPos = getDot.getBoundingClientRect().top;
-        var winHeight = window.innerHeight;
-        if (dotPos > winHeight - 200 || dotPos < 150) {
-          this.scrollToDot(getDot);
-        }
       }
-      console.log(stepsArray.length);
+      if (this.props.stepCount < pulseyTargets.length) {
+        this.props.incrementStepCount(stepCountChange);
+      }
       this.tourStatusCheck(1);
     }
   }, {
     key: 'scrollToDot',
     value: function scrollToDot(getDot) {
-      Velocity(getDot, 'scroll', {
-        duration: 500,
-        offset: -40,
-        easing: 'ease-in-out'
-      });
+      var dotPos = getDot.getBoundingClientRect().top;
+      var winHeight = window.innerHeight;
+      console.log(dotPos, winHeight);
+      if (dotPos > winHeight - 200 || dotPos < 150) {
+        Velocity(getDot, 'scroll', {
+          duration: 500,
+          offset: -40,
+          easing: 'ease-in-out'
+        });
+      }
     }
   }, {
     key: 'close',
@@ -327,8 +315,18 @@ var Dot = function (_React$Component4) {
       this.props.skip();
     }
   }, {
+    key: 'tourStatusCheck',
+    value: function tourStatusCheck(next) {
+      if (stepsArray.length === 0 + next) {
+        options.pulsey.tourComplete = true;
+        window[storage].setItem('tourComplete', true);
+      }
+    }
+  }, {
     key: 'render',
     value: function render() {
+      var _this4 = this;
+
       var pa = this.props.pa;
       var pos = pa.getBoundingClientRect();
       var targetStyle = window.getComputedStyle(pa, null),
@@ -365,9 +363,11 @@ var Dot = function (_React$Component4) {
           step: this.props.step,
           close: this.close.bind(this),
           skip: this.skip.bind(this),
-          incrementStepCount: this.props.incrementStepCount,
-          decrementStepCount: this.props.decrementStepCount,
-          stepCount: this.props.stepCount
+          incrementStepCount: function incrementStepCount() {
+            return _this4.incrementStepCount(stepCountChange);
+          },
+          stepCount: this.props.stepCount,
+          nextLabel: this.state.nextLabel
         }),
         _react2.default.createElement(Underlay, {
           id: this.props.id,
@@ -381,8 +381,8 @@ var Dot = function (_React$Component4) {
   return Dot;
 }(_react2.default.Component);
 
-var Pulsey = function (_React$Component5) {
-  _inherits(Pulsey, _React$Component5);
+var Pulsey = function (_React$Component4) {
+  _inherits(Pulsey, _React$Component4);
 
   function Pulsey(props) {
     _classCallCheck(this, Pulsey);
@@ -415,13 +415,8 @@ var Pulsey = function (_React$Component5) {
     }
   }, {
     key: 'incrementStepCount',
-    value: function incrementStepCount() {
-      this.state.stepCount < options.pulsey.numTargets ? this.setState({ stepCount: this.state.stepCount + 1 }) : null;
-    }
-  }, {
-    key: 'decrementStepCount',
-    value: function decrementStepCount() {
-      this.state.stepCount > 0 ? this.setState({ stepCount: this.state.stepCount - 1 }) : null;
+    value: function incrementStepCount(stepCountChange) {
+      this.state.stepCount < pulseyTargets.length ? this.setState({ stepCount: this.state.stepCount + stepCountChange }) : null;
     }
   }, {
     key: 'close',
@@ -464,7 +459,6 @@ var Pulsey = function (_React$Component5) {
           pa: this.state.pa[i],
           nextStep: this.nextStep.bind(this),
           incrementStepCount: this.incrementStepCount.bind(this),
-          decrementStepCount: this.decrementStepCount.bind(this),
           dotClick: this.dotClick.bind(this),
           close: this.close.bind(this),
           step: this.state.step,
@@ -480,12 +474,7 @@ var Pulsey = function (_React$Component5) {
           'button',
           { style: styles.reset, onClick: this.reset.bind(this) },
           'Reset Dots'
-        ),
-        _react2.default.createElement(Highlighter, {
-          stepCount: this.state.stepCount,
-          step: this.state.step,
-          pa: this.state.pa
-        })
+        )
       ) : null;
       return _react2.default.createElement(
         'div',
@@ -542,7 +531,6 @@ stepsArray.sort(function (a, b) {
 
 var options = {
   pulsey: {
-    numTargets: pulseyTargets.length,
     tourStarted: false,
     tourCompleted: false,
     tourSkipped: []
@@ -569,6 +557,10 @@ var options = {
     offset: {
       top: 75,
       left: 0
+    },
+    labels: {
+      next: 'Next',
+      finish: 'Finish'
     }
   },
   highlighter: {
@@ -595,7 +587,6 @@ for (var i = 0; i < pulseyTargets.length; i++) {
   if (window[storage].getItem('dot' + parseInt(stepsArray[i]))) {
     stepsArray.splice(i, 1);
     targetsArray.splice(i, 1);
-    i--;
   }
 }
 
