@@ -18,63 +18,63 @@ class Underlay extends React.Component {
   }
 }
 
-// class Highlighter extends React.Component {
-//   render() {
-//     var step = parseInt(stepsArray.indexOf(this.props.step)),
-//         highlighterStep = (step - 1 >= 0) ? step - 1 : 0,
-//         badStepName = parseInt(pulseyTargetsSteps.indexOf(this.props.step));
-//     for (var i = 0; i < pulseyTargets.length; i++) {
-//       document.getElementsByClassName('ps-anchor')[i].className = 'ps-anchor';
-//     }
-//     var pa = pulseyTargets[badStepName >= 0 ? badStepName : 0],
-//         pos = pa.getBoundingClientRect(),
-//         targetStyle = window.getComputedStyle(pa,null),
-//         fixed = targetStyle.getPropertyValue('position') === "fixed",
-//         highlighterStyles = {
-//           height: pos.height + 10,
-//           width: pos.width + 10,
-//           position: 'absolute',
-//           left: pos.left - 5 + window.scrollX,
-//           top: pos.top - 5 + window.scrollY,
-//           borderRadius: 3,
-//           boxShadow: '0 0 20px 3px rgba(255,255,255,0.25)',
-//           transition: 'all 0.3s ease-in',
-//           zIndex: 99998,
-//           background: 'white !important',
-//         },
-//         welcomeStyles = {
-//           width: 500,
-//           height: 300,
-//           position: 'absolute',
-//           left: '50%',
-//           top: '50%',
-//           transform: 'translate(-50%,-50%)',
-//           background: 'white',
-//         };
-//     if (options.welcome.display && !this.props.step) {
-//       var highlighter =
-//       this.props.step == null ? welcomeStyles : Object.assign(highlighterStyles,styles.highlighter);
-//     }
-//     else if (options.farewell.display && !this.props.step) {
-//     }
-//     else if (options.highlighter.display && this.props.step != null) {
-//       Object.assign(highlighterStyles,styles.highlighter);
-//     }
-//     var highlighter = options.highlighter.display && badStepName >= 0 ?
-//       <div style={highlighterStyles}></div> : null;
-//     options.highlighter.display && this.props.stepCount ? pulseyTargets[badStepName].className = 'ps-anchor highlight-target' : null;
-//     return (
-//       <div>
-//         <VelocityTransitionGroup
-//           enter={{animation: "fadeIn"}}
-//           leave={{animation: "fadeOut"}}
-//           className={'pulsey-tour'}>
-//           {highlighter}
-//         </VelocityTransitionGroup>
-//       </div>
-//     );
-//   }
-// }
+class Highlighter extends React.Component {
+  render() {
+    var step = parseInt(stepsArray.indexOf(this.props.step)),
+        highlighterStep = (step - 1 >= 0) ? step - 1 : 0,
+        badStepName = parseInt(pulseyTargetsSteps.indexOf(this.props.step));
+    for (var i = 0; i < pulseyTargets.length; i++) {
+      document.getElementsByClassName('ps-anchor')[i].className = 'ps-anchor';
+    }
+    var pa = pulseyTargets[badStepName >= 0 ? badStepName : 0],
+        pos = pa.getBoundingClientRect(),
+        targetStyle = window.getComputedStyle(pa,null),
+        fixed = targetStyle.getPropertyValue('position') === "fixed",
+        highlighterStyles = {
+          height: pos.height + 10,
+          width: pos.width + 10,
+          position: 'absolute',
+          left: pos.left - 5 + window.scrollX,
+          top: pos.top - 5 + window.scrollY,
+          borderRadius: 3,
+          boxShadow: '0 0 20px 3px rgba(255,255,255,0.25)',
+          transition: 'all 0.3s ease-in',
+          zIndex: 99998,
+          background: 'white !important',
+        },
+        welcomeStyles = {
+          width: 500,
+          height: 300,
+          position: 'absolute',
+          left: '50%',
+          top: '50%',
+          transform: 'translate(-50%,-50%)',
+          background: 'white',
+        };
+    if (options.welcome.display && !this.props.step) {
+      var highlighter =
+      this.props.step == null ? welcomeStyles : Object.assign(highlighterStyles,styles.highlighter);
+    }
+    else if (options.farewell.display && !this.props.step) {
+    }
+    else if (options.highlighter.display && this.props.step != null) {
+      Object.assign(highlighterStyles,styles.highlighter);
+    }
+    var highlighter = options.highlighter.display && badStepName >= 0 ?
+      <div style={highlighterStyles}></div> : null;
+    options.highlighter.display && this.props.stepCount ? pulseyTargets[badStepName].className = 'ps-anchor highlight-target' : null;
+    return (
+      <div>
+        <VelocityTransitionGroup
+          enter={{animation: "fadeIn"}}
+          leave={{animation: "fadeOut"}}
+          className={'pulsey-tour'}>
+          {highlighter}
+        </VelocityTransitionGroup>
+      </div>
+    );
+  }
+}
 
 class Tooltip extends React.Component {
   constructor(props) {
@@ -370,6 +370,11 @@ class Pulsey extends React.Component {
       <div>
         <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
           {pulseyTour}
+          <Highlighter
+            stepCount={this.state.stepCount}
+            step={this.state.step}
+            pa={this.state.pa}
+          />
         </VelocityTransitionGroup>
       </div>
     );
