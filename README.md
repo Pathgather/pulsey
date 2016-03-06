@@ -1,114 +1,96 @@
 # Pulsey
 Create beautiful pulsey tours for your app
 
-Component Map
-- 1 Pulsey
-- 2 Dot
-- 3 Underlay
-- 4 Tooltip
-- 5 Welcome
-- 6 Progress
-
-OPTIONS
-- utilities
-  - launch
-  - storage
-  - ordered
-  - keyboardNav
-  - animateScroll
-  - defaultStyles
-  - defaultAnimations
-  - callbacks
-    - tourComplete
-    - stepComplete
-    - exitTour  
-- dot
-  - style
-  - animation
-  - counter
-    - style
-    - animation
-  - offset
-    - left
-    - top
-- tooltip
-  - style
-  - animation
-  - offset
-    - left
-    - top
-  - counter
-    - style
-  - edgesense
-  - arrow
-    - display
-    - style
-  - closeButton
-    - display
-    - style
-  - nextButton
-    - display
-    - style
-    - text
-  - endButton
-    - display
-    - style
-    - text
-  - content
-    - header
-      - display
-      - style
-      - text
-    - note
-      - display
-      - style
-      - text
-- underlay
-  - style
-  - animation
-- welcome
-  - use
-  - style
-  - header
-    - style
-    - text
-  - note
-    - style
-    - text
-  - continueButton
-    - style
-- progress
-  - display
-  - container
-  - style
-
-STYLES
-- tour
-- dot
-- tooltip
-- underlay
-- welcome
-- progress
-
-
-NEXT FEATURES
-Completed: 8/14
-
-- basic optional welcome screen and finish screen with customizable header, message, button, etc.
-- progress/step badges and/or progress bar
-- tooltips recognize whether they are overflowing the screen and reposition themselves automatically, unless user decides to turn this functionality off
-- provide user with multiple pre-designed options for look and animation of dots and tooltips just by changing one option.  or they can choose to use their own css.
+GETTING STARTED
+- users choose html elements that they want to be included in the tour by adding the class 'ps-anchor'
+- users may optionally specify the order of their tour by passing a number to a data-ps-step attribute
+  - however, this is not required.  if users do not specify a data-ps-step, pulsey will add one for them in the order that they appear in the html.  pulsey will also handle the case where the user only sets data-ps-step for some and not others
+- users should specify the content of their tooltip in data-attributes as well, namely data-ps-header and data-ps-note.  in future release user will be able to put html inside the tooltip
+- once the 'ps-anchor' classes are set and data-attributes are supplied, users can just add 'pulsey()' to their js and pulsey ...should... just work
 
 FEATURES
-
-- user chooses html elements to be dotted
+- once pulsey() is called, one of a couple things will happen depending upon how options are configured
+  - in all cases, all targeted html elements will receive a pulsey dot at their center
+  - if a number is passed to options.dot.step (default is null) then pulsey will automatically start at that step
+  - if options.welcome.display is true, pulsey will show an intro screen prior to the first tooltip/dot
+- if options.highlighter.display is true, the target html element will receive a highlighting div that will transition between each step
+- navigate by clicking the next button or the arrow keys
+- if any of the target html elements have fixed position pulsey will have already accounted for this
+- pulsey dots track their html targets responsively
+- each pulsey component has its own class ('pulsey-dot-' + {this.props.id}) that users can use to easily customize styling
 - no jQuery required (requires Velocity)
-- each element has its own class that the user can easily identify and use to modify the styles without having to dive into the code or api
-- option to have tooltip arrow or not, and which side it will be on
-- give each dot a class of "pulsey-dot-" + po.dot.id so users can easily customize the CSS without using the API
+- other awesome stuff, and more to come, maybe
+
+OPTIONS
+- pulsey
+  - tourStarted: boolean
+  - tourCompleted: boolean
+  - tourSkipped: array // if user skips, pulsey creates an array with the step skipped on and how many remaining steps
+  - keyboardNav: boolean // currently N/A
+  - animateScroll: boolean // currently N/A
+- dot
+  - step: integer // default is null; change to a number to specify which step you would like tour to start on
+  - offset
+    - top: integer
+    - left: integer
+  - showDots: boolean // gives you option to allow users to pick and choose which dots they want to start on, or else be required to follow the order you specify
+- tooltip
+  - width: integer
+  - content
+    - header: string
+    - note: string
+  - tip
+    - display: boolean
+    - side: string // accepts one of 'top', 'bottom', 'left', 'right'
+    - size: integer
+  - offset
+    - left: integer
+    - top: integer
+  - labels
+    - next: 'string' // label for button that triggers next tooltip to be shown
+    - finish: 'string' // label for button that is shown on the last tooltip, immediately prior to tourComplete
+  - progress: boolean // show or hide a step progress counter
+  - edgesense: boolean // currently N/A
+  - showButtons // currently N/A
+    - close: boolean
+    - next: boolean
+    - previous: boolean
+    - skip: boolean
+- highlighter
+  display: boolean // when true a highlight div is placed underneath the target element and that element's z-index is raised above the underlay
+- welcome
+  - display: boolean // an optional welcome modal prior to commencement of tour
+  - fixed: boolean // when false, position is absolute
+  - header: string // currently N/A
+  - note: string // currently N/A
+- farewell
+  - display: boolean // an optional farewell modal once last tooltip has been completed
+  - fixed: boolean // when false, position is absolute
+  - header: string // currently N/A
+  - note: string // currently N/A
+  - finishButton: boolean
+- underlay
+  - clickToClose: boolean // when true clicking anywhere outside of the tooltip (ie clicking the underlay) will close the tooltip
+- storage : 'string' // accepts one of 'localStorage' or 'sessionStorage'; default is 'localStorage'
+- removeStepOnClick: boolean // when true, pulsey will only show a tooltip once
+- hideDotOnClick: boolean // if removeStepOnClick is false, leaving this as true will ensure that the dots are not shown
+
+STYLES // readme forthcoming - still need to determine what needs to be customizable and what doesn't
+- dot
+- tooltip
+- underlay
+- welcome
+- farewell
+- progress
+
+NEXT
+- customizable look and animation of dots and tooltips
+- test and fix lots of issues
+- tooltips recognize whether they are overflowing the screen and reposition themselves automatically, unless user decides to turn this functionality off
+- allow users to put html inside tooltip
 
 ISSUES
-
+- of bugs, there are many, many
 - options are not currently specific to each dot and each tooltip - they're global and shouldn't be
 - tooltip needs to be based off the outside of the pulsey target, not off the center
 - only want to transition underlay on dotclick() and close() (not nextStep())

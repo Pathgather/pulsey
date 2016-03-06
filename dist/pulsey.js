@@ -85,19 +85,19 @@ var Highlighter = function (_React$Component2) {
           targetStyle = window.getComputedStyle(pa, null),
           fixed = targetStyle.getPropertyValue('position') === "fixed",
           highlighterStyles = {
-        height: pos.height + 10,
-        width: pos.width + 10,
+        height: pos.height + 4,
+        width: pos.width + 4,
         position: 'absolute',
-        left: pos.left - 5 + window.scrollX,
-        top: pos.top - 5 + window.scrollY,
+        left: pos.left - 2 + window.scrollX,
+        top: pos.top - 2 + window.scrollY,
         borderRadius: 3,
-        boxShadow: '0 0 20px 3px rgba(255,255,255,0.25)',
+        boxShadow: '0 0 20px 3px rgba(255,255,255,0.5)',
         transition: this.props.resize ? 'none' : 'all 0.3s ease-in',
         zIndex: 99999,
         background: '#fff'
       },
           welcomeStyles = {
-        minWidth: 400,
+        width: 500,
         minHeight: 300,
         position: options.welcome.fixed ? 'fixed' : 'absolute',
         left: '50%',
@@ -111,7 +111,7 @@ var Highlighter = function (_React$Component2) {
         boxShadow: '0 0 120px 30px rgba(246, 123, 69, 0.4)'
       },
           farewellStyles = {
-        minWidth: 400,
+        width: 500,
         minHeight: 300,
         position: options.farewell.fixed ? 'fixed' : 'absolute',
         left: '50%',
@@ -261,6 +261,13 @@ var Tooltip = function (_React$Component3) {
         left: fixed ? pos.left + pos.width / 2 - styles.tooltip.width / 2 + options.tooltip.offset.left : pos.left + pos.width / 2 - styles.tooltip.width / 2 + options.tooltip.offset.left + window.scrollX,
         position: fixed ? 'fixed' : 'absolute'
       },
+          progressIndicator = options.tooltip.progress ? _react2.default.createElement(
+        'div',
+        { style: styles.progress },
+        ' ',
+        this.props.stepCount + 1,
+        ' '
+      ) : null,
           tooltipStyle = Object.assign(position, styles.tooltip),
           tip = options.tooltip.tip.display ? _react2.default.createElement('div', { style: styles.tooltip.tip }) : null,
           tooltip = _react2.default.createElement(
@@ -271,11 +278,7 @@ var Tooltip = function (_React$Component3) {
           { style: styles.tooltip.close, onClick: this.props.close },
           ' + '
         ),
-        _react2.default.createElement(
-          'div',
-          { style: styles.progress },
-          this.props.stepCount + 1
-        ),
+        progressIndicator,
         _react2.default.createElement(
           'div',
           { style: styles.tooltip.header },
@@ -674,7 +677,7 @@ var options = {
     tip: {
       display: true,
       side: 'top',
-      size: '10'
+      size: 10
     },
     offset: {
       top: 20,
@@ -683,7 +686,8 @@ var options = {
     labels: {
       next: 'Next',
       finish: 'Finish'
-    }
+    },
+    progress: true
   },
   highlighter: {
     display: true
@@ -700,7 +704,6 @@ var options = {
     clickToClose: true
   },
   storage: 'localStorage',
-  progress: {},
   removeStepOnClick: true,
   hideDotOnClick: true
 };
