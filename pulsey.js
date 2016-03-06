@@ -19,6 +19,21 @@ class Underlay extends React.Component {
 }
 
 class Highlighter extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      endTour: false,
+    }
+  }
+  getStarted() {
+    options.dot.step = stepsArray[0];
+    this.props.getStarted();
+  }
+  endTour() {
+    this.setState({
+      endTour: true,
+    });
+  }
   render() {
     var step = pulseyTargetsSteps.indexOf(this.props.step);
     var pa = pulseyTargets[step >= 0 ? step : 0],
@@ -38,30 +53,53 @@ class Highlighter extends React.Component {
           background: '#fff',
         },
         welcomeStyles = {
-          width: 500,
-          height: 300,
-          position: 'absolute',
+          minWidth: 400,
+          minHeight: 300,
+          position: options.welcome.fixed ? 'fixed' : 'absolute',
           left: '50%',
           top: '50%',
           transform: 'translate(-50%,-50%)',
-          background: '#fff',
+          background: '#555',
           transition: this.props.resize ? 'none' : 'all 0.3s ease-in',
+          padding: '10px 30px',
+          borderRadius: 3,
+          zIndex: 99999,
+          boxShadow: '0 0 120px 30px rgba(246, 123, 69, 0.4)',
         },
         farewellStyles = {
-          width: 500,
-          height: 300,
-          position: 'absolute',
+          minWidth: 400,
+          minHeight: 300,
+          position: options.farewell.fixed ? 'fixed' : 'absolute',
           left: '50%',
           top: '50%',
           transform: 'translate(-50%,-50%)',
           background: '#555',
           borderRadius: 3,
+          padding: '10px 30px',
           transition: this.props.resize ? 'none' : 'all 0.3s ease-in',
-        };console.log(this.props.step);
+          zIndex: 99999,
+          boxShadow: '0 0 120px 30px rgba(246, 123, 69, 0.4)',
+        };
     var welcome = !window[storage].getItem('tourStarted') && options.welcome.display;
     var farewell = options.pulsey.tourComplete && this.props.step !== null;
     var highlighter = options.highlighter.display;
-    var showHighlighter = <div style={welcome ? welcomeStyles : farewell ? farewellStyles : highlighter ? highlighterStyles : null}></div>
+    var welcomeContent = welcome ?
+      <div>
+        <div style={styles.welcome.header}>{welcomeHeader}</div>
+        <div style={styles.welcome.note}>{welcomeNote}</div>
+        <button style={styles.welcome.button} onClick={this.getStarted.bind(this)}>Get Started</button>
+      </div> : null;
+    var farewellContent = farewell ?
+      <div>
+        <div style={styles.welcome.header}>{farewellHeader}</div>
+        <div style={styles.welcome.note}>{farewellNote}</div>
+        <button style={styles.welcome.button} onClick={this.endTour.bind(this)}>Done</button>
+      </div> : null;
+    var showHighlighter =
+      <div style={welcome ? welcomeStyles : farewell ? farewellStyles : highlighter ? highlighterStyles : null}>
+        {welcomeContent}
+        {farewellContent}
+      </div>;
     setTimeout(function() {
       for (var i = 0; i < pulseyTargets.length; i++) {
         document.getElementsByClassName('ps-anchor')[i].className = 'ps-anchor';
@@ -76,7 +114,7 @@ class Highlighter extends React.Component {
           leave={{animation: "fadeOut"}}
           duration={3000}
           className={'pulsey-tour'}>
-          {welcome || this.props.step !== null ? showHighlighter : null}
+          {welcome || this.props.step !== null && !this.state.endTour ? showHighlighter : null}
         </VelocityTransitionGroup>
       </div>
     );
@@ -145,12 +183,11 @@ class Tooltip extends React.Component {
         tooltip =
           <div style={tooltipStyle} className={"pulsey-tour pulsey-tooltip-" + this.props.id}>
             <div style={styles.tooltip.close} onClick={this.props.close}> + </div>
+            <div style={styles.progress}>{this.props.stepCount+1}</div>
               <div style={styles.tooltip.header}>{tooltip.header}</div>
               <div style={styles.tooltip.note}>
                 {tooltip.note}
               </div>
-              <br/> step: {this.props.id}
-              <br/> stepCount: {this.props.stepCount}
               <div style={styles.tooltip.buttons}>
                 <button style={styles.tooltip.exitButton} onClick={this.props.skip}>Skip</button>
                 <button
@@ -234,7 +271,7 @@ class Dot extends React.Component {
   scrollToDot(getDot) {
     var dotPos = getDot.getBoundingClientRect().top;
     var winHeight = window.innerHeight;
-    if ( (dotPos > winHeight - 200) || (dotPos < 150) ) {
+    if ( (dotPos > winHeight - 300) || (dotPos < 150) ) {
       Velocity(getDot, 'scroll', {
         duration: 500,
         offset: -40,
@@ -255,7 +292,8 @@ class Dot extends React.Component {
     this.props.skip();
   }
   tourStatusCheck(next) {
-    stepsArray.length === 0 + next || this.props.stepCount + next === pulseyTargets.length ? (
+    console.log('stepsArray.length',stepsArray.length);
+    stepsArray.length === 0 || this.props.stepCount === pulseyTargets.length ? (
       options.pulsey.tourComplete = true,
       window[storage].setItem('tourComplete',true)
     ) : null;
@@ -406,6 +444,7 @@ class Pulsey extends React.Component {
             step={this.state.step}
             pa={this.state.pa}
             resize={this.state.resize}
+            getStarted={this.dotClick.bind(this)}
           />
         </VelocityTransitionGroup>
       </div>
@@ -416,6 +455,10 @@ class Pulsey extends React.Component {
 var psAnchors = document.getElementsByClassName('ps-anchor'),
     psWelcome = document.getElementsByClassName('ps-welcome')[0],
     psFarewell = document.getElementsByClassName('ps-farewell')[0],
+    welcomeHeader = psWelcome.getAttribute('data-ps-header'),
+    welcomeNote = psWelcome.getAttribute('data-ps-content'),
+    farewellHeader = psFarewell.getAttribute('data-ps-header'),
+    farewellNote = psFarewell.getAttribute('data-ps-content'),
     pulseyTargets = Array.prototype.slice.call(psAnchors),
     pulseyTargetsSteps = [],
     noStepGiven = 0;
@@ -428,9 +471,6 @@ for (var i = 0; i < pulseyTargets.length; i++) {
     pulseyTargetsSteps.push(parseInt(step));
   }
 }
-
-console.log(psWelcome);
-console.log(psFarewell);
 
 var ptsClone = pulseyTargetsSteps.slice();
 ptsClone.sort(function(a,b) {
@@ -497,9 +537,11 @@ var options = {
   },
   welcome: {
     display: psWelcome,
+    fixed: true,
   },
   farewell: {
     display: psFarewell,
+    fixed: true,
   },
   underlay: {
     clickToClose: true,
@@ -547,7 +589,39 @@ var styles = {
     }
   },
   welcome: {
-    background: '#f67b45',
+    header: {
+      display: 'flex',
+      justifyContent: 'center',
+      fontWeight: '600',
+      lineHeight: '2em',
+      fontSize: 28,
+      color: '#222',
+    },
+    note: {
+      display: 'flex',
+      justifyContent: 'center',
+      fontWeight: '300',
+      fontSize: 18,
+      color: '#111',
+    },
+    button: {
+      width: '125px',
+      height: '40px',
+      borderRadius: '2px',
+      boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+      background: '#f67b45',
+      color: '#fff',
+      fontSize: 13,
+      fontWeight: 300,
+      left: '50%',
+      position: 'absolute',
+      textTransform: 'uppercase',
+      bottom: '25px',
+      border: 'none',
+      cursor: 'pointer',
+      outline: 'none',
+      transform: 'translateX(-50%)',
+    },
   },
   farewell: {
     background: '#4c93ea',
@@ -650,6 +724,23 @@ var styles = {
     cursor: 'pointer',
     outline: 'none',
     transform: 'translateX(-50%)',
+  },
+  progress: {
+    width: 24,
+    height: 24,
+    background: '#4c93ea',
+    borderRadius: '100%',
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    transform: 'translate(-50%,-50%)',
+    color: '#fff',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontSize: 13,
+    fontWeight: 300,
+    boxShadow: '0 0 20px rgba(76, 147, 234, 0.85)',
   }
 }
 

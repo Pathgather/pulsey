@@ -52,13 +52,31 @@ var Underlay = function (_React$Component) {
 var Highlighter = function (_React$Component2) {
   _inherits(Highlighter, _React$Component2);
 
-  function Highlighter() {
+  function Highlighter(props) {
     _classCallCheck(this, Highlighter);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(Highlighter).apply(this, arguments));
+    var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(Highlighter).call(this, props));
+
+    _this2.state = {
+      endTour: false
+    };
+    return _this2;
   }
 
   _createClass(Highlighter, [{
+    key: 'getStarted',
+    value: function getStarted() {
+      options.dot.step = stepsArray[0];
+      this.props.getStarted();
+    }
+  }, {
+    key: 'endTour',
+    value: function endTour() {
+      this.setState({
+        endTour: true
+      });
+    }
+  }, {
     key: 'render',
     value: function render() {
       var step = pulseyTargetsSteps.indexOf(this.props.step);
@@ -79,30 +97,80 @@ var Highlighter = function (_React$Component2) {
         background: '#fff'
       },
           welcomeStyles = {
-        width: 500,
-        height: 300,
-        position: 'absolute',
+        minWidth: 400,
+        minHeight: 300,
+        position: options.welcome.fixed ? 'fixed' : 'absolute',
         left: '50%',
         top: '50%',
         transform: 'translate(-50%,-50%)',
-        background: '#fff',
-        transition: this.props.resize ? 'none' : 'all 0.3s ease-in'
+        background: '#555',
+        transition: this.props.resize ? 'none' : 'all 0.3s ease-in',
+        padding: '10px 30px',
+        borderRadius: 3,
+        zIndex: 99999,
+        boxShadow: '0 0 120px 30px rgba(246, 123, 69, 0.4)'
       },
           farewellStyles = {
-        width: 500,
-        height: 300,
-        position: 'absolute',
+        minWidth: 400,
+        minHeight: 300,
+        position: options.farewell.fixed ? 'fixed' : 'absolute',
         left: '50%',
         top: '50%',
         transform: 'translate(-50%,-50%)',
         background: '#555',
         borderRadius: 3,
-        transition: this.props.resize ? 'none' : 'all 0.3s ease-in'
-      };console.log(this.props.step);
+        padding: '10px 30px',
+        transition: this.props.resize ? 'none' : 'all 0.3s ease-in',
+        zIndex: 99999,
+        boxShadow: '0 0 120px 30px rgba(246, 123, 69, 0.4)'
+      };
       var welcome = !window[storage].getItem('tourStarted') && options.welcome.display;
       var farewell = options.pulsey.tourComplete && this.props.step !== null;
       var highlighter = options.highlighter.display;
-      var showHighlighter = _react2.default.createElement('div', { style: welcome ? welcomeStyles : farewell ? farewellStyles : highlighter ? highlighterStyles : null });
+      var welcomeContent = welcome ? _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'div',
+          { style: styles.welcome.header },
+          welcomeHeader
+        ),
+        _react2.default.createElement(
+          'div',
+          { style: styles.welcome.note },
+          welcomeNote
+        ),
+        _react2.default.createElement(
+          'button',
+          { style: styles.welcome.button, onClick: this.getStarted.bind(this) },
+          'Get Started'
+        )
+      ) : null;
+      var farewellContent = farewell ? _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'div',
+          { style: styles.welcome.header },
+          farewellHeader
+        ),
+        _react2.default.createElement(
+          'div',
+          { style: styles.welcome.note },
+          farewellNote
+        ),
+        _react2.default.createElement(
+          'button',
+          { style: styles.welcome.button, onClick: this.endTour.bind(this) },
+          'Done'
+        )
+      ) : null;
+      var showHighlighter = _react2.default.createElement(
+        'div',
+        { style: welcome ? welcomeStyles : farewell ? farewellStyles : highlighter ? highlighterStyles : null },
+        welcomeContent,
+        farewellContent
+      );
       setTimeout(function () {
         for (var i = 0; i < pulseyTargets.length; i++) {
           document.getElementsByClassName('ps-anchor')[i].className = 'ps-anchor';
@@ -120,7 +188,7 @@ var Highlighter = function (_React$Component2) {
             leave: { animation: "fadeOut" },
             duration: 3000,
             className: 'pulsey-tour' },
-          welcome || this.props.step !== null ? showHighlighter : null
+          welcome || this.props.step !== null && !this.state.endTour ? showHighlighter : null
         )
       );
     }
@@ -205,6 +273,11 @@ var Tooltip = function (_React$Component3) {
         ),
         _react2.default.createElement(
           'div',
+          { style: styles.progress },
+          this.props.stepCount + 1
+        ),
+        _react2.default.createElement(
+          'div',
           { style: styles.tooltip.header },
           tooltip.header
         ),
@@ -213,12 +286,6 @@ var Tooltip = function (_React$Component3) {
           { style: styles.tooltip.note },
           tooltip.note
         ),
-        _react2.default.createElement('br', null),
-        ' step: ',
-        this.props.id,
-        _react2.default.createElement('br', null),
-        ' stepCount: ',
-        this.props.stepCount,
         _react2.default.createElement(
           'div',
           { style: styles.tooltip.buttons },
@@ -321,7 +388,7 @@ var Dot = function (_React$Component4) {
     value: function scrollToDot(getDot) {
       var dotPos = getDot.getBoundingClientRect().top;
       var winHeight = window.innerHeight;
-      if (dotPos > winHeight - 200 || dotPos < 150) {
+      if (dotPos > winHeight - 300 || dotPos < 150) {
         Velocity(getDot, 'scroll', {
           duration: 500,
           offset: -40,
@@ -348,7 +415,8 @@ var Dot = function (_React$Component4) {
   }, {
     key: 'tourStatusCheck',
     value: function tourStatusCheck(next) {
-      stepsArray.length === 0 + next || this.props.stepCount + next === pulseyTargets.length ? (options.pulsey.tourComplete = true, window[storage].setItem('tourComplete', true)) : null;
+      console.log('stepsArray.length', stepsArray.length);
+      stepsArray.length === 0 || this.props.stepCount === pulseyTargets.length ? (options.pulsey.tourComplete = true, window[storage].setItem('tourComplete', true)) : null;
     }
   }, {
     key: 'render',
@@ -528,7 +596,8 @@ var Pulsey = function (_React$Component5) {
             stepCount: this.state.stepCount,
             step: this.state.step,
             pa: this.state.pa,
-            resize: this.state.resize
+            resize: this.state.resize,
+            getStarted: this.dotClick.bind(this)
           })
         )
       );
@@ -541,6 +610,10 @@ var Pulsey = function (_React$Component5) {
 var psAnchors = document.getElementsByClassName('ps-anchor'),
     psWelcome = document.getElementsByClassName('ps-welcome')[0],
     psFarewell = document.getElementsByClassName('ps-farewell')[0],
+    welcomeHeader = psWelcome.getAttribute('data-ps-header'),
+    welcomeNote = psWelcome.getAttribute('data-ps-content'),
+    farewellHeader = psFarewell.getAttribute('data-ps-header'),
+    farewellNote = psFarewell.getAttribute('data-ps-content'),
     pulseyTargets = Array.prototype.slice.call(psAnchors),
     pulseyTargetsSteps = [],
     noStepGiven = 0;
@@ -552,9 +625,6 @@ for (var i = 0; i < pulseyTargets.length; i++) {
     pulseyTargetsSteps.push(parseInt(step));
   }
 }
-
-console.log(psWelcome);
-console.log(psFarewell);
 
 var ptsClone = pulseyTargetsSteps.slice();
 ptsClone.sort(function (a, b) {
@@ -619,10 +689,12 @@ var options = {
     display: true
   },
   welcome: {
-    display: psWelcome
+    display: psWelcome,
+    fixed: true
   },
   farewell: {
-    display: psFarewell
+    display: psFarewell,
+    fixed: true
   },
   underlay: {
     clickToClose: true
@@ -667,7 +739,39 @@ var styles = {
     }
   },
   welcome: {
-    background: '#f67b45'
+    header: {
+      display: 'flex',
+      justifyContent: 'center',
+      fontWeight: '600',
+      lineHeight: '2em',
+      fontSize: 28,
+      color: '#222'
+    },
+    note: {
+      display: 'flex',
+      justifyContent: 'center',
+      fontWeight: '300',
+      fontSize: 18,
+      color: '#111'
+    },
+    button: {
+      width: '125px',
+      height: '40px',
+      borderRadius: '2px',
+      boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+      background: '#f67b45',
+      color: '#fff',
+      fontSize: 13,
+      fontWeight: 300,
+      left: '50%',
+      position: 'absolute',
+      textTransform: 'uppercase',
+      bottom: '25px',
+      border: 'none',
+      cursor: 'pointer',
+      outline: 'none',
+      transform: 'translateX(-50%)'
+    }
   },
   farewell: {
     background: '#4c93ea'
@@ -770,6 +874,23 @@ var styles = {
     cursor: 'pointer',
     outline: 'none',
     transform: 'translateX(-50%)'
+  },
+  progress: {
+    width: 24,
+    height: 24,
+    background: '#4c93ea',
+    borderRadius: '100%',
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    transform: 'translate(-50%,-50%)',
+    color: '#fff',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontSize: 13,
+    fontWeight: 300,
+    boxShadow: '0 0 20px rgba(76, 147, 234, 0.85)'
   }
 };
 
