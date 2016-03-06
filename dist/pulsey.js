@@ -163,7 +163,7 @@ var Tooltip = function (_React$Component3) {
         }.bind(this);
       }
       var nextLabel = options.tooltip.labels.next;
-      stepsArray.length === 1 ? nextLabel = options.tooltip.labels.finish : nextLabel = options.tooltip.labels.next;
+      stepsArray.length === 1 || this.props.stepCount === pulseyTargets.length ? nextLabel = options.tooltip.labels.finish : nextLabel = options.tooltip.labels.next;
       var pa = this.props.pa,
           pos = pa.getBoundingClientRect(),
           targetStyle = window.getComputedStyle(pa, null),
@@ -177,7 +177,7 @@ var Tooltip = function (_React$Component3) {
         note: tooltipNote ? tooltipNote : options.tooltip.content.note
       },
           position = {
-        top: fixed ? pos.top + pos.height / 2 + options.tooltip.offset.top : pos.top + pos.height / 2 + options.tooltip.offset.top + window.scrollY,
+        top: fixed ? pos.top + pos.height + options.tooltip.offset.top : pos.top + pos.height + options.tooltip.offset.top + window.scrollY,
         left: fixed ? pos.left + pos.width / 2 - styles.tooltip.width / 2 + options.tooltip.offset.left : pos.left + pos.width / 2 - styles.tooltip.width / 2 + options.tooltip.offset.left + window.scrollX,
         position: fixed ? 'fixed' : 'absolute'
       },
@@ -240,8 +240,7 @@ var Dot = function (_React$Component4) {
     var _this4 = _possibleConstructorReturn(this, Object.getPrototypeOf(Dot).call(this, props));
 
     _this4.state = {
-      showDot: !window[storage].getItem("dot" + _this4.props.id),
-      nextLabel: 'Next'
+      showDot: !window[storage].getItem("dot" + _this4.props.id)
     };
     return _this4;
   }
@@ -249,9 +248,8 @@ var Dot = function (_React$Component4) {
   _createClass(Dot, [{
     key: 'dotClick',
     value: function dotClick() {
-      options.removeStepOnClick ? this.setState({
-        showDot: window[storage].setItem("dot" + this.props.id, true),
-        nextLabel: stepsArray.length === 1 ? 'Finish' : 'Next'
+      options.removeStepOnClick || options.hideDotOnClick ? this.setState({
+        showDot: window[storage].setItem("dot" + this.props.id, true)
       }) : null;
       options.dot.step = this.props.id;
       this.props.dotClick();
@@ -291,6 +289,9 @@ var Dot = function (_React$Component4) {
           this.props.nextStep(stepsArray[step + 1]);
         }
       }
+      options.removeStepOnClick || options.hideDotOnClick ? this.setState({
+        showDot: window[storage].setItem("dot" + stepsArray[step], true)
+      }) : null;
       if (this.props.stepCount < pulseyTargets.length) {
         this.props.incrementStepCount(stepCountChange);
       }
@@ -377,8 +378,7 @@ var Dot = function (_React$Component4) {
           incrementStepCount: function incrementStepCount() {
             return _this5.incrementStepCount(stepCountChange);
           },
-          stepCount: this.props.stepCount,
-          nextLabel: this.state.nextLabel
+          stepCount: this.props.stepCount
         }),
         _react2.default.createElement(Underlay, {
           id: this.props.id,
@@ -450,7 +450,6 @@ var Pulsey = function (_React$Component5) {
         this.setState({ pa: pulseyTargets, resize: true });
         clearTimeout(window.resizeFinished);
         window.resizeFinished = setTimeout(function () {
-          console.log('resizeFinished');
           this.setState({ resize: false });
         }.bind(this), 250);
       }.bind(this);
@@ -559,7 +558,7 @@ var options = {
     tourSkipped: []
   },
   dot: {
-    step: null,
+    step: 1,
     offset: {
       top: 0,
       left: 0
@@ -578,7 +577,7 @@ var options = {
       size: '10'
     },
     offset: {
-      top: 75,
+      top: 20,
       left: 0
     },
     labels: {
@@ -601,7 +600,8 @@ var options = {
   storage: 'localStorage',
   welcome: {},
   progress: {},
-  removeStepOnClick: true
+  removeStepOnClick: false,
+  hideDotOnClick: true
 };
 
 var storage = options.storage === 'localStorage' || options.storage === 'sessionStorage' ? options.storage : 'localStorage';
