@@ -61,13 +61,8 @@ var Highlighter = function (_React$Component2) {
   _createClass(Highlighter, [{
     key: 'render',
     value: function render() {
-      var step = parseInt(stepsArray.indexOf(this.props.step)),
-          highlighterStep = step - 1 >= 0 ? step - 1 : 0,
-          badStepName = parseInt(pulseyTargetsSteps.indexOf(this.props.step));
-      for (var i = 0; i < pulseyTargets.length; i++) {
-        document.getElementsByClassName('ps-anchor')[i].className = 'ps-anchor';
-      }
-      var pa = pulseyTargets[badStepName >= 0 ? badStepName : 0],
+      var step = pulseyTargetsSteps.indexOf(this.props.step);
+      var pa = pulseyTargets[step >= 0 ? step : 0],
           pos = pa.getBoundingClientRect(),
           targetStyle = window.getComputedStyle(pa, null),
           fixed = targetStyle.getPropertyValue('position') === "fixed",
@@ -80,7 +75,7 @@ var Highlighter = function (_React$Component2) {
         borderRadius: 3,
         boxShadow: '0 0 20px 3px rgba(255,255,255,0.25)',
         transition: 'all 0.3s ease-in',
-        zIndex: 99998,
+        zIndex: 99999,
         background: 'white !important'
       },
           welcomeStyles = {
@@ -97,8 +92,14 @@ var Highlighter = function (_React$Component2) {
       } else if (options.farewell.display && !this.props.step) {} else if (options.highlighter.display && this.props.step != null) {
         Object.assign(highlighterStyles, styles.highlighter);
       }
-      var highlighter = options.highlighter.display && badStepName >= 0 ? _react2.default.createElement('div', { style: highlighterStyles }) : null;
-      options.highlighter.display && this.props.stepCount ? pulseyTargets[badStepName].className = 'ps-anchor highlight-target' : null;
+      var highlighter = options.highlighter.display && step >= 0 ? _react2.default.createElement('div', { style: highlighterStyles }) : null;
+      setTimeout(function () {
+        for (var i = 0; i < pulseyTargets.length; i++) {
+          document.getElementsByClassName('ps-anchor')[i].className = 'ps-anchor';
+        }
+        options.highlighter.display && step >= 0 ? pulseyTargets[step].className = 'ps-anchor highlight-target' : null;
+      }, 500);
+      options.highlighter.display && step >= 0 ? pulseyTargets[step].className = 'ps-anchor highlight-target' : null;
       return _react2.default.createElement(
         'div',
         null,
@@ -107,6 +108,7 @@ var Highlighter = function (_React$Component2) {
           {
             enter: { animation: "fadeIn" },
             leave: { animation: "fadeOut" },
+            duration: 3000,
             className: 'pulsey-tour' },
           highlighter
         )
@@ -299,7 +301,6 @@ var Dot = function (_React$Component4) {
     value: function scrollToDot(getDot) {
       var dotPos = getDot.getBoundingClientRect().top;
       var winHeight = window.innerHeight;
-      console.log(dotPos, winHeight);
       if (dotPos > winHeight - 200 || dotPos < 150) {
         Velocity(getDot, 'scroll', {
           duration: 500,

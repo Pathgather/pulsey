@@ -90,25 +90,16 @@ STYLES
 - welcome
 - progress
 
-<Highlighter
-  stepCount={this.state.stepCount}
-  step={this.state.step}
-  pa={this.state.pa}
-/>
-
 
 NEXT FEATURES
 Completed: 8/15
 
-- detect if no dots are left, and show "finish" in place of "next" in the next button
 - add loopTillComplete option, set to true initially.  if false, you can't skip beyond last step to first.
 - add hideDotOnClick option that does as described.  allows removeStepOnClick to be true without having to keep showing the dot.
-
 - basic optional welcome screen and finish screen with customizable header, message, button, etc.
 - progress/step badges and/or progress bar
 - allow user to put html inside tooltip via data attribute
 - tooltips recognize whether they are overflowing the screen and reposition themselves automatically, unless user decides to turn this functionality off
-
 - provide user with multiple pre-designed options for look and animation of dots and tooltips just by changing one option.  or they can choose to use their own css.
 
 FEATURES
@@ -128,3 +119,4 @@ ISSUES
 - on screenresize (and probably scroll) don't want highlight-back element to have a transition duration (currently lags and looks bad)
 - tooltip needs to be based off the outside of the pulsey target, not off the center
 - only want to transition underlay on dotclick() and close() (not nextStep())
+- nextLabel doesn't change to 'finish' when removeStepOnClick is false
