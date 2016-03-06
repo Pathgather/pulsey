@@ -87,12 +87,7 @@ var Highlighter = function (_React$Component2) {
         transform: 'translate(-50%,-50%)',
         background: '#fff'
       };
-      if (options.welcome.display && !this.props.step) {
-        var highlighter = this.props.step == null ? welcomeStyles : Object.assign(highlighterStyles, styles.highlighter);
-      } else if (options.farewell.display && !this.props.step) {} else if (options.highlighter.display && this.props.step != null) {
-        Object.assign(highlighterStyles, styles.highlighter);
-      }
-      var highlighter = options.highlighter.display && step >= 0 ? _react2.default.createElement('div', { style: highlighterStyles }) : null;
+      var highlighter = options.highlighter.display ? _react2.default.createElement('div', { style: step < 0 && !options.pulsey.tourStarted ? welcomeStyles : highlighterStyles }) : null;
       setTimeout(function () {
         for (var i = 0; i < pulseyTargets.length; i++) {
           document.getElementsByClassName('ps-anchor')[i].className = 'ps-anchor';
@@ -110,7 +105,7 @@ var Highlighter = function (_React$Component2) {
             leave: { animation: "fadeOut" },
             duration: 3000,
             className: 'pulsey-tour' },
-          highlighter
+          !options.pulsey.tourComplete ? highlighter : null
         )
       );
     }
@@ -149,12 +144,14 @@ var Tooltip = function (_React$Component3) {
             });
             if (this.props.stepCount < pulseyTargets.length) {
               this.props.nextStep(1);
+            } else if (this.props.stepCount === pulseyTargets.length) {
+              this.props.close();
             }
           } else if (e.keyCode === 37) {
             stepsArray.sort(function (a, b) {
               return b - a;
             });
-            if (this.props.stepCount < pulseyTargets.length) {
+            if (this.props.stepCount < pulseyTargets.length && this.props.stepCount > 0) {
               this.props.nextStep(-1);
             }
           } else if (e.keyCode === 27) {
@@ -201,6 +198,12 @@ var Tooltip = function (_React$Component3) {
           { style: styles.tooltip.note },
           tooltip.note
         ),
+        _react2.default.createElement('br', null),
+        ' step: ',
+        this.props.id,
+        _react2.default.createElement('br', null),
+        ' stepCount: ',
+        this.props.stepCount,
         _react2.default.createElement(
           'div',
           { style: styles.tooltip.buttons },
@@ -287,6 +290,7 @@ var Dot = function (_React$Component4) {
           });
         } else {
           this.props.nextStep(stepsArray[step + 1]);
+          this.props.stepCount === pulseyTargets.length ? this.close() : null;
         }
       }
       options.removeStepOnClick || options.hideDotOnClick ? this.setState({
@@ -329,10 +333,7 @@ var Dot = function (_React$Component4) {
   }, {
     key: 'tourStatusCheck',
     value: function tourStatusCheck(next) {
-      if (stepsArray.length === 0 + next) {
-        options.pulsey.tourComplete = true;
-        window[storage].setItem('tourComplete', true);
-      }
+      stepsArray.length === 0 + next || this.props.stepCount + next === pulseyTargets.length ? (options.pulsey.tourComplete = true, window[storage].setItem('tourComplete', true)) : null;
     }
   }, {
     key: 'render',
@@ -424,11 +425,17 @@ var Pulsey = function (_React$Component5) {
     key: 'dotClick',
     value: function dotClick() {
       this.setState({ step: options.dot.step });
+      options.pulsey.tourStarted = true;
+      window[storage].setItem('tourStarted', true);
     }
   }, {
     key: 'incrementStepCount',
     value: function incrementStepCount(stepCountChange) {
-      this.state.stepCount < pulseyTargets.length ? this.setState({ stepCount: this.state.stepCount + stepCountChange }) : null;
+      if (stepCountChange > 0) {
+        this.state.stepCount < pulseyTargets.length ? this.setState({ stepCount: this.state.stepCount + stepCountChange }) : null;
+      } else {
+        this.state.stepCount > 0 ? this.setState({ stepCount: this.state.stepCount + stepCountChange }) : null;
+      }
     }
   }, {
     key: 'close',
@@ -456,8 +463,10 @@ var Pulsey = function (_React$Component5) {
       window.onscroll = function () {
         this.setState({ pa: pulseyTargets });
       }.bind(this);
-      options.pulsey.tourStarted = true;
-      window[storage].setItem('tourStarted', true);
+      if (!options.welcome.display) {
+        options.pulsey.tourStarted = true;
+        window[storage].setItem('tourStarted', true);
+      }
     }
   }, {
     key: 'render',
@@ -558,7 +567,7 @@ var options = {
     tourSkipped: []
   },
   dot: {
-    step: 1,
+    step: null,
     offset: {
       top: 0,
       left: 0
@@ -589,7 +598,7 @@ var options = {
     display: true
   },
   welcome: {
-    display: false
+    display: true
   },
   farewell: {
     display: false
@@ -598,7 +607,6 @@ var options = {
     clickToClose: true
   },
   storage: 'localStorage',
-  welcome: {},
   progress: {},
   removeStepOnClick: false,
   hideDotOnClick: true
@@ -636,9 +644,6 @@ var styles = {
       transform: 'translate(-50%,-50%)',
       background: '#fff'
     }
-  },
-  highlighter: {
-    background: '#fbfbfb'
   },
   welcome: {
     background: '#f67b45'

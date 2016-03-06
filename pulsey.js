@@ -46,17 +46,8 @@ class Highlighter extends React.Component {
           transform: 'translate(-50%,-50%)',
           background: '#fff',
         };
-    if (options.welcome.display && !this.props.step) {
-      var highlighter =
-      this.props.step == null ? welcomeStyles : Object.assign(highlighterStyles,styles.highlighter);
-    }
-    else if (options.farewell.display && !this.props.step) {
-    }
-    else if (options.highlighter.display && this.props.step != null) {
-      Object.assign(highlighterStyles,styles.highlighter);
-    }
-    var highlighter = options.highlighter.display && step >= 0 ?
-      <div style={highlighterStyles}></div> : null;
+    var highlighter = options.highlighter.display ?
+      <div style={step < 0 && !options.pulsey.tourStarted ? welcomeStyles : highlighterStyles}></div> : null;
     setTimeout(function() {
       for (var i = 0; i < pulseyTargets.length; i++) {
         document.getElementsByClassName('ps-anchor')[i].className = 'ps-anchor';
@@ -71,7 +62,7 @@ class Highlighter extends React.Component {
           leave={{animation: "fadeOut"}}
           duration={3000}
           className={'pulsey-tour'}>
-          {highlighter}
+          {!options.pulsey.tourComplete ? highlighter : null}
         </VelocityTransitionGroup>
       </div>
     );
@@ -98,12 +89,15 @@ class Tooltip extends React.Component {
           if (this.props.stepCount < pulseyTargets.length) {
             this.props.nextStep(1);
           }
+          else if (this.props.stepCount === pulseyTargets.length) {
+            this.props.close();
+          }
         }
         else if (e.keyCode === 37) {
           stepsArray.sort(function(a,b) {
             return b - a;
           });
-          if (this.props.stepCount < pulseyTargets.length) {
+          if (this.props.stepCount < pulseyTargets.length && this.props.stepCount > 0) {
             this.props.nextStep(-1);
           }
         }
@@ -138,7 +132,11 @@ class Tooltip extends React.Component {
           <div style={tooltipStyle} className={"pulsey-tour pulsey-tooltip-" + this.props.id}>
             <div style={styles.tooltip.close} onClick={this.props.close}> + </div>
               <div style={styles.tooltip.header}>{tooltip.header}</div>
-              <div style={styles.tooltip.note}>{tooltip.note}</div>
+              <div style={styles.tooltip.note}>
+                {tooltip.note}
+              </div>
+              <br/> step: {this.props.id}
+              <br/> stepCount: {this.props.stepCount}
               <div style={styles.tooltip.buttons}>
                 <button style={styles.tooltip.exitButton} onClick={this.props.skip}>Skip</button>
                 <button
@@ -207,6 +205,7 @@ class Dot extends React.Component {
       }
       else {
         this.props.nextStep(stepsArray[step + 1]);
+        this.props.stepCount === pulseyTargets.length ? this.close() : null;
       }
     }
     options.removeStepOnClick || options.hideDotOnClick ?
@@ -242,10 +241,10 @@ class Dot extends React.Component {
     this.props.skip();
   }
   tourStatusCheck(next) {
-    if (stepsArray.length === 0 + next) {
-      options.pulsey.tourComplete = true;
-      window[storage].setItem('tourComplete',true);
-    }
+    stepsArray.length === 0 + next || this.props.stepCount + next === pulseyTargets.length ? (
+      options.pulsey.tourComplete = true,
+      window[storage].setItem('tourComplete',true)
+    ) : null;
   }
   render() {
     var pa = this.props.pa;
@@ -318,10 +317,18 @@ class Pulsey extends React.Component {
   }
   dotClick() {
     this.setState({step: options.dot.step});
+    options.pulsey.tourStarted = true;
+    window[storage].setItem('tourStarted',true);
   }
   incrementStepCount(stepCountChange) {
-    this.state.stepCount < pulseyTargets.length ?
-    this.setState({stepCount: this.state.stepCount + stepCountChange}) : null;
+    if (stepCountChange > 0) {
+      this.state.stepCount < pulseyTargets.length ?
+      this.setState({stepCount: this.state.stepCount + stepCountChange}) : null;
+    }
+    else {
+      this.state.stepCount > 0 ?
+      this.setState({stepCount: this.state.stepCount + stepCountChange}) : null;
+    }
   }
   close() {
     this.setState({step: null});
@@ -343,8 +350,10 @@ class Pulsey extends React.Component {
     window.onscroll = function () {
       this.setState({pa: pulseyTargets});
     }.bind(this);
-    options.pulsey.tourStarted = true;
-    window[storage].setItem('tourStarted',true);
+    if (!options.welcome.display) {
+      options.pulsey.tourStarted = true;
+      window[storage].setItem('tourStarted',true);
+    }
   }
   render() {
     var tourStyles = {
@@ -436,7 +445,7 @@ var options = {
     tourSkipped: [],
   },
   dot: {
-    step: 1,
+    step: null,
     offset: {
       top: 0,
       left: 0,
@@ -467,7 +476,7 @@ var options = {
     display: true,
   },
   welcome: {
-    display: false,
+    display: true,
   },
   farewell: {
     display: false,
@@ -476,7 +485,6 @@ var options = {
     clickToClose: true,
   },
   storage: 'localStorage',
-  welcome: {},
   progress: {},
   removeStepOnClick: false,
   hideDotOnClick: true,
@@ -517,9 +525,6 @@ var styles = {
       transform: 'translate(-50%,-50%)',
       background: '#fff',
     }
-  },
-  highlighter: {
-    background: '#fbfbfb',
   },
   welcome: {
     background: '#f67b45',

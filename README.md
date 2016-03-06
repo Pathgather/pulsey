@@ -92,13 +92,11 @@ STYLES
 
 
 NEXT FEATURES
-Completed: 8/15
+Completed: 8/14
 
-- add loopTillComplete option, set to true initially.  if false, you can't skip beyond last step to first.
-- add hideDotOnClick option that does as described.  allows removeStepOnClick to be true without having to keep showing the dot.
 - basic optional welcome screen and finish screen with customizable header, message, button, etc.
+- add loopTillComplete option, set to true initially.  if false, you can't skip beyond last step to first.
 - progress/step badges and/or progress bar
-- allow user to put html inside tooltip via data attribute
 - tooltips recognize whether they are overflowing the screen and reposition themselves automatically, unless user decides to turn this functionality off
 - provide user with multiple pre-designed options for look and animation of dots and tooltips just by changing one option.  or they can choose to use their own css.
 
@@ -112,11 +110,7 @@ FEATURES
 
 ISSUES
 
-- remove highlight-back when stepsArray is empty
-- add highlight-target to correct element on dotClick, not just nextStep
-- only want to remove highlight-target class from target element after highlighter has completed transition to next step
 - options are not currently specific to each dot and each tooltip - they're global and shouldn't be
-- on screenresize (and probably scroll) don't want highlight-back element to have a transition duration (currently lags and looks bad)
 - tooltip needs to be based off the outside of the pulsey target, not off the center
 - only want to transition underlay on dotclick() and close() (not nextStep())
 - nextLabel doesn't change to 'finish' when removeStepOnClick is false
