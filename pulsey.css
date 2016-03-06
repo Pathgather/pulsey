@@ -13,7 +13,7 @@ body {
   box-sizing: border-box;
 }
 
-.wrapper div {
+.wrapper .ps-anchor {
   background: #f67b45;
   width: 300px;
   height: 100px;
@@ -32,7 +32,6 @@ body {
 .highlight-target {
   z-index: 100000;
   position: relative !important;
-  /*background: tomato !important;*/
 }
 
 @-webkit-keyframes sk-scaleout {

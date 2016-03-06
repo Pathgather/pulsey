@@ -45,9 +45,23 @@ class Highlighter extends React.Component {
           top: '50%',
           transform: 'translate(-50%,-50%)',
           background: '#fff',
-        };
-    var highlighter = options.highlighter.display ?
-      <div style={step < 0 && !options.pulsey.tourStarted ? welcomeStyles : highlighterStyles}></div> : null;
+          transition: this.props.resize ? 'none' : 'all 0.3s ease-in',
+        },
+        farewellStyles = {
+          width: 500,
+          height: 300,
+          position: 'absolute',
+          left: '50%',
+          top: '50%',
+          transform: 'translate(-50%,-50%)',
+          background: '#555',
+          borderRadius: 3,
+          transition: this.props.resize ? 'none' : 'all 0.3s ease-in',
+        };console.log(this.props.step);
+    var welcome = !window[storage].getItem('tourStarted') && options.welcome.display;
+    var farewell = options.pulsey.tourComplete && this.props.step !== null;
+    var highlighter = options.highlighter.display;
+    var showHighlighter = <div style={welcome ? welcomeStyles : farewell ? farewellStyles : highlighter ? highlighterStyles : null}></div>
     setTimeout(function() {
       for (var i = 0; i < pulseyTargets.length; i++) {
         document.getElementsByClassName('ps-anchor')[i].className = 'ps-anchor';
@@ -62,7 +76,7 @@ class Highlighter extends React.Component {
           leave={{animation: "fadeOut"}}
           duration={3000}
           className={'pulsey-tour'}>
-          {!options.pulsey.tourComplete ? highlighter : null}
+          {welcome || this.props.step !== null ? showHighlighter : null}
         </VelocityTransitionGroup>
       </div>
     );
@@ -340,6 +354,7 @@ class Pulsey extends React.Component {
     window[storage].setItem('tourSkipped',true);
   }
   componentDidMount() {
+    window[storage].getItem('tourStarted') ? options.pulsey.tourStarted = true : null;
     window.onresize = function () {
       this.setState({pa: pulseyTargets, resize: true});
       clearTimeout(window.resizeFinished);
@@ -399,6 +414,8 @@ class Pulsey extends React.Component {
 }
 
 var psAnchors = document.getElementsByClassName('ps-anchor'),
+    psWelcome = document.getElementsByClassName('ps-welcome')[0],
+    psFarewell = document.getElementsByClassName('ps-farewell')[0],
     pulseyTargets = Array.prototype.slice.call(psAnchors),
     pulseyTargetsSteps = [],
     noStepGiven = 0;
@@ -411,6 +428,9 @@ for (var i = 0; i < pulseyTargets.length; i++) {
     pulseyTargetsSteps.push(parseInt(step));
   }
 }
+
+console.log(psWelcome);
+console.log(psFarewell);
 
 var ptsClone = pulseyTargetsSteps.slice();
 ptsClone.sort(function(a,b) {
@@ -476,17 +496,17 @@ var options = {
     display: true,
   },
   welcome: {
-    display: true,
+    display: psWelcome,
   },
   farewell: {
-    display: false,
+    display: psFarewell,
   },
   underlay: {
     clickToClose: true,
   },
   storage: 'localStorage',
   progress: {},
-  removeStepOnClick: false,
+  removeStepOnClick: true,
   hideDotOnClick: true,
 }
 

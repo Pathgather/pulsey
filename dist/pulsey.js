@@ -85,9 +85,24 @@ var Highlighter = function (_React$Component2) {
         left: '50%',
         top: '50%',
         transform: 'translate(-50%,-50%)',
-        background: '#fff'
-      };
-      var highlighter = options.highlighter.display ? _react2.default.createElement('div', { style: step < 0 && !options.pulsey.tourStarted ? welcomeStyles : highlighterStyles }) : null;
+        background: '#fff',
+        transition: this.props.resize ? 'none' : 'all 0.3s ease-in'
+      },
+          farewellStyles = {
+        width: 500,
+        height: 300,
+        position: 'absolute',
+        left: '50%',
+        top: '50%',
+        transform: 'translate(-50%,-50%)',
+        background: '#555',
+        borderRadius: 3,
+        transition: this.props.resize ? 'none' : 'all 0.3s ease-in'
+      };console.log(this.props.step);
+      var welcome = !window[storage].getItem('tourStarted') && options.welcome.display;
+      var farewell = options.pulsey.tourComplete && this.props.step !== null;
+      var highlighter = options.highlighter.display;
+      var showHighlighter = _react2.default.createElement('div', { style: welcome ? welcomeStyles : farewell ? farewellStyles : highlighter ? highlighterStyles : null });
       setTimeout(function () {
         for (var i = 0; i < pulseyTargets.length; i++) {
           document.getElementsByClassName('ps-anchor')[i].className = 'ps-anchor';
@@ -105,7 +120,7 @@ var Highlighter = function (_React$Component2) {
             leave: { animation: "fadeOut" },
             duration: 3000,
             className: 'pulsey-tour' },
-          !options.pulsey.tourComplete ? highlighter : null
+          welcome || this.props.step !== null ? showHighlighter : null
         )
       );
     }
@@ -453,6 +468,7 @@ var Pulsey = function (_React$Component5) {
   }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
+      window[storage].getItem('tourStarted') ? options.pulsey.tourStarted = true : null;
       window.onresize = function () {
         this.setState({ pa: pulseyTargets, resize: true });
         clearTimeout(window.resizeFinished);
@@ -523,6 +539,8 @@ var Pulsey = function (_React$Component5) {
 }(_react2.default.Component);
 
 var psAnchors = document.getElementsByClassName('ps-anchor'),
+    psWelcome = document.getElementsByClassName('ps-welcome')[0],
+    psFarewell = document.getElementsByClassName('ps-farewell')[0],
     pulseyTargets = Array.prototype.slice.call(psAnchors),
     pulseyTargetsSteps = [],
     noStepGiven = 0;
@@ -534,6 +552,9 @@ for (var i = 0; i < pulseyTargets.length; i++) {
     pulseyTargetsSteps.push(parseInt(step));
   }
 }
+
+console.log(psWelcome);
+console.log(psFarewell);
 
 var ptsClone = pulseyTargetsSteps.slice();
 ptsClone.sort(function (a, b) {
@@ -598,17 +619,17 @@ var options = {
     display: true
   },
   welcome: {
-    display: true
+    display: psWelcome
   },
   farewell: {
-    display: false
+    display: psFarewell
   },
   underlay: {
     clickToClose: true
   },
   storage: 'localStorage',
   progress: {},
-  removeStepOnClick: false,
+  removeStepOnClick: true,
   hideDotOnClick: true
 };
 

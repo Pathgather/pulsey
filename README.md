@@ -95,7 +95,6 @@ NEXT FEATURES
 Completed: 8/14
 
 - basic optional welcome screen and finish screen with customizable header, message, button, etc.
-- add loopTillComplete option, set to true initially.  if false, you can't skip beyond last step to first.
 - progress/step badges and/or progress bar
 - tooltips recognize whether they are overflowing the screen and reposition themselves automatically, unless user decides to turn this functionality off
 - provide user with multiple pre-designed options for look and animation of dots and tooltips just by changing one option.  or they can choose to use their own css.
