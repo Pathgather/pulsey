@@ -33,9 +33,9 @@ class Highlighter extends React.Component {
           top: pos.top - 5 + window.scrollY,
           borderRadius: 3,
           boxShadow: '0 0 20px 3px rgba(255,255,255,0.25)',
-          transition: 'all 0.3s ease-in',
+          transition: this.props.resize ? 'none' : 'all 0.3s ease-in',
           zIndex: 99999,
-          background: 'white !important',
+          background: '#fff',
         },
         welcomeStyles = {
           width: 500,
@@ -44,7 +44,7 @@ class Highlighter extends React.Component {
           left: '50%',
           top: '50%',
           transform: 'translate(-50%,-50%)',
-          background: 'white',
+          background: '#fff',
         };
     if (options.welcome.display && !this.props.step) {
       var highlighter =
@@ -303,6 +303,7 @@ class Pulsey extends React.Component {
     super(props);
     this.state = {
       step: options.dot.step,
+      resize: false,
       pa: pulseyTargets,
       stepCount: 0,
       tourSkipped: false || window[storage].getItem('tourSkipped'),
@@ -332,7 +333,12 @@ class Pulsey extends React.Component {
   }
   componentDidMount() {
     window.onresize = function () {
-      this.setState({pa: pulseyTargets});
+      this.setState({pa: pulseyTargets, resize: true});
+      clearTimeout(window.resizeFinished);
+      window.resizeFinished = setTimeout(function(){
+        console.log('resizeFinished');
+        this.setState({resize: false});
+      }.bind(this), 250);
     }.bind(this);
     window.onscroll = function () {
       this.setState({pa: pulseyTargets});
@@ -375,6 +381,7 @@ class Pulsey extends React.Component {
             stepCount={this.state.stepCount}
             step={this.state.step}
             pa={this.state.pa}
+            resize={this.state.resize}
           />
         </VelocityTransitionGroup>
       </div>

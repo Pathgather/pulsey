@@ -74,9 +74,9 @@ var Highlighter = function (_React$Component2) {
         top: pos.top - 5 + window.scrollY,
         borderRadius: 3,
         boxShadow: '0 0 20px 3px rgba(255,255,255,0.25)',
-        transition: 'all 0.3s ease-in',
+        transition: this.props.resize ? 'none' : 'all 0.3s ease-in',
         zIndex: 99999,
-        background: 'white !important'
+        background: '#fff'
       },
           welcomeStyles = {
         width: 500,
@@ -85,7 +85,7 @@ var Highlighter = function (_React$Component2) {
         left: '50%',
         top: '50%',
         transform: 'translate(-50%,-50%)',
-        background: 'white'
+        background: '#fff'
       };
       if (options.welcome.display && !this.props.step) {
         var highlighter = this.props.step == null ? welcomeStyles : Object.assign(highlighterStyles, styles.highlighter);
@@ -402,6 +402,7 @@ var Pulsey = function (_React$Component5) {
 
     _this6.state = {
       step: options.dot.step,
+      resize: false,
       pa: pulseyTargets,
       stepCount: 0,
       tourSkipped: false || window[storage].getItem('tourSkipped')
@@ -446,7 +447,12 @@ var Pulsey = function (_React$Component5) {
     key: 'componentDidMount',
     value: function componentDidMount() {
       window.onresize = function () {
-        this.setState({ pa: pulseyTargets });
+        this.setState({ pa: pulseyTargets, resize: true });
+        clearTimeout(window.resizeFinished);
+        window.resizeFinished = setTimeout(function () {
+          console.log('resizeFinished');
+          this.setState({ resize: false });
+        }.bind(this), 250);
       }.bind(this);
       window.onscroll = function () {
         this.setState({ pa: pulseyTargets });
@@ -497,7 +503,8 @@ var Pulsey = function (_React$Component5) {
           _react2.default.createElement(Highlighter, {
             stepCount: this.state.stepCount,
             step: this.state.step,
-            pa: this.state.pa
+            pa: this.state.pa,
+            resize: this.state.resize
           })
         )
       );
