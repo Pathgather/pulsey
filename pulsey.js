@@ -5,10 +5,20 @@ require('./velocity.ui');
 
 class Underlay extends React.Component {
   render() {
+    var style = {
+        zIndex: '99997',
+        background: 'rgba(0,0,0,0.25)',
+        position: 'absolute',
+        left: '0',
+        top: '0',
+        width: '100vw',
+        height: '100vh',
+        position: 'fixed',
+    };
     var close = options.underlay.clickToClose ?
       this.props.close : null;
     var underlay =
-      <div style={styles.underlay} onClick={close}></div>
+      <div style={style} onClick={close}></div>
     var showUnderlay = this.props.id == this.props.step ? underlay : null;
     return (
       <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
@@ -35,68 +45,103 @@ class Highlighter extends React.Component {
     });
   }
   render() {
-    var step = pulseyTargetsSteps.indexOf(this.props.step);
-    var pa = pulseyTargets[step >= 0 ? step : 0],
-        pos = pa.getBoundingClientRect(),
-        targetStyle = window.getComputedStyle(pa,null),
-        fixed = targetStyle.getPropertyValue('position') === "fixed",
-        highlighterStyles = {
-          height: pos.height + 4,
-          width: pos.width + 4,
-          position: 'absolute',
-          left: pos.left - 2 + window.scrollX,
-          top: pos.top - 2 + window.scrollY,
-          borderRadius: 3,
-          boxShadow: '0 0 20px 3px rgba(255,255,255,0.5)',
-          transition: this.props.resize ? 'none' : 'all 0.3s ease-in',
-          zIndex: 99999,
-          background: '#fff',
-        },
-        welcomeStyles = {
-          width: 500,
-          minHeight: 300,
-          position: options.welcome.fixed ? 'fixed' : 'absolute',
-          left: '50%',
-          top: '50%',
-          transform: 'translate(-50%,-50%)',
-          background: '#555',
-          transition: this.props.resize ? 'none' : 'all 0.3s ease-in',
-          padding: '10px 30px',
-          borderRadius: 3,
-          zIndex: 99999,
-          boxShadow: '0 0 120px 30px rgba(246, 123, 69, 0.4)',
-        },
-        farewellStyles = {
-          width: 500,
-          minHeight: 300,
-          position: options.farewell.fixed ? 'fixed' : 'absolute',
-          left: '50%',
-          top: '50%',
-          transform: 'translate(-50%,-50%)',
-          background: '#555',
-          borderRadius: 3,
-          padding: '10px 30px',
-          transition: this.props.resize ? 'none' : 'all 0.3s ease-in',
-          zIndex: 99999,
-          boxShadow: '0 0 120px 30px rgba(246, 123, 69, 0.4)',
-        };
-    var welcome = !window[storage].getItem('tourStarted') && options.welcome.display;
-    var farewell = options.pulsey.tourComplete && this.props.step !== null;
-    var highlighter = options.highlighter.display;
-    var welcomeContent = welcome ?
+    var welcome = {
+      header: {
+        display: 'flex',
+        justifyContent: 'center',
+        fontWeight: '600',
+        lineHeight: '2em',
+        fontSize: 28,
+        color: '#222',
+      },
+      note: {
+        display: 'flex',
+        justifyContent: 'center',
+        fontWeight: '300',
+        fontSize: 18,
+        color: '#111',
+      },
+      button: {
+        width: '125px',
+        height: '40px',
+        borderRadius: '2px',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+        background: '#f67b45',
+        color: '#fff',
+        fontSize: 13,
+        fontWeight: 300,
+        left: '50%',
+        position: 'absolute',
+        textTransform: 'uppercase',
+        bottom: '25px',
+        border: 'none',
+        cursor: 'pointer',
+        outline: 'none',
+        transform: 'translateX(-50%)',
+      },
+    },
+    step = pulseyTargetsSteps.indexOf(this.props.step),
+    pa = pulseyTargets[step >= 0 ? step : 0],
+    pos = pa.getBoundingClientRect(),
+    targetStyle = window.getComputedStyle(pa,null),
+    fixed = targetStyle.getPropertyValue('position') === "fixed",
+    highlighterPosition = {
+      height: pos.height + 4,
+      width: pos.width + 4,
+      position: 'absolute',
+      left: pos.left - 2 + window.scrollX,
+      top: pos.top - 2 + window.scrollY,
+      borderRadius: 3,
+      boxShadow: '0 0 20px 3px rgba(255,255,255,0.5)',
+      transition: this.props.resize ? 'none' : 'all 0.3s ease-in',
+      zIndex: 99999,
+      background: '#fff',
+    },
+    welcomePosition = {
+      width: 500,
+      minHeight: 300,
+      position: options.welcome.fixed ? 'fixed' : 'absolute',
+      left: '50%',
+      top: '50%',
+      transform: 'translate(-50%,-50%)',
+      background: '#555',
+      transition: this.props.resize ? 'none' : 'all 0.3s ease-in',
+      padding: '10px 30px',
+      borderRadius: 3,
+      zIndex: 99999,
+      boxShadow: '0 0 120px 30px rgba(246, 123, 69, 0.4)',
+    },
+    farewellPosition = {
+      width: 500,
+      minHeight: 300,
+      position: options.farewell.fixed ? 'fixed' : 'absolute',
+      left: '50%',
+      top: '50%',
+      transform: 'translate(-50%,-50%)',
+      background: '#555',
+      borderRadius: 3,
+      padding: '10px 30px',
+      transition: this.props.resize ? 'none' : 'all 0.3s ease-in',
+      zIndex: 99999,
+      boxShadow: '0 0 120px 30px rgba(246, 123, 69, 0.4)',
+    };
+    var showWelcome = !window[storage].getItem('tourStarted') && options.welcome.display;
+    var showFarewell = options.pulsey.tourComplete && this.props.step !== null;
+    var showHighlighter = options.highlighter.display;
+    var welcomeContent = showWelcome ?
       <div>
-        <div style={styles.welcome.header}>{welcomeHeader}</div>
-        <div style={styles.welcome.note}>{welcomeNote}</div>
-        <button style={styles.welcome.button} onClick={this.getStarted.bind(this)}>Get Started</button>
+        <div style={welcome.header}>{welcomeHeader}</div>
+        <div style={welcome.note}>{welcomeNote}</div>
+        <button style={welcome.button} onClick={this.getStarted.bind(this)}>Get Started</button>
       </div> : null;
-    var farewellContent = farewell ?
+    var farewellContent = showFarewell ?
       <div>
-        <div style={styles.welcome.header}>{farewellHeader}</div>
-        <div style={styles.welcome.note}>{farewellNote}</div>
-        <button style={styles.welcome.button} onClick={this.endTour.bind(this)}>Done</button>
+        <div style={welcome.header}>{farewellHeader}</div>
+        <div style={welcome.note}>{farewellNote}</div>
+        <button style={welcome.button} onClick={this.endTour.bind(this)}>Done</button>
       </div> : null;
-    var showHighlighter =
-      <div style={welcome ? welcomeStyles : farewell ? farewellStyles : highlighter ? highlighterStyles : null}>
+    var flexyBox =
+      <div style={showWelcome ? welcomePosition : showFarewell ? farewellPosition : showHighlighter ? highlighterPosition : null}>
         {welcomeContent}
         {farewellContent}
       </div>;
@@ -114,7 +159,7 @@ class Highlighter extends React.Component {
           leave={{animation: "fadeOut"}}
           duration={3000}
           className={'pulsey-tour'}>
-          {welcome || this.props.step !== null && !this.state.endTour ? showHighlighter : null}
+          {welcome || this.props.step !== null && !this.state.endTour ? flexyBox : null}
         </VelocityTransitionGroup>
       </div>
     );
@@ -168,31 +213,127 @@ class Tooltip extends React.Component {
         tooltipNote = pa.getAttribute('data-ps-note'),
         step = parseInt(pa.getAttribute('data-ps-step')),
         customHTML = pa.getAttribute('data-ps-custom'),
-        tooltip = {
+        tooltipContent = {
           header: tooltipHeader ? tooltipHeader : options.tooltip.content.header,
           note: tooltipNote ? tooltipNote : options.tooltip.content.note,
         },
-        position = {
+        tipSide = options.tooltip.tip.side,
+        tipSize = options.tooltip.tip.size,
+        style = {
+          tooltip: {
+            zIndex: '99999',
+            background: '#fff',
+            padding: '15',
+            width: options.tooltip.width,
+            borderRadius: '2',
+            transform: 'translate(-50%,-50%)',
+            cursor: 'pointer',
+            boxSizing: 'border-box',
+            header: {
+              display: 'flex',
+              justifyContent: 'center',
+              fontWeight: '600',
+              lineHeight: '2em',
+            },
+            note: {
+              display: 'flex',
+              justifyContent: 'center',
+              fontWeight: '300',
+            },
+            tip: {
+              width: '0',
+              height: '0',
+              borderLeft: tipSide == 'right' ? tipSize + 'px solid #fff' : tipSize + 'px solid transparent',
+              borderBottom: tipSide == 'top' ? tipSize + 'px solid #fff' : tipSize + 'px solid transparent',
+              borderRight: tipSide == 'left' ? tipSize + 'px solid #fff' : tipSize + 'px solid transparent',
+              borderTop: tipSide == 'bottom' ? tipSize + 'px solid #fff' : tipSize + 'px solid transparent',
+              transform: tipSide == 'right' || tipSide == 'left' ? 'translateY(-50%)' : tipSide == 'bottom' ? 'translate(-50%, 100%)' : 'translate(-50%, 0)',
+              left: tipSide == 'top' || tipSide == 'bottom' ? '50%' : tipSide == 'left' ? '-' + 2*tipSize : options.tooltip.width,
+              top: tipSide == 'right' || tipSide == 'left' ? '50%' : tipSide == 'top' ? '-' + 2*tipSize : null,
+              bottom: tipSide == 'bottom' ? '0' : null,
+              position: 'absolute',
+            },
+          },
+          progress: {
+            width: 24,
+            height: 24,
+            background: '#4c93ea',
+            borderRadius: '100%',
+            position: 'absolute',
+            left: 0,
+            top: 0,
+            transform: 'translate(-50%,-50%)',
+            color: '#fff',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            fontSize: 13,
+            fontWeight: 300,
+            boxShadow: '0 0 20px rgba(76, 147, 234, 0.85)',
+          },
+          close: {
+            color: '#333',
+            transform: 'rotate(45deg)',
+            position: 'absolute',
+            top: '5',
+            right: '12',
+            fontSize: '25',
+          },
+          buttons: {
+            position: 'relative',
+            width: '100%',
+            marginTop: '20',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          },
+          nextButton: {
+            padding: '4',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            border: '1px solid #ddd',
+            background: '#fff',
+            borderRadius: '2',
+            color: '#555',
+            width: '50',
+            outline: 'none',
+            cursor: 'pointer',
+          },
+          exitButton: {
+            padding: '4',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            border: 'none',
+            background: '#fff',
+            color: '#aaa',
+            width: '50',
+            outline: 'none',
+            cursor: 'pointer',
+          },
+        },
+        tooltipPosition = {
           top: fixed ? pos.top + pos.height + options.tooltip.offset.top : pos.top + pos.height + options.tooltip.offset.top + window.scrollY,
-          left: fixed ? pos.left + pos.width/2 - styles.tooltip.width/2 + options.tooltip.offset.left : pos.left + pos.width/2 - styles.tooltip.width/2 + options.tooltip.offset.left + window.scrollX,
+          left: fixed ? pos.left + pos.width/2 - style.tooltip.width/2 + options.tooltip.offset.left : pos.left + pos.width/2 - style.tooltip.width/2 + options.tooltip.offset.left + window.scrollX,
           position: fixed ? 'fixed' : 'absolute',
         },
-        progressIndicator = options.tooltip.progress ?             <div style={styles.progress}> {this.props.stepCount+1} </div> : null,
-        tooltipStyle = Object.assign(position,styles.tooltip),
+        progressIndicator = options.tooltip.progress ?             <div style={style.progress}> {this.props.stepCount+1} </div> : null,
+        tooltipStyle = Object.assign({},tooltipPosition,style.tooltip),
         tip = options.tooltip.tip.display ?
-          <div style={styles.tooltip.tip}></div> : null,
+          <div style={style.tooltip.tip}></div> : null,
         tooltip =
           <div style={tooltipStyle} className={"pulsey-tour pulsey-tooltip-" + this.props.id}>
-            <div style={styles.tooltip.close} onClick={this.props.close}> + </div>
+            <div style={style.close} onClick={this.props.close}> + </div>
             {progressIndicator}
-              <div style={styles.tooltip.header}>{tooltip.header}</div>
-              <div style={styles.tooltip.note}>
-                {tooltip.note}
+              <div style={style.tooltip.header}>{tooltipContent.header}</div>
+              <div style={style.tooltip.note}>
+                {tooltipContent.note}
               </div>
-              <div style={styles.tooltip.buttons}>
-                <button style={styles.tooltip.exitButton} onClick={this.props.skip}>Skip</button>
+              <div style={style.buttons}>
+                <button style={style.exitButton} onClick={this.props.skip}>Skip</button>
                 <button
-                  style={styles.tooltip.nextButton}
+                  style={style.nextButton}
                   onClick={this.nextStep.bind(this)}>
                   {nextLabel}
                 </button>
@@ -200,6 +341,7 @@ class Tooltip extends React.Component {
               {tip}
           </div>,
         showTooltip = this.props.id == this.props.step ? tooltip : null;
+        console.log()
     return (
       <VelocityTransitionGroup enter={{animation: "transition.expandIn"}} leave={{animation: "transition.expandOut"}}>
         {showTooltip}
@@ -300,26 +442,47 @@ class Dot extends React.Component {
     ) : null;
   }
   render() {
-    var pa = this.props.pa;
-    var pos = pa.getBoundingClientRect();
-    var targetStyle = window.getComputedStyle(pa,null),
-        fixed = targetStyle.getPropertyValue('position') === "fixed";
-    var position = {
-      top: fixed ? pos.top + pos.height/2 + options.dot.offset.top : pos.top + pos.height/2 + options.dot.offset.top + window.scrollY,
-      left: fixed ? pos.left + pos.width/2 + options.dot.offset.left : pos.left + pos.width/2 + options.dot.offset.left + window.scrollX,
-      position: fixed ? 'fixed' : 'absolute',
-    }
-    var dotStyle = Object.assign(position,styles.dot.back);
-    var dot =
-      <div
-        style={dotStyle}
-        className={"pulsey-tour pulsey-dot-" + this.props.id}
-        onClick={this.dotClick.bind(this)}>
-        <div
-          style={styles.dot.front}
-          className="spinner">
-        </div>
-      </div>
+    var pa = this.props.pa,
+        pos = pa.getBoundingClientRect(),
+        targetStyle = window.getComputedStyle(pa,null),
+        fixed = targetStyle.getPropertyValue('position') === "fixed",
+        style = {
+          position: {
+            top: fixed ? pos.top + pos.height/2 + options.dot.offset.top : pos.top + pos.height/2 + options.dot.offset.top + window.scrollY,
+            left: fixed ? pos.left + pos.width/2 + options.dot.offset.left : pos.left + pos.width/2 + options.dot.offset.left + window.scrollX,
+            position: fixed ? 'fixed' : 'absolute',
+          },
+          dot: {
+            zIndex: '99997',
+            size: '25',
+            cursor: 'pointer',
+          },
+          backDot: {
+            width: '25',
+            height: '25',
+            borderRadius: '100%',
+            transform: 'translate(-50%,-50%)',
+            background: 'rgba(255,255,255,0.2)',
+          },
+          frontDot: {
+            width: '25',
+            height: '25',
+            cursor: 'pointer',
+            transform: 'translate(-50%,-50%)',
+            background: '#fff',
+          }
+        },
+        dotPosition = Object.assign({}, style.position, style.backDot),
+        dot =
+          <div
+            style={dotPosition}
+            className={"pulsey-tour pulsey-dot-" + this.props.id}
+            onClick={this.dotClick.bind(this)}>
+            <div
+              style={style.frontDot}
+              className="spinner">
+            </div>
+          </div>;
     return (
       <div>
         <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
@@ -565,153 +728,7 @@ for (var i = 0; i < pulseyTargets.length; i++) {
   }
 }
 
-/// ASSORTED VARIABLES
-var tipSide = options.tooltip.tip.side;
-var tipSize = options.tooltip.tip.size;
-
-var styles = {
-  dot: {
-    zIndex: '99997',
-    size: '25',
-    cursor: 'pointer',
-    back: {
-      width: '25',
-      height: '25',
-      borderRadius: '100%',
-      transform: 'translate(-50%,-50%)',
-      background: 'rgba(255,255,255,0.2)',
-    },
-    front: {
-      width: '25',
-      height: '25',
-      cursor: 'pointer',
-      transform: 'translate(-50%,-50%)',
-      background: '#fff',
-    }
-  },
-  welcome: {
-    header: {
-      display: 'flex',
-      justifyContent: 'center',
-      fontWeight: '600',
-      lineHeight: '2em',
-      fontSize: 28,
-      color: '#222',
-    },
-    note: {
-      display: 'flex',
-      justifyContent: 'center',
-      fontWeight: '300',
-      fontSize: 18,
-      color: '#111',
-    },
-    button: {
-      width: '125px',
-      height: '40px',
-      borderRadius: '2px',
-      boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
-      background: '#f67b45',
-      color: '#fff',
-      fontSize: 13,
-      fontWeight: 300,
-      left: '50%',
-      position: 'absolute',
-      textTransform: 'uppercase',
-      bottom: '25px',
-      border: 'none',
-      cursor: 'pointer',
-      outline: 'none',
-      transform: 'translateX(-50%)',
-    },
-  },
-  farewell: {
-    background: '#4c93ea',
-  },
-  tooltip: {
-    zIndex: '99999',
-    background: '#fff',
-    padding: '15',
-    width: options.tooltip.width,
-    borderRadius: '2',
-    transform: 'translate(-50%,-50%)',
-    cursor: 'pointer',
-    boxSizing: 'border-box',
-    header: {
-      display: 'flex',
-      justifyContent: 'center',
-      fontWeight: '600',
-      lineHeight: '2em',
-    },
-    note: {
-      display: 'flex',
-      justifyContent: 'center',
-      fontWeight: '300',
-    },
-    buttons: {
-      position: 'relative',
-      width: '100%',
-      marginTop: '20',
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-    },
-    nextButton: {
-      padding: '4',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      border: '1px solid #ddd',
-      background: '#fff',
-      borderRadius: '2',
-      color: '#555',
-      width: '50',
-      outline: 'none',
-      cursor: 'pointer',
-    },
-    exitButton: {
-      padding: '4',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      border: 'none',
-      background: '#fff',
-      color: '#aaa',
-      width: '50',
-      outline: 'none',
-      cursor: 'pointer',
-    },
-    tip: {
-      width: '0',
-      height: '0',
-      borderLeft: tipSide == 'right' ? tipSize + 'px solid #fff' : tipSize + 'px solid transparent',
-      borderBottom: tipSide == 'top' ? tipSize + 'px solid #fff' : tipSize + 'px solid transparent',
-      borderRight: tipSide == 'left' ? tipSize + 'px solid #fff' : tipSize + 'px solid transparent',
-      borderTop: tipSide == 'bottom' ? tipSize + 'px solid #fff' : tipSize + 'px solid transparent',
-      transform: tipSide == 'right' || tipSide == 'left' ? 'translateY(-50%)' : tipSide == 'bottom' ? 'translate(-50%, 100%)' : 'translate(-50%, 0)',
-      left: tipSide == 'top' || tipSide == 'bottom' ? '50%' : tipSide == 'left' ? '-' + 2*tipSize : options.tooltip.width,
-      top: tipSide == 'right' || tipSide == 'left' ? '50%' : tipSide == 'top' ? '-' + 2*tipSize : null,
-      bottom: tipSide == 'bottom' ? '0' : null,
-      position: 'absolute',
-    },
-    close: {
-      color: '#333',
-      transform: 'rotate(45deg)',
-      position: 'absolute',
-      top: '5',
-      right: '12',
-      fontSize: '25',
-    },
-  },
-  underlay: {
-    zIndex: '99997',
-    background: 'rgba(0,0,0,0.25)', //'rgba(76,147,234,0.4)',
-    position: 'absolute',
-    left: '0',
-    top: '0',
-    width: '100vw',
-    height: '100vh',
-    position: 'fixed',
-  },
+var styles = { //just for purposes of demo
   reset: {
     width: '150px',
     height: '50px',
@@ -726,25 +743,7 @@ var styles = {
     outline: 'none',
     transform: 'translateX(-50%)',
   },
-  progress: {
-    width: 24,
-    height: 24,
-    background: '#4c93ea',
-    borderRadius: '100%',
-    position: 'absolute',
-    left: 0,
-    top: 0,
-    transform: 'translate(-50%,-50%)',
-    color: '#fff',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    fontSize: 13,
-    fontWeight: 300,
-    boxShadow: '0 0 20px rgba(76, 147, 234, 0.85)',
-  }
 }
-
 
 function pulsey() {
   ReactDOM.render(<Pulsey/>,
