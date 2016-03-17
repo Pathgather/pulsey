@@ -880,11 +880,17 @@ for (var i = 0; i < pulseyTargets.length; i++) {
   }
 }
 
-function pulsey() {
+function pulsey(userOptions) {
+  Object.assign(options, userOptions);
   _reactDom2.default.render(_react2.default.createElement(Pulsey, null), document.getElementById('pulsey'));
 }
 
-pulsey();
+// END USER FILE START
+
+pulsey({
+  option1: 'nice!',
+  option2: 'even nicer!'
+});
 },{"./velocity.ui":244,"react":161,"react-dom":3,"velocity-react":162}],2:[function(require,module,exports){
 // shim for using process in browser
 

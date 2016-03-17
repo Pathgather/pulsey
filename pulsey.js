@@ -728,9 +728,15 @@ for (var i = 0; i < pulseyTargets.length; i++) {
   }
 }
 
-function pulsey() {
+function pulsey(userOptions) {
+  Object.assign(options,userOptions);
   ReactDOM.render(<Pulsey/>,
   document.getElementById('pulsey'));
 }
 
-pulsey();
+// END USER FILE START
+
+pulsey({
+  option1: 'nice!',
+  option2: 'even nicer!',
+});
