@@ -747,7 +747,7 @@ var Pulsey = function (_React$Component5) {
         dots,
         _react2.default.createElement(
           'button',
-          { style: styles.reset, onClick: this.reset.bind(this) },
+          { className: 'reset', onClick: this.reset.bind(this) },
           'Reset Dots'
         )
       ) : null;
@@ -879,23 +879,6 @@ for (var i = 0; i < pulseyTargets.length; i++) {
     targetsArray.splice(i, 1);
   }
 }
-
-var styles = { //just for purposes of demo
-  reset: {
-    width: '150px',
-    height: '50px',
-    borderRadius: '2px',
-    boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
-    background: '#555',
-    left: '50%',
-    bottom: '7.5vh',
-    position: 'fixed',
-    border: 'none',
-    cursor: 'pointer',
-    outline: 'none',
-    transform: 'translateX(-50%)'
-  }
-};
 
 function pulsey() {
   _reactDom2.default.render(_react2.default.createElement(Pulsey, null), document.getElementById('pulsey'));

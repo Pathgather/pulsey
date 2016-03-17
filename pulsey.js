@@ -597,7 +597,7 @@ class Pulsey extends React.Component {
     var pulseyTour = !this.state.tourSkipped ?
       <div style={tourStyles}>
         {dots}
-        <button style={styles.reset} onClick={this.reset.bind(this)}>Reset Dots</button>
+        <button className={'reset'} onClick={this.reset.bind(this)}>Reset Dots</button>
       </div> : null;
     return (
       <div>
@@ -726,23 +726,6 @@ for (var i = 0; i < pulseyTargets.length; i++) {
     stepsArray.splice(i,1);
     targetsArray.splice(i,1);
   }
-}
-
-var styles = { //just for purposes of demo
-  reset: {
-    width: '150px',
-    height: '50px',
-    borderRadius: '2px',
-    boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
-    background: '#555',
-    left: '50%',
-    bottom: '7.5vh',
-    position: 'fixed',
-    border: 'none',
-    cursor: 'pointer',
-    outline: 'none',
-    transform: 'translateX(-50%)',
-  },
 }
 
 function pulsey() {

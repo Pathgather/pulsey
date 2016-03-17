@@ -84,14 +84,15 @@ STYLES // readme forthcoming - still need to determine what needs to be customiz
 - progress
 
 PLANNED IMPROVEMENTS
+- pass options through props
+- move components into different source files then have an index.js that combines them all
 - think about how it would work for someone using a react app, with html actually being jsx
 - consider giving alternative to data attributes (pass in through javascript)
 - make sure that whenever app rerenders/receives new data Pulsey recognizes this and updates
-- consider putting all styles into components
-- move components into different source files then have an index.js that combines them all
-- potentially wrap the init functions (that grab ps-anchor targets) in a function and call from within Pulsey
+- potentially wrap the init functions (that grab ps-anchor targets) in a function and call from within Pulsey (why, again?)
 - find a way to remove need for all css - make all javascript
 - give user a way to modify styles of each individual dot - probably need to object.assign each styles object for each component with whatever the user passes in via pulsey()
+- use velocity in place of keyframes
 
 UPCOMING FEATURES
 - customizable look and animation of dots and tooltips
