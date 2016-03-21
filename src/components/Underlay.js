@@ -1,6 +1,9 @@
-console.log('yebo');
-export class Underlay extends React.Component {
+import React from 'react';
+import {VelocityReact, VelocityComponent, VelocityTransitionGroup} from 'velocity-react';
+
+export default class Underlay extends React.Component {
   render() {
+    var options = this.props.options;
     var style = {
         zIndex: '99997',
         background: 'rgba(0,0,0,0.25)',

@@ -83,26 +83,25 @@ STYLES // readme forthcoming - still need to determine what needs to be customiz
 - farewell
 - progress
 
-PLANNED IMPROVEMENTS
-- pass options through props
-- move components into different source files then have an index.js that combines them all
-- think about how it would work for someone using a react app, with html actually being jsx
-- consider giving alternative to data attributes (pass in through javascript)
+NEXT
+- animate pulses via velocity
+- ensure it works with a react app (not html-based)
 - make sure that whenever app rerenders/receives new data Pulsey recognizes this and updates
-- potentially wrap the init functions (that grab ps-anchor targets) in a function and call from within Pulsey (why, again?)
-- find a way to remove need for all css - make all javascript
-- give user a way to modify styles of each individual dot - probably need to object.assign each styles object for each component with whatever the user passes in via pulsey()
-- use velocity in place of keyframes
 
-UPCOMING FEATURES
-- customizable look and animation of dots and tooltips
-- test and fix lots of issues
-- tooltips recognize whether they are overflowing the screen and reposition themselves automatically, unless user decides to turn this functionality off
-- allow users to put html inside tooltip
-
-ISSUES TO BE FIXED
-- there are many
+ISSUES
+- some variables are being stored on the window and probably shouldn't be - find a better way
 - options are not currently specific to each dot and each tooltip - they're global and shouldn't be
 - tooltip needs to be based off the outside of the pulsey target, not off the center
 - only want to transition underlay on dotclick() and close() (not nextStep())
 - nextLabel doesn't change to 'finish' when removeStepOnClick is false
+- highlighter doesn't disappear after farewell screen is clicked
+- highlighter shouldnt be shown unless no steps have been clicked yet
+
+FUTURE
+- give user option to use without velocity (and thus no animations)
+- consider giving alternative to data attributes (pass in through javascript)
+- customizable look and animation of dots and tooltips
+- test and fix lots of issues
+- tooltips recognize whether they are overflowing the screen and reposition themselves automatically, unless user decides to turn this functionality off
+- allow users to put html inside tooltip
+- give user a way to modify styles of each individual dot - probably need to object.assign each styles object for each component with whatever the user passes in via pulsey()
