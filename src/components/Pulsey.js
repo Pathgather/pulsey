@@ -4,6 +4,7 @@ import velocityUI from 'velocity-ui-pack';
 import Dot from 'components/Dot';
 import Highlighter from 'components/Highlighter';
 import options from '../options';
+import { psAnchors, psWelcome, psFarewell, welcomeHeader, welcomeNote, farewellHeader, farewellNote, pulseyTargets, pulseyTargetsSteps } from '../init';
 
 export default class Pulsey extends React.Component {
   constructor(props) {

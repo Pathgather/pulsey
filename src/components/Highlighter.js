@@ -1,5 +1,6 @@
 import React from 'react';
 import {VelocityReact, VelocityComponent, VelocityTransitionGroup} from 'velocity-react';
+import { psAnchors, psWelcome, psFarewell, welcomeHeader, welcomeNote, farewellHeader, farewellNote, pulseyTargets, pulseyTargetsSteps } from '../init';
 
 export default class Highlighter extends React.Component {
   constructor(props) {

@@ -84,9 +84,9 @@ STYLES // readme forthcoming - still need to determine what needs to be customiz
 - progress
 
 NEXT
-- animate pulses via velocity
-- ensure it works with a react app (not html-based)
-- make sure that whenever app rerenders/receives new data Pulsey recognizes this and updates
+- animate pulses via velocity (no more css)
+- load successfully in a react app, behaves properly when that app rerenders/updates (?)
+- create pulseys via javascript instead of / in addition to data-attributes
 
 ISSUES
 - some variables are being stored on the window and probably shouldn't be - find a better way
@@ -96,10 +96,10 @@ ISSUES
 - nextLabel doesn't change to 'finish' when removeStepOnClick is false
 - highlighter doesn't disappear after farewell screen is clicked
 - highlighter shouldnt be shown unless no steps have been clicked yet
+- using window...but probably shouldn't be
 
 FUTURE
 - give user option to use without velocity (and thus no animations)
-- consider giving alternative to data attributes (pass in through javascript)
 - customizable look and animation of dots and tooltips
 - test and fix lots of issues
 - tooltips recognize whether they are overflowing the screen and reposition themselves automatically, unless user decides to turn this functionality off
