@@ -95,6 +95,19 @@ export default class Dot extends React.Component {
       window[storage].setItem('tourComplete',true)
     ) : null;
   }
+  componentDidMount() {
+    var pulseyFrontAnimate = document.getElementsByClassName('pulseyFrontAnimate');
+    var pulseyBackAnimate = document.getElementsByClassName('pulseyBackAnimate');
+    for (var i = 0; i < pulseyFrontAnimate.length; i++) {
+      Velocity(pulseyFrontAnimate[i], {
+        scale: 0.5,
+        opacity: 0.25,
+      }, {
+        duration: 850,
+        loop: 11
+      });
+    }
+  }
   render() {
     var options = this.props.options;
     var storage =
@@ -128,18 +141,19 @@ export default class Dot extends React.Component {
             height: '25',
             cursor: 'pointer',
             transform: 'translate(-50%,-50%)',
-            background: '#fff',
+            background: 'rgba(255,255,255,0.7)',
+            borderRadius: '100%',
           }
         },
         dotPosition = Object.assign({}, style.position, style.backDot),
         dot =
           <div
             style={dotPosition}
-            className={"pulsey-tour pulsey-dot-" + this.props.id}
+            className={"pulseyBackAnimate pulsey-tour pulsey-dot-" + this.props.id}
             onClick={this.dotClick.bind(this)}>
             <div
               style={style.frontDot}
-              className="spinner">
+              className="pulseyFrontAnimate">
             </div>
           </div>;
     return (

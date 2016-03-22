@@ -84,12 +84,10 @@ STYLES // readme forthcoming - still need to determine what needs to be customiz
 - progress
 
 NEXT
-- animate pulses via velocity (no more css)
 - load successfully in a react app, behaves properly when that app rerenders/updates (?)
 - create pulseys via javascript instead of / in addition to data-attributes
 
 ISSUES
-- some variables are being stored on the window and probably shouldn't be - find a better way
 - options are not currently specific to each dot and each tooltip - they're global and shouldn't be
 - tooltip needs to be based off the outside of the pulsey target, not off the center
 - only want to transition underlay on dotclick() and close() (not nextStep())
@@ -97,6 +95,7 @@ ISSUES
 - highlighter doesn't disappear after farewell screen is clicked
 - highlighter shouldnt be shown unless no steps have been clicked yet
 - using window...but probably shouldn't be
+- having trouble with Velocity loop being set to true (doesn't loop, but putting a number there isntead does seem to)
 
 FUTURE
 - give user option to use without velocity (and thus no animations)
