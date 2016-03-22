@@ -3,18 +3,17 @@ import {VelocityReact, VelocityComponent, VelocityTransitionGroup} from 'velocit
 import velocityUI from 'velocity-ui-pack';
 import Dot from 'components/Dot';
 import Highlighter from 'components/Highlighter';
-import options from '../options';
-import { psAnchors, psWelcome, psFarewell, welcomeHeader, welcomeNote, farewellHeader, farewellNote, pulseyTargets, pulseyTargetsSteps } from '../init';
+import { pulseyTargets, pulseyTargetsSteps } from '../init';
 
 export default class Pulsey extends React.Component {
   constructor(props) {
     super(props);
     window.storage =
-      options.storage === 'localStorage' ||
-      options.storage === 'sessionStorage' ?
-        options.storage : 'localStorage';
+      this.props.options.storage === 'localStorage' ||
+      this.props.options.storage === 'sessionStorage' ?
+        this.props.options.storage : 'localStorage';
     this.state = {
-      step: options.dot.step,
+      step: this.props.options.dot.step,
       resize: false,
       pa: pulseyTargets,
       stepCount: 0,
@@ -28,8 +27,8 @@ export default class Pulsey extends React.Component {
     this.setState({step: next});
   }
   dotClick() {
-    this.setState({step: options.dot.step});
-    options.pulsey.tourStarted = true;
+    this.setState({step: this.props.options.dot.step});
+    this.props.options.pulsey.tourStarted = true;
     window[storage].setItem('tourStarted',true);
   }
   incrementStepCount(stepCountChange) {

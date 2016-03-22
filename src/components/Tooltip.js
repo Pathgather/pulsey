@@ -1,6 +1,6 @@
 import React from 'react';
 import {VelocityReact, VelocityComponent, VelocityTransitionGroup} from 'velocity-react';
-import { psAnchors, psWelcome, psFarewell, welcomeHeader, welcomeNote, farewellHeader, farewellNote, pulseyTargets, pulseyTargetsSteps } from '../init';
+import { pulseyTargets } from '../init';
 
 export default class Tooltip extends React.Component {
   constructor(props) {

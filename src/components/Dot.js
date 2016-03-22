@@ -2,8 +2,7 @@ import React from 'react';
 import {VelocityReact, VelocityComponent, VelocityTransitionGroup} from 'velocity-react';
 import Tooltip from 'components/Tooltip';
 import Underlay from 'components/Underlay';
-import options from '../options';
-import { psAnchors, psWelcome, psFarewell, welcomeHeader, welcomeNote, farewellHeader, farewellNote, pulseyTargets, pulseyTargetsSteps } from '../init';
+import { pulseyTargets, pulseyTargetsSteps } from '../init';
 
 export default class Dot extends React.Component {
   constructor(props) {
@@ -13,11 +12,11 @@ export default class Dot extends React.Component {
     }
   }
   dotClick() {
-    options.removeStepOnClick || options.hideDotOnClick ?
+    this.props.options.removeStepOnClick || this.props.options.hideDotOnClick ?
       this.setState({
         showDot: window[storage].setItem("dot" + this.props.id, true),
       }) : null;
-    options.dot.step = this.props.id;
+    this.props.options.dot.step = this.props.id;
     this.props.dotClick();
     var scrollStep = parseInt(pulseyTargetsSteps.indexOf(this.props.id));
     var getDot = pulseyTargets[scrollStep];
@@ -31,7 +30,7 @@ export default class Dot extends React.Component {
     var scrollIndex = pulseyTargetsSteps.indexOf(scrollStep);
     this.scrollToDot(pulseyTargets[scrollIndex]);
     if (nextStep === undefined && stepsArray.length > 0) {
-      if (options.removeStepOnClick) {
+      if (this.props.options.removeStepOnClick) {
         stepsArray.splice(step,1);
         targetsArray.splice(step,1);
         this.props.nextStep(stepsArray[0]);
@@ -44,7 +43,7 @@ export default class Dot extends React.Component {
       }
     }
     else {
-      if (options.removeStepOnClick) {
+      if (this.props.options.removeStepOnClick) {
         stepsArray.splice(step,1);
         targetsArray.splice(step,1);
         this.props.nextStep(stepsArray[step]);
@@ -57,7 +56,7 @@ export default class Dot extends React.Component {
         this.props.stepCount === pulseyTargets.length ? this.close() : null;
       }
     }
-    options.removeStepOnClick || options.hideDotOnClick ?
+    this.props.options.removeStepOnClick || this.props.options.hideDotOnClick ?
       this.setState({
         showDot: window[storage].setItem("dot" + stepsArray[step], true)
       }) : null;
@@ -86,12 +85,12 @@ export default class Dot extends React.Component {
     this.props.close();
     var step = parseInt(stepsArray.indexOf(this.props.id));
     stepsArray.splice(step,1);
-    options.pulsey.tourSkipped.push([this.props.id,stepsArray.length]);
+    this.props.options.pulsey.tourSkipped.push([this.props.id,stepsArray.length]);
     this.props.skip();
   }
   tourStatusCheck(next) {
     stepsArray.length === 0 || this.props.stepCount === pulseyTargets.length ? (
-      options.pulsey.tourComplete = true,
+      this.props.options.pulsey.tourComplete = true,
       window[storage].setItem('tourComplete',true)
     ) : null;
   }

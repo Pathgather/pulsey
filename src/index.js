@@ -5,13 +5,10 @@ import Pulsey from 'components/Pulsey';
 
 class PulseyTour extends React.Component {
   render() {
-    return (
-      <div>
-        <Pulsey options={this.props.options}/>
-      </div>
-    );
+    return <Pulsey options={this.props.options} />;
   }
 }
+
 function pulsey(userOptions) {
   Object.assign(options,userOptions);
   ReactDOM.render(<PulseyTour options={options}/>,
