@@ -1,8 +1,8 @@
-import React from 'react';
-import {VelocityReact, VelocityComponent, VelocityTransitionGroup} from 'velocity-react';
-import Tooltip from 'components/Tooltip';
-import Underlay from 'components/Underlay';
-import { pulseyTargets, pulseyTargetsSteps } from '../init';
+import React from 'react'
+import { VelocityReact, VelocityComponent, VelocityTransitionGroup } from 'velocity-react'
+import Tooltip from 'components/Tooltip'
+import Underlay from 'components/Underlay'
+import { pulseyTargets, pulseyTargetsSteps } from '../init'
 
 export default class Dot extends React.Component {
   constructor(props) {

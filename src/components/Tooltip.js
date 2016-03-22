@@ -1,6 +1,6 @@
-import React from 'react';
-import {VelocityReact, VelocityComponent, VelocityTransitionGroup} from 'velocity-react';
-import { pulseyTargets } from '../init';
+import React from 'react'
+import { VelocityReact, VelocityComponent, VelocityTransitionGroup } from 'velocity-react'
+import { pulseyTargets } from '../init'
 
 export default class Tooltip extends React.Component {
   constructor(props) {

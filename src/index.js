@@ -1,27 +1,37 @@
-import React from 'react';
+import React from 'react'
 import ReactDOM from 'react-dom'
-import options from './options';
-import Pulsey from 'components/Pulsey';
+import options from './options'
+import Pulsey from 'components/Pulsey'
 
-class PulseyTour extends React.Component {
-  render() {
-    return <Pulsey options={this.props.options} />;
-  }
-}
-
-function pulsey(userOptions) {
-  Object.assign(options,userOptions);
-  ReactDOM.render(<PulseyTour options={options}/>,
+function pulsey(userInput) {
+  Object.assign(options, userInput.options);
+  ReactDOM.render(<Pulsey
+    options={options}
+    tour={userInput.tour}
+  />,
   document.getElementById('pulsey'));
 }
 
-//////////////////////
-// USER FILE START //
-////////////////////
+// User launches pulsey with the following function call.
 
 pulsey({
-  welcome: {
-    display: true,
+  options: {
+    welcome: {
+      display: true,
+    }
   },
-  option2: 'even nicer!',
+  tour: [
+    {
+      step: 1,
+      header: 'yebo',
+      note: 'yebobebo',
+      overrides: null
+    },
+    {
+      step: 2,
+      header: 'We got a second step here',
+      note: 'Take notice!',
+      overrides: null
+    }
+  ]
 });

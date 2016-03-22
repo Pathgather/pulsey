@@ -1,5 +1,5 @@
-import React from 'react';
-import {VelocityReact, VelocityComponent, VelocityTransitionGroup} from 'velocity-react';
+import React from 'react'
+import { VelocityReact, VelocityComponent, VelocityTransitionGroup } from 'velocity-react'
 
 export default class Underlay extends React.Component {
   render() {

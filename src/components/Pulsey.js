@@ -1,9 +1,9 @@
-import React from 'react';
-import {VelocityReact, VelocityComponent, VelocityTransitionGroup} from 'velocity-react';
-import velocityUI from 'velocity-ui-pack';
-import Dot from 'components/Dot';
-import Highlighter from 'components/Highlighter';
-import { pulseyTargets, pulseyTargetsSteps } from '../init';
+import React from 'react'
+import { VelocityReact, VelocityComponent, VelocityTransitionGroup } from 'velocity-react'
+import velocityUI from 'velocity-ui-pack'
+import Dot from 'components/Dot'
+import Highlighter from 'components/Highlighter'
+import { pulseyTargets, pulseyTargetsSteps } from '../init'
 
 export default class Pulsey extends React.Component {
   constructor(props) {
