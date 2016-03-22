@@ -84,8 +84,8 @@ STYLES // readme forthcoming - still need to determine what needs to be customiz
 - progress
 
 NEXT
-- load successfully in a react app, behaves properly when that app rerenders/updates (?)
 - create pulseys via javascript instead of / in addition to data-attributes
+- load successfully in a react app, behaves properly when that app rerenders/updates (?)
 
 ISSUES
 - options are not currently specific to each dot and each tooltip - they're global and shouldn't be
@@ -94,13 +94,12 @@ ISSUES
 - nextLabel doesn't change to 'finish' when removeStepOnClick is false
 - highlighter doesn't disappear after farewell screen is clicked
 - highlighter shouldnt be shown unless no steps have been clicked yet
-- using window...but probably shouldn't be
-- having trouble with Velocity loop being set to true (doesn't loop, but putting a number there isntead does seem to)
+- still using window for a couple variables
+- having trouble with Velocity loop being set to true (doesn't loop, but putting a number there instead does seem to)
 
 FUTURE
 - give user option to use without velocity (and thus no animations)
 - customizable look and animation of dots and tooltips
-- test and fix lots of issues
 - tooltips recognize whether they are overflowing the screen and reposition themselves automatically, unless user decides to turn this functionality off
 - allow users to put html inside tooltip
 - give user a way to modify styles of each individual dot - probably need to object.assign each styles object for each component with whatever the user passes in via pulsey()

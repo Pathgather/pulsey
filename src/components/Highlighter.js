@@ -125,7 +125,7 @@ export default class Highlighter extends React.Component {
         document.getElementsByClassName('ps-anchor')[i].className = 'ps-anchor';
       }
       options.highlighter.display && step >= 0 ? pulseyTargets[step].className = 'ps-anchor highlight-target' : null;
-    },500);
+    }, 250);
     options.highlighter.display && step >= 0 ? pulseyTargets[step].className = 'ps-anchor highlight-target' : null;
     return (
       <div>
