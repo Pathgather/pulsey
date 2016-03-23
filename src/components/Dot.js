@@ -3,6 +3,7 @@ import { VelocityReact, VelocityComponent, VelocityTransitionGroup } from 'veloc
 import Tooltip from 'components/Tooltip'
 import Underlay from 'components/Underlay'
 import { pulseyTargets, pulseyTargetsSteps } from '../init'
+import { style } from '../styles/dot.styles'
 
 export default class Dot extends React.Component {
   constructor(props) {
@@ -117,34 +118,12 @@ export default class Dot extends React.Component {
         pos = pa.getBoundingClientRect(),
         targetStyle = window.getComputedStyle(pa,null),
         fixed = targetStyle.getPropertyValue('position') === "fixed",
-        style = {
-          position: {
-            top: fixed ? pos.top + pos.height/2 + options.dot.offset.top : pos.top + pos.height/2 + options.dot.offset.top + window.scrollY,
-            left: fixed ? pos.left + pos.width/2 + options.dot.offset.left : pos.left + pos.width/2 + options.dot.offset.left + window.scrollX,
-            position: fixed ? 'fixed' : 'absolute',
-          },
-          dot: {
-            zIndex: '99997',
-            size: '25',
-            cursor: 'pointer',
-          },
-          backDot: {
-            width: '25',
-            height: '25',
-            borderRadius: '100%',
-            transform: 'translate(-50%,-50%)',
-            background: 'rgba(255,255,255,0.2)',
-          },
-          frontDot: {
-            width: '25',
-            height: '25',
-            cursor: 'pointer',
-            transform: 'translate(-50%,-50%)',
-            background: 'rgba(255,255,255,0.7)',
-            borderRadius: '100%',
-          }
+        position = {
+          top: fixed ? pos.top + pos.height/2 + options.dot.offset.top : pos.top + pos.height/2 + options.dot.offset.top + window.scrollY,
+          left: fixed ? pos.left + pos.width/2 + options.dot.offset.left : pos.left + pos.width/2 + options.dot.offset.left + window.scrollX,
+          position: fixed ? 'fixed' : 'absolute',
         },
-        dotPosition = Object.assign({}, style.position, style.backDot),
+        dotPosition = Object.assign({}, position, style.backDot),
         dot =
           <div
             style={dotPosition}

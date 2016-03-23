@@ -86,6 +86,7 @@ STYLES // readme forthcoming - still need to determine what needs to be customiz
 NEXT
 - create pulseys via javascript instead of / in addition to data-attributes
 - load successfully in a react app, behaves properly when that app rerenders/updates (?)
+- consider using redux
 
 ISSUES
 - options are not currently specific to each dot and each tooltip - they're global and shouldn't be

@@ -46,4 +46,4 @@ stepsArray.sort(function(a,b) {
   return a - b;
 });
 
-export {psAnchors, psWelcome, psFarewell, welcomeHeader, welcomeNote, farewellHeader, farewellNote, pulseyTargets, pulseyTargetsSteps}
+export { psAnchors, psWelcome, psFarewell, welcomeHeader, welcomeNote, farewellHeader, farewellNote, pulseyTargets, pulseyTargetsSteps }

@@ -4,6 +4,7 @@ import velocityUI from 'velocity-ui-pack'
 import Dot from 'components/Dot'
 import Highlighter from 'components/Highlighter'
 import { pulseyTargets, pulseyTargetsSteps } from '../init'
+import { tourStyles } from '../styles/pulsey.styles'
 
 export default class Pulsey extends React.Component {
   constructor(props) {
@@ -76,10 +77,6 @@ export default class Pulsey extends React.Component {
   }
   render() {
     var options = this.props.options;
-    var tourStyles = {
-      position: 'absolute',
-      zIndex: '99999',
-    }
     var dots = [];
     for (var i = 0; i < pulseyTargets.length; i++) {
       var id = parseInt(pulseyTargetsSteps[i]);
