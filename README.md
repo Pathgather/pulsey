@@ -21,6 +21,41 @@ FEATURES
 - no jQuery required (requires Velocity)
 - other awesome stuff, and more to come, maybe
 
+pulsey
+  defaultOptions
+  createSteps
+    create
+    step
+    display
+    style
+      offset
+        top
+        left
+      front
+        width
+        height
+        borderRadius
+      back
+        width
+        height
+        borderRadius
+    tooltipOptions
+      stepIndicator
+      content
+        header
+        note
+      buttonLabels
+        next
+        finish
+      style
+        tooltip
+          width
+        tip
+        stepIndicator
+        offset
+          top
+          left
+
 OPTIONS
 - pulsey
   - tourStarted: boolean

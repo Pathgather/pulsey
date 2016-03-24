@@ -70,20 +70,24 @@ export default class Highlighter extends React.Component {
       </div>;
     setTimeout(function() {
       for (var i = 0; i < pulseyTargets.length; i++) {
-        document.getElementsByClassName('ps-anchor')[i].className = 'ps-anchor';
+        document.getElementsByClassName('pt-anchor')[i].className = 'pt-anchor';
       }
-      options.highlighter.display && step >= 0 ? pulseyTargets[step].className = 'ps-anchor highlight-target' : null;
+      options.highlighter.display && step >= 0 ? pulseyTargets[step].className = 'pt-anchor highlight-target' : null;
     }, 250);
-    options.highlighter.display && step >= 0 ? pulseyTargets[step].className = 'ps-anchor highlight-target' : null;
+    options.highlighter.display && step >= 0 ? pulseyTargets[step].className = 'pt-anchor highlight-target' : null;
+    var highlighter = welcome || this.props.step !== null && !this.state.endTour ? flexyBox : null;
+    console.log(stepsArray.length);
     return (
       <div>
-        <VelocityTransitionGroup
-          enter={{animation: "fadeIn"}}
-          leave={{animation: "fadeOut"}}
-          duration={3000}
-          className={'pulsey-tour'}>
-          {welcome || this.props.step !== null && !this.state.endTour ? flexyBox : null}
-        </VelocityTransitionGroup>
+          <VelocityTransitionGroup
+            enter={{animation: "fadeIn"}}
+            leave={{animation: "fadeOut"}}
+            duration={3000}
+            className={'pulsey-tour'}>
+            <div>
+              {options.tourStarted && stepsArray.length > 0 ? highlighter : null}
+            </div>
+          </VelocityTransitionGroup>
       </div>
     );
   }

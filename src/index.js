@@ -4,7 +4,7 @@ import options from './options'
 import Pulsey from 'components/Pulsey'
 
 function pulsey(userInput) {
-  Object.assign(options, userInput.options);
+  Object.assign(options, userInput.defaultOptions);
   ReactDOM.render(<Pulsey
     options={options}
     tour={userInput.tour}
@@ -15,23 +15,44 @@ function pulsey(userInput) {
 // User launches pulsey with the following function call.
 
 pulsey({
-  options: {
-    welcome: {
-      display: true,
-    }
+  defaultOptions: {
+    //overrides defaults set in options.js
   },
-  tour: [
+  createSteps: [
     {
-      step: 1,
+      create: true,
       header: 'yebo',
-      note: 'yebobebo',
-      overrides: null
-    },
-    {
-      step: 2,
-      header: 'We got a second step here',
-      note: 'Take notice!',
-      overrides: null
+      note: 'bebo',
+      step: 1,
+      nextButton: 'Next',
+      finishButton: 'Finish',
+      skipButton: null,
+      stepIndicator: true,
+      style: {
+        dot: {
+          offset: {
+            top: 20,
+            left: 0,
+          },
+          front: {
+            width: 25,
+            height: 25,
+            borderRadius: '100%',
+          },
+          back: {
+            width: 25,
+            height: 25,
+            borderRadius: '100%',
+          },
+        },
+        tooltip: {
+          width: 250,
+        },
+        tip: {
+          side: 'top',
+          background: '#fff',
+        }
+      }
     }
   ]
 });

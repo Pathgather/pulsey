@@ -1,17 +1,17 @@
 var
-  psAnchors = document.getElementsByClassName('ps-anchor'),
-  psWelcome = document.getElementsByClassName('ps-welcome')[0],
-  psFarewell = document.getElementsByClassName('ps-farewell')[0],
-  welcomeHeader = psWelcome.getAttribute('data-ps-header'),
-  welcomeNote = psWelcome.getAttribute('data-ps-content'),
-  farewellHeader = psFarewell.getAttribute('data-ps-header'),
-  farewellNote = psFarewell.getAttribute('data-ps-content'),
+  psAnchors = document.getElementsByClassName('pt-anchor'),
+  psWelcome = document.getElementsByClassName('pt-welcome')[0],
+  psFarewell = document.getElementsByClassName('pt-farewell')[0],
+  welcomeHeader = psWelcome.getAttribute('data-pt-header'),
+  welcomeNote = psWelcome.getAttribute('data-pt-content'),
+  farewellHeader = psFarewell.getAttribute('data-pt-header'),
+  farewellNote = psFarewell.getAttribute('data-pt-content'),
   pulseyTargets = Array.prototype.slice.call(psAnchors),
   pulseyTargetsSteps = [],
   noStepGiven = 0;
-
+console.log(pulseyTargets);
 for (var i = 0; i < pulseyTargets.length; i++) {
-  var step = pulseyTargets[i].getAttribute('data-ps-step');
+  var step = pulseyTargets[i].getAttribute('data-pt-step');
   if (step == '' || step == null) {
     noStepGiven++;
   }
