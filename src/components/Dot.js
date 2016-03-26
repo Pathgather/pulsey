@@ -155,6 +155,7 @@ export default class Dot extends React.Component {
           incrementStepCount={()=>this.incrementStepCount(stepCountChange)}
           stepCount={this.props.stepCount}
           options={this.props.options}
+          create={this.props.create}
         />
         <Underlay
           id={this.props.id}

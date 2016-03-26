@@ -93,6 +93,7 @@ export default class Pulsey extends React.Component {
           stepCount={this.state.stepCount}
           skip={this.skip.bind(this)}
           options={options}
+          create={this.props.create}
         />);
     }
     var pulseyTour = !this.state.tourSkipped ?

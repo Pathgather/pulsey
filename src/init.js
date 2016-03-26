@@ -9,7 +9,6 @@ var
   pulseyTargets = Array.prototype.slice.call(psAnchors),
   pulseyTargetsSteps = [],
   noStepGiven = 0;
-console.log(pulseyTargets);
 for (var i = 0; i < pulseyTargets.length; i++) {
   var step = pulseyTargets[i].getAttribute('data-pt-step');
   if (step == '' || step == null) {
@@ -20,12 +19,12 @@ for (var i = 0; i < pulseyTargets.length; i++) {
   }
 }
 
-var ptsClone = pulseyTargetsSteps.slice();
-ptsClone.sort(function(a,b) {
+var pulseyTargetsStepsSorted = pulseyTargetsSteps.slice();
+pulseyTargetsStepsSorted.sort(function(a,b) {
   return a - b;
 });
 
-var nextPsStep = ptsClone.slice(-1)[0] ? ptsClone.slice(-1)[0] + 1 : 1;
+var nextPsStep = pulseyTargetsStepsSorted.slice(-1)[0] ? pulseyTargetsStepsSorted.slice(-1)[0] + 1 : 1;
 
 if (noStepGiven > 0) {
   for (var i = 0; i < noStepGiven; i++) {

@@ -76,7 +76,6 @@ export default class Highlighter extends React.Component {
     }, 250);
     options.highlighter.display && step >= 0 ? pulseyTargets[step].className = 'pt-anchor highlight-target' : null;
     var highlighter = welcome || this.props.step !== null && !this.state.endTour ? flexyBox : null;
-    console.log(stepsArray.length);
     return (
       <div>
           <VelocityTransitionGroup

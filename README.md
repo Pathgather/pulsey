@@ -119,19 +119,16 @@ STYLES // readme forthcoming - still need to determine what needs to be customiz
 - progress
 
 NEXT
-- create pulseys via javascript instead of / in addition to data-attributes
-- load successfully in a react app, behaves properly when that app rerenders/updates (?)
-- consider using redux
+- create pulseys via javascript
+- potentially make create.step a class, then allow them to override specific parts of the class
+- ability to choose between javascript and data-attribute methods, or use both
+- load successfully in a react app
+- fix all critical ordering bugs
 
 ISSUES
-- options are not currently specific to each dot and each tooltip - they're global and shouldn't be
-- tooltip needs to be based off the outside of the pulsey target, not off the center
+- various ordering issues, can't arrow key back sometimes, farewell screen doesnt show sometimes, done button doesn't work
 - only want to transition underlay on dotclick() and close() (not nextStep())
-- nextLabel doesn't change to 'finish' when removeStepOnClick is false
-- highlighter doesn't disappear after farewell screen is clicked
-- highlighter shouldnt be shown unless no steps have been clicked yet
 - still using window for a couple variables
-- having trouble with Velocity loop being set to true (doesn't loop, but putting a number there instead does seem to)
 
 FUTURE
 - give user option to use without velocity (and thus no animations)
@@ -139,3 +136,5 @@ FUTURE
 - tooltips recognize whether they are overflowing the screen and reposition themselves automatically, unless user decides to turn this functionality off
 - allow users to put html inside tooltip
 - give user a way to modify styles of each individual dot - probably need to object.assign each styles object for each component with whatever the user passes in via pulsey()
+- only mount dots when needed, and unmount when done
+- consider using redux

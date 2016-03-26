@@ -43,47 +43,54 @@ export default class Tooltip extends React.Component {
     }
     var nextLabel = options.tooltip.labels.next;
     stepsArray.length === 1 || this.props.stepCount === pulseyTargets.length ? nextLabel = options.tooltip.labels.finish : nextLabel = options.tooltip.labels.next;
+    var createSteps = this.props.create.steps;
+    for (var i = 0; i < pulseyTargets.length; i++) {
+      if (createSteps[i] && createSteps[i].step === this.props.id) {
+        var objectTooltipHeader = createSteps[i].header;
+        var objectTooltipNote = createSteps[i].note;
+      }
+    }
     var pa = this.props.pa,
         pos = pa.getBoundingClientRect(),
         targetStyle = window.getComputedStyle(pa,null),
         fixed = targetStyle.getPropertyValue('position') === "fixed",
-        tooltipHeader = pa.getAttribute('data-pt-header'),
-        tooltipNote = pa.getAttribute('data-pt-note'),
+        dataTooltipHeader = pa.getAttribute('data-pt-header'),
+        dataTooltipNote = pa.getAttribute('data-pt-note'),
         step = parseInt(pa.getAttribute('data-pt-step')),
         customHTML = pa.getAttribute('data-pt-custom'),
         tooltipContent = {
-          header: tooltipHeader ? tooltipHeader : options.tooltip.content.header,
-          note: tooltipNote ? tooltipNote : options.tooltip.content.note,
+          header: objectTooltipHeader ? objectTooltipHeader : dataTooltipHeader,
+          note: objectTooltipNote ? objectTooltipNote : dataTooltipNote,
         },
         tooltipPosition = {
           top: fixed ? pos.top + pos.height + options.tooltip.offset.top : pos.top + pos.height + options.tooltip.offset.top + window.scrollY,
           left: fixed ? pos.left + pos.width/2 - style.tooltip.width/2 + options.tooltip.offset.left : pos.left + pos.width/2 - style.tooltip.width/2 + options.tooltip.offset.left + window.scrollX,
           position: fixed ? 'fixed' : 'absolute',
         },
-        progressIndicator = options.tooltip.progress ?             <div style={style.progress}> {this.props.stepCount+1} </div> : null,
+        progressIndicator = options.tooltip.progress ?
+        <div style={style.progress}> {this.props.stepCount+1} </div> : null,
         tooltipStyle = Object.assign({},tooltipPosition,style.tooltip),
         tip = options.tooltip.tip.display ?
-          <div style={style.tooltip.tip}></div> : null,
-        tooltip =
-          <div style={tooltipStyle} className={"pulsey-tour pulsey-tooltip-" + this.props.id}>
-            <div style={style.close} onClick={this.props.close}> + </div>
-            {progressIndicator}
-              <div style={style.tooltip.header}>{tooltipContent.header}</div>
-              <div style={style.tooltip.note}>
-                {tooltipContent.note}
-              </div>
-              <div style={style.buttons}>
-                <button style={style.exitButton} onClick={this.props.skip}>Skip</button>
-                <button
-                  style={style.nextButton}
-                  onClick={this.nextStep.bind(this)}>
-                  {nextLabel}
-                </button>
-              </div>
-              {tip}
-          </div>,
-        showTooltip = this.props.id == this.props.step ? tooltip : null;
-        console.log()
+          <div style={style.tooltip.tip}></div> : null;
+    var tooltip =
+      <div style={tooltipStyle} className={"pulsey-tour pulsey-tooltip-" + this.props.id}>
+        <div style={style.close} onClick={this.props.close}> + </div>
+        {progressIndicator}
+          <div style={style.tooltip.header}>{tooltipContent.header}</div>
+          <div style={style.tooltip.note}>
+            {tooltipContent.note}
+          </div>
+          <div style={style.buttons}>
+            <button style={style.exitButton} onClick={this.props.skip}>Skip</button>
+            <button
+              style={style.nextButton}
+              onClick={this.nextStep.bind(this)}>
+              {nextLabel}
+            </button>
+          </div>
+          {tip}
+      </div>;
+    var showTooltip = this.props.id == this.props.step ? tooltip : null;
     return (
       <VelocityTransitionGroup enter={{animation: "transition.expandIn"}} leave={{animation: "transition.expandOut"}}>
         {showTooltip}
